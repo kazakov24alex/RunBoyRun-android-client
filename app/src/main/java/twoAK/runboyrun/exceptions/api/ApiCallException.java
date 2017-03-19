@@ -1,8 +1,10 @@
-package twoAK.runboyrun.exception.api;
+package twoAK.runboyrun.exceptions.api;
 
 
-import twoAK.runboyrun.exception.RunBoyRunException;
+import twoAK.runboyrun.exceptions.RunBoyRunException;
 
+
+/** API Call error */
 public class ApiCallException extends RunBoyRunException {
     public ApiCallException() {
         super();

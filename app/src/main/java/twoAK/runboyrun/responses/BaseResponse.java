@@ -1,14 +1,15 @@
-package twoAK.runboyrun.response;
+package twoAK.runboyrun.responses;
 
 import java.util.Map;
 
 
-
+/** Base response */
 public class BaseResponse {
-    protected boolean success;
-    protected String error_code;
-    protected String error;
-    protected Map<String, Object> additionalProperties;
+    protected boolean success;      // success of response
+    protected String error_code;    // code of error
+    protected String error;         // message of error
+    protected Map<String, Object> additionalProperties; // individual properties of a response
+
 
     public boolean isSuccess() {
         return success;

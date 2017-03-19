@@ -1,7 +1,12 @@
 package twoAK.runboyrun.activities;
 
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -14,27 +19,39 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
 
 
+import static twoAK.runboyrun.auth.Auth.setToken;
 
+
+/** This class is designed to control the functional activity of the login and the login proсess.
+*   @version in process
+*/
 public class LoginActivity extends AppCompatActivity {
 
-    private SignInTask signInTask;
+    private Auth        mAuth;          // authorization module
+    private SignInTask  mSignInTask;    // task to attempt sign in
 
-    private EditText loginInput;
-    private EditText passwordInput;
-    private Button mSignUpButton;
+    private EditText    mEmailView;     // email input field
+    private EditText    mPasswordView;  // password input field
+    private Button      mSignUpButton;  // button to attempt sign in
 
-    private Auth auth;
+    private View        mProgressView;  // view of a progress spinner
+    private View        mLoginFormView; // view of login form
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        auth = new Auth();
 
-        loginInput = (EditText) findViewById(R.id.editText_email);
-        passwordInput = (EditText) findViewById(R.id.editText_password);
+        // initializing class members
+        mAuth           = new Auth();
+        mEmailView      = (EditText) findViewById(R.id.editText_email);
+        mPasswordView   = (EditText) findViewById(R.id.editText_password);
+        mSignUpButton   = (Button) findViewById(R.id.button_sendSignIn);
+        mLoginFormView  = findViewById(R.id.login_form);
+        mProgressView   = findViewById(R.id.login_progress);
 
-        mSignUpButton = (Button) findViewById(R.id.button_sendSignIn);
+        // setting click listener on SIGN IN button
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,99 +61,146 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    /** This method tries to login with the data available in the EMAIL and PASSWORD fields.
+     *
+     */
     private void attemptSignIn() {
-        if(signInTask != null) {
+        boolean cancelFlag = false; // attempt cancellation flag
+        View focusView = null;      // focus on field of
+
+        // сheck if the task is already running
+        if(mSignInTask != null) {
             return;
         }
 
-        loginInput.setError(null);
-        passwordInput.setError(null);
+        // store values at the time of the login attempt
+        String login    = mEmailView.getText().toString().trim();
+        String password = mPasswordView.getText().toString().trim();
 
-        // Store values at the time of the login attempt.
-        String login = loginInput.getText().toString();
-        String password = passwordInput.getText().toString();
-        login.trim();
-        password.trim();
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
+        // check for a valid password, if the user entered one
         if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
-            passwordInput.setError("ERROR: INVALID PASSWORD");  //getString(R.string.error_invalid_password));
-            focusView = passwordInput;
-            cancel = true;
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancelFlag = true;
         }
 
-        // Check for a valid login.
+        // check for a valid email
         if (TextUtils.isEmpty(login)) {
-            loginInput.setError("ERROR: EMAIL FIELD IS EMPTY"); //getString(R.string.error_field_required));
-            focusView = loginInput;
-            cancel = true;
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancelFlag = true;
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+        if (cancelFlag) {
+            // there was an error; don't attempt login and focus the first form field with an error
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //showProgress(true);
-            signInTask = new LoginActivity.SignInTask(login, password);
-            signInTask.execute((Void) null);
+            // show a progress spinner and kick off a background task to perform the user login attempt
+            showProgress(true);
+            mSignInTask = new LoginActivity.SignInTask(login, password);
+            mSignInTask.execute((Void) null);
         }
 
     }
 
-
+    /** This method сhecks the entered password for validity.
+     * @param password - verifiable password
+     * @return correct or not
+     */
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
 
 
-    private class SignInTask extends AsyncTask<Void, Void, Boolean> {
+    /**
+     * Represents an asynchronous login task used to authenticate the user.
+     */
+    public class SignInTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String identificator;
-        private final String password;
+        private final String mLogin;    // entered EMAIL
+        private final String mPassword; // entered EMAIL
 
-        public SignInTask(String login, String password) {
-            this.identificator = login;
-            this.password = password;
+        SignInTask(String email, String password) {
+            mLogin = email;
+            mPassword = password;
         }
 
+
+        /** The specified task - "Send request for login".
+         * @return success of the task
+         */
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            Log.i("SignupActivity", "Trying to sign up...");
-            return auth.signin(this.identificator, this.password);
+        protected Boolean doInBackground(Void... params) {
+            Log.i("LoginActivity", "Trying to login.");
+            return mAuth.signin(mLogin, mPassword);
         }
 
+        /** Actions after task execution
+         * @param success - success of the task
+         *  */
         @Override
         protected void onPostExecute(final Boolean success) {
-            super.onPostExecute(success);
-            signInTask = null;
-            //showProgress(false);
+            // reset the task and hide a progress spinner
+            mSignInTask = null;
+            showProgress(false);
 
-            if(success) {
-                System.out.println("YEEEEEAAHHHHH! = " + Auth.getToken());
-                auth.setToken(Auth.getToken());
+            if (success) {
+                // set the received token and go to the "NewsFeed" activity
+                setToken(Auth.getToken());
                 startActivity(new Intent(LoginActivity.this, Activity1.class));
-            }
-            else {
-                System.out.println("FUUUUUCK!");
-                loginInput.setError("Failed to sign up");
-                loginInput.requestFocus();
+            } else {
+                // show the error and focus on the wrong field
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
             }
         }
 
+        /** The task was canceled. */
         @Override
         protected void onCancelled() {
-            signInTask = null;
-            //showProgress(false);
+            // reset the task and hide a progress spinner
+            mSignInTask = null;
+            showProgress(false);
         }
     }
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
 }
-

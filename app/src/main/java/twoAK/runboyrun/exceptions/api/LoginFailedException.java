@@ -1,6 +1,7 @@
-package twoAK.runboyrun.exception.api;
+package twoAK.runboyrun.exceptions.api;
 
 
+/** Login failed*/
 public class LoginFailedException extends InsuccessfulResponseException {
     public LoginFailedException() {
         super();
