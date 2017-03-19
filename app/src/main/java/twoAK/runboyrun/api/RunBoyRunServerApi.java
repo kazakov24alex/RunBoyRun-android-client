@@ -4,7 +4,9 @@ package twoAK.runboyrun.api;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
+import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 
 //import com.et.response.BaseResponse;
@@ -19,6 +21,9 @@ public interface RunBoyRunServerApi {
 
     @POST("signin")
     Call<TokenResponse> signin(@Body LoginBody login_password);
+
+    @POST("check")
+    Call<CheckResponse> check(@Body CheckBody identificator);
 
     /*
     @POST("signup")

@@ -23,8 +23,14 @@
         </activity>
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.SignInActivity"
             android:label="Login"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".activities.PreSignUpActivity"
+            android:label="PreSignUp"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

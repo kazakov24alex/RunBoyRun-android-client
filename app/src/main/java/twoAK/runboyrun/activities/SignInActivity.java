@@ -25,14 +25,14 @@ import static twoAK.runboyrun.auth.Auth.setToken;
 /** This class is designed to control the functional activity of the login and the login proсess.
 *   @version in process
 */
-public class LoginActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
     private Auth        mAuth;          // authorization module
     private SignInTask  mSignInTask;    // task to attempt sign in
 
     private EditText    mEmailView;     // email input field
     private EditText    mPasswordView;  // password input field
-    private Button      mSignUpButton;  // button to attempt sign in
+    private Button      mSignInButton;  // button to attempt sign in
 
     private View        mProgressView;  // view of a progress spinner
     private View        mLoginFormView; // view of login form
@@ -45,14 +45,14 @@ public class LoginActivity extends AppCompatActivity {
 
         // initializing class members
         mAuth           = new Auth();
-        mEmailView      = (EditText) findViewById(R.id.editText_email);
-        mPasswordView   = (EditText) findViewById(R.id.editText_password);
-        mSignUpButton   = (Button) findViewById(R.id.button_sendSignIn);
-        mLoginFormView  = findViewById(R.id.login_form);
-        mProgressView   = findViewById(R.id.login_progress);
+        mEmailView      = (EditText) findViewById(R.id.signin_editText_email);
+        mPasswordView   = (EditText) findViewById(R.id.sign_in_editText_password);
+        mSignInButton   = (Button) findViewById(R.id.signin_button_sendSignIn);
+        mLoginFormView  = findViewById(R.id.signin_login_form);
+        mProgressView   = findViewById(R.id.signin_login_progress);
 
         // setting click listener on SIGN IN button
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptSignIn();
@@ -66,16 +66,16 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void attemptSignIn() {
         boolean cancelFlag = false; // attempt cancellation flag
-        View focusView = null;      // focus on field of
+        View focusView = null;      // focus on field with error
 
         // сheck if the task is already running
         if(mSignInTask != null) {
             return;
         }
 
-        // store values at the time of the login attempt
-        String login    = mEmailView.getText().toString().trim();
-        String password = mPasswordView.getText().toString().trim();
+        // store values at the time of the identificator attempt
+        String identificator    = mEmailView.getText().toString().trim();
+        String password         = mPasswordView.getText().toString().trim();
 
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // check for a valid email
-        if (TextUtils.isEmpty(login)) {
+        if (TextUtils.isEmpty(identificator)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancelFlag = true;
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // show a progress spinner and kick off a background task to perform the user login attempt
             showProgress(true);
-            mSignInTask = new LoginActivity.SignInTask(login, password);
+            mSignInTask = new SignInActivity.SignInTask(identificator, password);
             mSignInTask.execute((Void) null);
         }
 
@@ -120,11 +120,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class SignInTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mLogin;    // entered EMAIL
-        private final String mPassword; // entered EMAIL
+        private final String mIdentificator;    // entered EMAIL
+        private final String mPassword;         // entered PASSWORD
 
         SignInTask(String email, String password) {
-            mLogin = email;
+            mIdentificator = email;
             mPassword = password;
         }
 
@@ -134,8 +134,8 @@ public class LoginActivity extends AppCompatActivity {
          */
         @Override
         protected Boolean doInBackground(Void... params) {
-            Log.i("LoginActivity", "Trying to login.");
-            return mAuth.signin(mLogin, mPassword);
+            Log.i("SignInActivity", "Trying to login.");
+            return mAuth.signin(mIdentificator, mPassword);
         }
 
         /** Actions after task execution
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 // set the received token and go to the "NewsFeed" activity
                 setToken(Auth.getToken());
-                startActivity(new Intent(LoginActivity.this, Activity1.class));
+                startActivity(new Intent(SignInActivity.this, Activity1.class));
             } else {
                 // show the error and focus on the wrong field
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

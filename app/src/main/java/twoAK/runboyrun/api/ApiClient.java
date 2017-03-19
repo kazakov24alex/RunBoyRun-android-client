@@ -2,14 +2,17 @@ package twoAK.runboyrun.api;
 
 
 import java.io.IOException;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+import twoAK.runboyrun.exceptions.api.CheckFailedException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
+import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
+import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 
 
@@ -69,5 +72,18 @@ import twoAK.runboyrun.responses.TokenResponse;
         }
     }
 
-
+    @Override
+    public boolean check(String identificator) throws CheckFailedException {
+        Call<CheckResponse> req = service.check(new CheckBody(identificator));
+        try {
+            Response<CheckResponse> response = req.execute();
+            if(response.body().isSuccess())
+                return response.body().getBusy();
+            else
+                throw new CheckFailedException("Request is failed");
+        }
+        catch (IOException e) {
+            throw new CheckFailedException(e);
+        }
+    }
 }

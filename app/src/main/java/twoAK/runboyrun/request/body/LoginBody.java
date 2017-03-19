@@ -6,8 +6,8 @@ public class LoginBody {
     private String identificator;
     private String password;
 
-    public LoginBody(String login, String password) {
-        this.identificator = login;
+    public LoginBody(String identificator, String password) {
+        this.identificator = identificator;
         this.password = password;
     }
 }

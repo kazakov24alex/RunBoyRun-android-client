@@ -2,6 +2,7 @@ package twoAK.runboyrun.auth;
 
 
 import twoAK.runboyrun.api.ApiClient;
+import twoAK.runboyrun.exceptions.api.CheckFailedException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 //import exception.api.SignupFailedException;
 
@@ -57,6 +58,16 @@ public class Auth {
             return true;
         }
         catch (LoginFailedException e) {
+            return false;
+        }
+    }
+
+
+    public static boolean check(String identificator) {
+        try {
+            return ApiClient.instance().check(identificator);
+        }
+        catch (CheckFailedException e) {
             return false;
         }
     }
