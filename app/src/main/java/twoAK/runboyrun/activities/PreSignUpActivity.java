@@ -18,8 +18,6 @@ import android.widget.EditText;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
 
-import static twoAK.runboyrun.auth.Auth.setToken;
-
 
 public class PreSignUpActivity extends AppCompatActivity {
 
@@ -95,7 +93,7 @@ public class PreSignUpActivity extends AppCompatActivity {
         } else {
             // show a progress spinner and kick off a background task to perform the user login attempt
             showProgress(true);
-            mCheckEmailTask = new PreSignUpActivity.CheckEmailTask(identificator);
+            mCheckEmailTask = new PreSignUpActivity.CheckEmailTask(identificator, password);
             mCheckEmailTask.execute((Void) null);
         }
 
@@ -117,9 +115,11 @@ public class PreSignUpActivity extends AppCompatActivity {
     public class CheckEmailTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mIdentificator; // entered EMAIL
+        private final String mPassword;      // entered PASSWORD
 
-        CheckEmailTask(String email) {
+        CheckEmailTask(String email, String password) {
             mIdentificator = email;
+            mPassword = password;
         }
 
 
@@ -142,13 +142,16 @@ public class PreSignUpActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                // set the received token and go to the "NewsFeed" activity
-                setToken(Auth.getToken());
-                startActivity(new Intent(PreSignUpActivity.this, Activity1.class));
-            } else {
                 // show the error and focus on the wrong field
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mEmailView.setError(getString(R.string.error_identificator_busy));
+                mEmailView.requestFocus();
+
+            } else {
+                // go to the SIGN UP activity and send identificator and password there
+                Intent intent = new Intent(PreSignUpActivity.this, SignUpActivity.class);
+                intent.putExtra("identificator", mIdentificator);
+                intent.putExtra("password", mPassword);
+                startActivity(intent);
             }
         }
 
