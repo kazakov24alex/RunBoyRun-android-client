@@ -2,6 +2,7 @@ package twoAK.runboyrun.api;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -9,11 +10,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
+import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
+import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.responses.CheckResponse;
+import twoAK.runboyrun.responses.CitiesResponse;
+import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.TokenResponse;
+import twoAK.runboyrun.responses.objects.CityObject;
+import twoAK.runboyrun.responses.objects.CountryObject;
 
 
 /** A class that performs requests on the server and receives responses from it.
@@ -86,4 +93,37 @@ import twoAK.runboyrun.responses.TokenResponse;
             throw new CheckFailedException(e);
         }
     }
+
+    @Override
+    public List<CountryObject> countries() throws RequestFailedException, InsuccessfulResponseException {
+        Call<CountriesResponse> req = service.countries();
+        try {
+            Response<CountriesResponse> response = req.execute();
+            if(response.body().isSuccess()){
+                return response.body().getCountries();
+            } else {
+                throw new InsuccessfulResponseException("Failed to fetch countries from server.");
+            }
+        } catch(IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+    @Override
+    public List<CityObject> cities(String countryCode) throws RequestFailedException, InsuccessfulResponseException {
+        Call<CitiesResponse> req = service.cities(countryCode);
+        try {
+            Response<CitiesResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body().getCities();
+            } else {
+                throw new InsuccessfulResponseException("Failed to fetch cities from server.");
+            }
+        } catch(IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+
 }

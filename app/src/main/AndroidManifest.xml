@@ -35,6 +35,12 @@
         </activity>
 
         <activity
+            android:name=".activities.SignUpActivity"
+            android:label="PreSignUp"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
             android:name=".activities.Activity1"
             android:label="Activity1"
             android:theme="@style/AppTheme.NoActionBar">
