@@ -8,4 +8,5 @@ import twoAK.runboyrun.responses.objects.CountryObject;
 
 public interface ICountriesProvider {
     public List<CountryObject> getAll();
+    public CountryObject getByPosition(int pos);
 }

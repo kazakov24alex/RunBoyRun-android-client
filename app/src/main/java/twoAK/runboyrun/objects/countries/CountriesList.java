@@ -40,4 +40,7 @@ public class CountriesList implements ICountriesProvider {
         return countries;
     }
 
+    @Override
+    public CountryObject getByPosition(int pos) { return countries.get(pos); }
+
 }

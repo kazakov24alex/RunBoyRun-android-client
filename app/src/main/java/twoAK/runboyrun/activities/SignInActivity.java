@@ -18,7 +18,6 @@ import android.widget.EditText;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
 
-
 import static twoAK.runboyrun.auth.Auth.setToken;
 
 
@@ -26,6 +25,8 @@ import static twoAK.runboyrun.auth.Auth.setToken;
 *   @version in process
 */
 public class SignInActivity extends AppCompatActivity {
+
+
 
     private Auth        mAuth;          // authorization module
     private SignInTask  mSignInTask;    // task to attempt sign in
