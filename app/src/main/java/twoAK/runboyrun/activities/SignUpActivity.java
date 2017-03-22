@@ -1,12 +1,17 @@
 package twoAK.runboyrun.activities;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import java.util.Calendar;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +37,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     Spinner mCountrySpinner;
     Spinner mCitySpinner;
+    Spinner mSexSpinner;
+
+    Button mBithdayButton;
+    private int mYear, mMonth, mDay;
 
     CountryObject   mSelectedCountry;
     CountryObject   mPreviousCountry;
@@ -46,12 +55,42 @@ public class SignUpActivity extends AppCompatActivity {
 
         mCountrySpinner = (Spinner)findViewById(R.id.signup_spinner_country);
         mCitySpinner = (Spinner)findViewById(R.id.signup_spinner_city);
+        mSexSpinner = (Spinner)findViewById(R.id.signup_spinner_sex);
+        mBithdayButton = (Button)findViewById(R.id.signup_button_birthday);
+
+        ArrayAdapter<?> adapter =
+                ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+// Вызываем адаптер
+        mSexSpinner.setAdapter(adapter);
 
         mCountriesLoadTask = new SignUpActivity.CountriesLoadTask();
         mCountriesLoadTask.execute((Void) null);
-
-
     }
+
+
+    public void onBithdayButtonClick(View view)
+    {
+        // получаем текущую дату
+        final Calendar cal = Calendar.getInstance();
+        mYear = cal.get(Calendar.YEAR);
+        mMonth = cal.get(Calendar.MONTH);
+        mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        // инициализируем диалог выбора даты текущими значениями
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String editTextDateParam = dayOfMonth + "." + (monthOfYear + 1) + "." + year;
+                        mBithdayButton.setText(editTextDateParam);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+
 
 
 
