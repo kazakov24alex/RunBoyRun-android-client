@@ -56,10 +56,22 @@
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:text="Country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/signup_text_country_label" />
+
             <Spinner
                 android:id="@+id/signup_spinner_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/signup_text_city_label" />
 
             <Spinner
                 android:id="@+id/signup_spinner_city"

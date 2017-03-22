@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CitiesSpinnerAdapter;
@@ -15,7 +16,6 @@ import twoAK.runboyrun.adapters.CountriesSpinnerAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.objects.cities.CitiesList;
 import twoAK.runboyrun.objects.countries.CountriesList;
-import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
 
@@ -33,7 +33,9 @@ public class SignUpActivity extends AppCompatActivity {
     Spinner mCitySpinner;
 
     CountryObject   mSelectedCountry;
-    CityObject      mSelectedCity;
+    CountryObject   mPreviousCountry;
+    int mPosSelectedCountry;
+    int mPosPreviousCountry;
 
 
     @Override
@@ -82,6 +84,9 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent,
                                            View itemSelected, int selectedItemPosition, long selectedId) {
 
+
+                    mPosPreviousCountry = mPosSelectedCountry;
+                    mPosSelectedCountry = selectedItemPosition;
                     mSelectedCountry = mCountriesList.getByPosition(selectedItemPosition);
 
                     mCitiesLoadTask = new SignUpActivity.CitiesLoadTask(mSelectedCountry.getCode());
@@ -126,12 +131,23 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
 
             System.out.println("CITIES =" + mCitiesList.getAll());
+            dialog.dismiss();
+
+            if(mCitiesList.getAll() == null) {
+                mCountrySpinner.setSelection(mPosPreviousCountry);
+                mPosSelectedCountry = mPosPreviousCountry;
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Сities were not loaded. try it again", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+
             mCitySpinner.setEnabled(true);
             // create an adapter and assign the adapter to the list
             CitiesSpinnerAdapter cityAdapter = new CitiesSpinnerAdapter(self, mCitiesList.getAll());
             mCitySpinner.setAdapter(cityAdapter);
 
-            dialog.dismiss();
+
 
         }
 
