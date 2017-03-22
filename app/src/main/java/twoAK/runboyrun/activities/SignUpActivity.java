@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import twoAK.runboyrun.R;
@@ -50,9 +51,6 @@ public class SignUpActivity extends AppCompatActivity {
         mCountriesLoadTask.execute((Void) null);
 
 
-        // TODO: prisobachit' to country selection
-
-
     }
 
 
@@ -60,7 +58,14 @@ public class SignUpActivity extends AppCompatActivity {
     /////////////////////////////////////////////////////////////////////////
     public class CountriesLoadTask extends AsyncTask<Void, Void, Boolean> {
 
+        private ProgressDialog dialog;
+
         CountriesLoadTask() {
+            dialog = ProgressDialog.show(self,null,null);
+            dialog.setContentView(R.layout.loader);
+            TextView text = (TextView)dialog.findViewById(R.id.signup_dialog_text);
+            text.setText("Loading a list of countries");
+            dialog.show();
         }
 
         @Override
@@ -74,8 +79,14 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            dialog.dismiss();
 
-            System.out.println(mCountriesList.getAll());
+
+            if(mCountriesList.getAll() == null) {
+                mCountriesLoadTask = new SignUpActivity.CountriesLoadTask();
+                mCountriesLoadTask.execute((Void) null);
+            };
+
             // create an adapter and assign the adapter to the list
             CountriesSpinnerAdapter countryAdapter = new CountriesSpinnerAdapter(self, mCountriesList.getAll());
             mCountrySpinner.setAdapter(countryAdapter);
@@ -99,10 +110,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         }
 
-        @Override
-        protected void onCancelled() {
-
-        }
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -116,6 +123,8 @@ public class SignUpActivity extends AppCompatActivity {
 
             dialog = ProgressDialog.show(self,null,null);
             dialog.setContentView(R.layout.loader);
+            TextView text = (TextView)dialog.findViewById(R.id.signup_dialog_text);
+            text.setText("Loading a list of cities");
             dialog.show();
         }
 
@@ -130,7 +139,6 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
 
-            System.out.println("CITIES =" + mCitiesList.getAll());
             dialog.dismiss();
 
             if(mCitiesList.getAll() == null) {
@@ -151,9 +159,5 @@ public class SignUpActivity extends AppCompatActivity {
 
         }
 
-        @Override
-        protected void onCancelled() {
-
-        }
     }
 }

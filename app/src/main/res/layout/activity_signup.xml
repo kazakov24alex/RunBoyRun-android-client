@@ -88,12 +88,14 @@
                     android:text="BIRTHDAY"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/signup_button_birthday" />
+                    android:id="@+id/signup_button_birthday"
+                    android:layout_weight="1"/>
 
                 <Spinner
                     android:id="@+id/signup_spinner_sex"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 

@@ -15,7 +15,6 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:text="Loading a list of cities"
         android:layout_width="53dp"
         android:layout_height="wrap_content"
         android:id="@+id/signup_dialog_text"
