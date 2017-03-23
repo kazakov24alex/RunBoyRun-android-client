@@ -8,9 +8,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
+import twoAK.runboyrun.request.body.SignUpBody;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 
 //import com.et.response.BaseResponse;
@@ -35,8 +37,6 @@ public interface RunBoyRunServerApi {
     @GET("cities/{countryCode}")
     Call<CitiesResponse> cities(@Path("countryCode") String countryCode);
 
-    /*
     @POST("signup")
-    Call<SignupResponse> signup(@Body LoginBody login_password);
-    */
+    Call<SignUpResponse> signup(@Body SignUpBody signUpBody);
 }

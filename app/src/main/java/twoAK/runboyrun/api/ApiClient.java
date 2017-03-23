@@ -13,11 +13,14 @@ import twoAK.runboyrun.exceptions.api.CheckFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
+import twoAK.runboyrun.exceptions.api.SignupFailedException;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
+import twoAK.runboyrun.request.body.SignUpBody;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
@@ -76,6 +79,23 @@ import twoAK.runboyrun.responses.objects.CountryObject;
         }
         catch (IOException e) {
             throw new LoginFailedException(e);
+        }
+    }
+
+    @Override
+    public String signup(String identificator,String password,String name,String surname,String country,
+                         String city, String birthday, String sex) throws SignupFailedException{
+        Call<SignUpResponse> req = service.signup(new SignUpBody(identificator, password, name, surname, country, city, birthday, sex));
+        try {
+            Response<SignUpResponse> response = req.execute();
+            if (response.body().isSuccess())
+                return response.body().getToken();
+            else {
+                throw new SignupFailedException(response.body().getError());
+            }
+        }
+        catch (IOException e){
+            throw new SignupFailedException(e);
         }
     }
 

@@ -6,7 +6,6 @@ public class SignUpResponse extends BaseResponse {
 
     private String token;   // token of authentication
 
-
     public String getToken() {
         return token;
     }

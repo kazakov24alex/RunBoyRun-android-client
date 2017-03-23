@@ -38,4 +38,7 @@ public class CitiesList implements ICitiesProvider {
         return cities;
     }
 
+    @Override
+    public CityObject getByPosition(int pos) { return cities.get(pos); }
+
 }

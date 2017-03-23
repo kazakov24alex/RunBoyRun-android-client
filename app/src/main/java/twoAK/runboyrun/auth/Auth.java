@@ -4,6 +4,7 @@ package twoAK.runboyrun.auth;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
+import twoAK.runboyrun.exceptions.api.SignupFailedException;
 //import exception.api.SignupFailedException;
 
 
@@ -73,13 +74,15 @@ public class Auth {
     }
 
 
-    /*public static boolean signup(String login, String password) {
+    public static boolean signup(String identificator,String password,String name,String surname,String country,
+                                 String city, String bithday, String sex) {
         try {
-            signin = ApiClient.instance().signup(login, password);
+            token = ApiClient.instance().signup(identificator, password, name, surname, country, city, bithday, sex);
             return true;
         }
         catch (SignupFailedException e) {
+            e.printStackTrace();
             return false;
         }
-    }*/
+    }
 }
