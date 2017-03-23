@@ -15,11 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.auth.Auth;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private Auth mAuth;
     private Toolbar mActionBarToolbar;
     private DrawerLayout mDrawerLayout;
     protected NavigationView mNavigationView;
@@ -153,6 +154,11 @@ public abstract class BaseActivity extends AppCompatActivity
             case R.id.nav_2:
                 createBackStack(new Intent(this, Activity2.class));
                 break;
+            case R.id.nav_menu_exit:
+                mAuth.setToken("");
+                startActivity(new Intent(this, WelcomeActivity.class));
+
+
         }
 
         closeNavDrawer();
