@@ -83,9 +83,10 @@ import twoAK.runboyrun.responses.objects.CountryObject;
     }
 
     @Override
-    public String signup(String identificator,String password,String name,String surname,String country,
-                         String city, String birthday, String sex) throws SignupFailedException{
-        Call<SignUpResponse> req = service.signup(new SignUpBody(identificator, password, name, surname, country, city, birthday, sex));
+    public String signup(String oauth, String identificator,String password,String name,String surname,
+                         String country, String city, String birthday, String sex) throws SignupFailedException{
+        Call<SignUpResponse> req = service.signup(
+                new SignUpBody(oauth, identificator, password, name, surname, country, city, birthday, sex));
         try {
             Response<SignUpResponse> response = req.execute();
             if (response.body().isSuccess())
@@ -104,6 +105,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
         Call<CheckResponse> req = service.check(new CheckBody(identificator));
         try {
             Response<CheckResponse> response = req.execute();
+
             if(response.body().isSuccess())
                 return response.body().getBusy();
             else

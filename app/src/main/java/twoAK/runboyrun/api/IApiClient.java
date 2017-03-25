@@ -14,15 +14,21 @@ import twoAK.runboyrun.responses.objects.CountryObject;
 /** Interface of IApiClient */
 public interface IApiClient {
 
-    public String       login(String login, String password) throws LoginFailedException;
-    public boolean      check(String identificator) throws CheckFailedException;
+    public List<CountryObject>  countries()
+            throws RequestFailedException, InsuccessfulResponseException;
 
-    public List<CountryObject>  countries() throws RequestFailedException, InsuccessfulResponseException;
-    public List<CityObject>     cities(String countryCode) throws RequestFailedException, InsuccessfulResponseException;
+    public List<CityObject>     cities(String countryCode)
+            throws RequestFailedException, InsuccessfulResponseException;
 
-    public String   signup(String identificator,String password,String name,String surname,String country,
-                           String city, String birthday, String sex) throws SignupFailedException;
 
-    //public String signup(String login, String password) throws SignupFailedException;
+    public String login(String login, String password)
+            throws LoginFailedException;
+
+    public boolean check(String identificator)
+            throws CheckFailedException;
+
+    public String signup(String oauth, String identificator,String password,String name,
+                           String surname, String country, String city, String birthday, String sex)
+            throws SignupFailedException;
 
 }

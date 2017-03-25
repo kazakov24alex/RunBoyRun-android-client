@@ -43,4 +43,14 @@ public class CountriesList implements ICountriesProvider {
     @Override
     public CountryObject getByPosition(int pos) { return countries.get(pos); }
 
+    @Override
+    public int getPositionByTitle(String title) {
+        for (int i = 0; i < countries.size(); i++) {
+            if(countries.get(i).getName().equals(title)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

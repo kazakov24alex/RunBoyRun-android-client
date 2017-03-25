@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.vk.sdk.VKSdk;
+
 import twoAK.runboyrun.R;
 
 
@@ -18,6 +20,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        VKSdk.initialize(this);
 
         mSignInButton = (Button) findViewById(R.id.welcome_button_signin);
         mSignInButton.setOnClickListener(new View.OnClickListener() {

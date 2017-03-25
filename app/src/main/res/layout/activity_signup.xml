@@ -49,11 +49,11 @@
                 android:layout_height="match_parent">
 
                 <EditText
+                    android:id="@+id/signup_editText_surname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Surname"
-                    android:id="@+id/signup_editText_surname"
-                    android:inputType="textPassword" />
+                    android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -85,12 +85,12 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:text="BIRTHDAY"
+                    android:id="@+id/signup_button_birthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/signup_button_birthday"
                     android:layout_weight="1"
-                    android:onClick="onBithdayButtonClick"/>
+                    android:text="@string/signup_birthday"
+                    android:textAllCaps="false"/>
 
                 <Spinner
                     android:id="@+id/signup_spinner_sex"

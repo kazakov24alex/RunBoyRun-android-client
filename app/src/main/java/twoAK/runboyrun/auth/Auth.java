@@ -74,10 +74,10 @@ public class Auth {
     }
 
 
-    public static boolean signup(String identificator,String password,String name,String surname,String country,
-                                 String city, String bithday, String sex) {
+    public static boolean signup(String oAuth, String identificator,String password,String name,String surname,String country,
+                                 String city, String birthday, String sex) {
         try {
-            token = ApiClient.instance().signup(identificator, password, name, surname, country, city, bithday, sex);
+            token = ApiClient.instance().signup(oAuth, identificator, password, name, surname, country, city, birthday, sex);
             return true;
         }
         catch (SignupFailedException e) {

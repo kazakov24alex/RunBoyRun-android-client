@@ -41,4 +41,14 @@ public class CitiesList implements ICitiesProvider {
     @Override
     public CityObject getByPosition(int pos) { return cities.get(pos); }
 
+    @Override
+    public int getPositionByTitle(String title) {
+        for (int i = 0; i < cities.size(); i++) {
+            if(cities.get(i).getName().equals(title)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

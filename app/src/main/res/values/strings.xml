@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Run Boy Run</string>
+    <integer name="com_vk_sdk_AppId">5944334</integer>
     <string name="server_url">https://runboyrun.herokuapp.com/</string>
+
+
     <string name="action_settings">Settings</string>
-
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -11,6 +12,12 @@
     <string name="navdrawer_description_a11y">Navigation Drawer used to switch between major features of the application</string>
     <string name="title_activity_deleteme">deleteme</string>
     <string name="title_activity_2">Activity2</string>
+
+
+    <!-- SignUp activiry -->
+    <string name="signup_birthday">Birthday</string>
+
+
 
 
     <!--ERRORS-->

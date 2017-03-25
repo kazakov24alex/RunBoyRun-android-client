@@ -14,6 +14,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
@@ -22,11 +36,12 @@ import twoAK.runboyrun.auth.Auth;
 public class PreSignUpActivity extends AppCompatActivity {
 
     private Auth            mAuth;      // authorization module
-    private CheckEmailTask  mCheckEmailTask; // task to check free identificator
+    private CheckEmailTask mCheckIdentificatorTask; // task to check free identificator
 
     private EditText    mEmailView;     // email input field
     private EditText    mPasswordView;  // password input field
     private Button      mSignUpButton;  // button to check EMAIL
+    private Button      mVKSignUpButton;// button to registration by VK oAuth
 
     private View        mProgressView;  // view of a progress spinner
     private View        mSignUpFormView;// view of SIGNUP form
@@ -39,10 +54,11 @@ public class PreSignUpActivity extends AppCompatActivity {
 
         // initializing class members
         mAuth           = new Auth();
+        mSignUpFormView = findViewById(R.id.pre_signup_form);
         mEmailView      = (EditText) findViewById(R.id.pre_signup_editText_email);
         mPasswordView   = (EditText) findViewById(R.id.pre_signup_editText_password);
         mSignUpButton   = (Button) findViewById(R.id.pre_signup_button_sign_up);
-        mSignUpFormView = findViewById(R.id.pre_signup_form);
+        mVKSignUpButton = (Button) findViewById(R.id.pre_signup_vk_button);
         mProgressView   = findViewById(R.id.pre_signup_progress);
 
         // setting click listener on SIGN UP button
@@ -50,6 +66,12 @@ public class PreSignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkIdentificator();
+            }
+        });
+        mVKSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                oAuthVK();
             }
         });
     }
@@ -62,7 +84,7 @@ public class PreSignUpActivity extends AppCompatActivity {
         View focusView = null;      // focus on field with error
 
         // сheck if the task is already running
-        if (mCheckEmailTask != null) {
+        if (mCheckIdentificatorTask != null) {
             return;
         }
 
@@ -93,12 +115,91 @@ public class PreSignUpActivity extends AppCompatActivity {
         } else {
             // show a progress spinner and kick off a background task to perform the user login attempt
             showProgress(true);
-            mCheckEmailTask = new PreSignUpActivity.CheckEmailTask(identificator, password);
-            mCheckEmailTask.execute((Void) null);
+            mCheckIdentificatorTask = new PreSignUpActivity.CheckEmailTask(identificator, password);
+            mCheckIdentificatorTask.execute((Void) null);
         }
 
     }
 
+
+    private void oAuthVK() {
+        //startActivity(new Intent(PreSignUpActivity.this, VKSignUpActivity.class));
+        String[] scope = new String[] {VKScope.OFFLINE };
+        VKSdk.login(this, scope);
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                Toast.makeText(getApplicationContext(), res.accessToken, Toast.LENGTH_LONG).show();
+
+                checkSocialAccount(res.userId, res.accessToken);
+            }
+
+            @Override
+            public void onError(VKError err) {
+                Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
+            }
+
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+
+    private void checkSocialAccount(final String userId, final String accessToken) {
+        VKParameters parameters = VKParameters.from(VKApiConst.ACCESS_TOKEN, accessToken);
+        VKRequest request = new VKRequest("account.getProfileInfo", parameters);
+        request.useSystemLanguage = false;
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+
+                mCheckIdentificatorTask = new PreSignUpActivity.CheckEmailTask("vk.com/id" + userId, accessToken);
+
+                String OAuth = "vk";
+                String name = null;
+                String surname = null;
+                String country = null;
+                String city = null;
+                String birthday = null;
+                int sex = 0;
+
+
+                try {
+                    JSONObject jsonObject = response.json.getJSONObject("response");
+                    name = jsonObject.getString("first_name");
+                    surname = jsonObject.getString("last_name");
+                    country = jsonObject.getJSONObject("country").getString("title");
+                    city = jsonObject.getJSONObject("city").getString("title");
+                    birthday = jsonObject.getString("bdate");
+                    sex = jsonObject.getInt("sex");
+                } catch (JSONException e) { }
+
+                // TODO: country cast
+                if(country.equals("Russia"))
+                    country = "Russian Federation";
+
+                // sex format cast from VK form to APP form
+                if(sex == 0)
+                    sex = -1;
+                else if (sex == 2)
+                    sex = 0;
+
+                // show a progress spinner and kick off a background task to perform the user login attempt
+                showProgress(true);
+                mCheckIdentificatorTask.setProfile(OAuth, name, surname, country, city, birthday, sex);
+                mCheckIdentificatorTask.execute((Void) null);
+
+            }
+        });
+    }
 
     /** This method сhecks the entered password for validity.
      * @param password - verifiable password
@@ -114,14 +215,42 @@ public class PreSignUpActivity extends AppCompatActivity {
      */
     public class CheckEmailTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String mOAuth;
+
         private final String mIdentificator; // entered EMAIL
         private final String mPassword;      // entered PASSWORD
 
+        private String mName;
+        private String mSurname;
+        private String mCountry;
+        private String mCity;
+        private String mBirthday;
+        private int    mSex;
+
         CheckEmailTask(String email, String password) {
+            mOAuth = "own";
+
             mIdentificator = email;
             mPassword = password;
+
+            mName = null;
+            mSurname = null;
+            mCountry = null;
+            mCity = null;
+            mBirthday = null;
+            mSex = 0;
         }
 
+
+        public void setProfile(String OAuth, String name, String surname, String country, String city, String birthday, int sex) {
+            mOAuth = OAuth;
+            mName = name;
+            mSurname = surname;
+            mCountry = country;
+            mCity = city;
+            mBirthday = birthday;
+            mSex = sex;
+        }
 
         /** The specified task - "Send request for check identificator".
          * @return success of the task
@@ -138,7 +267,7 @@ public class PreSignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             // reset the task and hide a progress spinner
-            mCheckEmailTask = null;
+            mCheckIdentificatorTask = null;
             showProgress(false);
 
             if (success) {
@@ -149,8 +278,15 @@ public class PreSignUpActivity extends AppCompatActivity {
             } else {
                 // go to the SIGN UP activity and send identificator and password there
                 Intent intent = new Intent(PreSignUpActivity.this, SignUpActivity.class);
+                intent.putExtra("oauth", mOAuth);
                 intent.putExtra("identificator", mIdentificator);
                 intent.putExtra("password", mPassword);
+                intent.putExtra("name", mName);
+                intent.putExtra("surname", mSurname);
+                intent.putExtra("country", mCountry);
+                intent.putExtra("city", mCity);
+                intent.putExtra("birthday", mBirthday);
+                intent.putExtra("sex", mSex);
                 startActivity(intent);
             }
         }
@@ -159,7 +295,7 @@ public class PreSignUpActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             // reset the task and hide a progress spinner
-            mCheckEmailTask = null;
+            mCheckIdentificatorTask = null;
             showProgress(false);
         }
     }
