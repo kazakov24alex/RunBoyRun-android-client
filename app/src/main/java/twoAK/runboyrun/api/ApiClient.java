@@ -34,7 +34,8 @@ import twoAK.runboyrun.responses.objects.CountryObject;
     private static ApiClient inst = null;   // Singleton pattern implementation
 
     public static final String BASE_URL = "https://runboyrun.herokuapp.com/";
-    // public static final String BASE_URL = "http://localhost:8000/";
+    // TODO: DEBUG
+    //public static final String BASE_URL = "http://localhost:8000/";
 
     private Retrofit retrofit;          // HTTP client
     private RunBoyRunServerApi service; // service of server
@@ -62,14 +63,15 @@ import twoAK.runboyrun.responses.objects.CountryObject;
 
 
     /** The method implements LOGIN request to the server and receives from it the TokenResponce.
+     * @param oauth         type of authorization
      * @param identificator identificator of user
      * @param password      password of user
      * @exception LoginFailedException data isn't correct or request is not passed
      * @return token for user
      * */
-     @Override
-    public String login(String identificator, String password) throws LoginFailedException {
-        Call<TokenResponse> req = service.signin(new LoginBody(identificator, password));
+    @Override
+    public String login(String oauth, String identificator, String password) throws LoginFailedException {
+        Call<TokenResponse> req = service.signin(new LoginBody(oauth, identificator, password));
         try {
             Response<TokenResponse> response = req.execute();
             if(response.body().isSuccess())

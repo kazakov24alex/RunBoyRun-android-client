@@ -14,9 +14,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
+import twoAK.runboyrun.exceptions.api.LoginFailedException;
 
 import static twoAK.runboyrun.auth.Auth.setToken;
 
@@ -33,7 +41,9 @@ public class SignInActivity extends AppCompatActivity {
 
     private EditText    mEmailView;     // email input field
     private EditText    mPasswordView;  // password input field
+
     private Button      mSignInButton;  // button to attempt sign in
+    private Button      mVKSignInButton;// button to attempt sign in via VK
 
     private View        mProgressView;  // view of a progress spinner
     private View        mLoginFormView; // view of login form
@@ -49,6 +59,7 @@ public class SignInActivity extends AppCompatActivity {
         mEmailView      = (EditText) findViewById(R.id.signin_editText_email);
         mPasswordView   = (EditText) findViewById(R.id.sign_in_editText_password);
         mSignInButton   = (Button) findViewById(R.id.signin_button_sendSignIn);
+        mVKSignInButton = (Button) findViewById(R.id.signin_vk_button);
         mLoginFormView  = findViewById(R.id.signin_login_form);
         mProgressView   = findViewById(R.id.signin_login_progress);
 
@@ -57,6 +68,12 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 attemptSignIn();
+            }
+        });
+        mVKSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptVKSignIn();
             }
         });
     }
@@ -101,11 +118,44 @@ public class SignInActivity extends AppCompatActivity {
         } else {
             // show a progress spinner and kick off a background task to perform the user login attempt
             showProgress(true);
-            mSignInTask = new SignInActivity.SignInTask(identificator, password);
+            mSignInTask = new SignInActivity.SignInTask("own", identificator, password);
             mSignInTask.execute((Void) null);
         }
 
     }
+
+
+
+    public void attemptVKSignIn() {
+        String[] scope = new String[] {VKScope.OFFLINE };
+        VKSdk.login(this, scope);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                showProgress(true);
+
+                mSignInTask = new SignInActivity.SignInTask("vk", res.userId, res.accessToken);
+                mSignInTask.execute((Void) null);
+            }
+
+            @Override
+            public void onError(VKError err) {
+                Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
+            }
+
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+
+
 
     /** This method сhecks the entered password for validity.
      * @param password - verifiable password
@@ -121,10 +171,12 @@ public class SignInActivity extends AppCompatActivity {
      */
     public class SignInTask extends AsyncTask<Void, Void, Boolean> {
 
+        private final String mOAuth;            // type of authorization
         private final String mIdentificator;    // entered EMAIL
         private final String mPassword;         // entered PASSWORD
 
-        SignInTask(String email, String password) {
+        SignInTask(String oauth, String email, String password) {
+            mOAuth = oauth;
             mIdentificator = email;
             mPassword = password;
         }
@@ -136,7 +188,9 @@ public class SignInActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             Log.i("SignInActivity", "Trying to login.");
-            return mAuth.signin(mIdentificator, mPassword);
+
+            return mAuth.signin(mOAuth, mIdentificator, mPassword);
+
         }
 
         /** Actions after task execution

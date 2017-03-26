@@ -53,9 +53,9 @@ public class Auth {
      * @exception LoginFailedException login failed
      * @return the success of obtaining a token
      * */
-    public static boolean signin(String login, String password) {
+    public static boolean signin(String oauth, String login, String password)  {
         try {
-            token = ApiClient.instance().login(login, password);
+            token = ApiClient.instance().login(oauth, login, password);
             return true;
         }
         catch (LoginFailedException e) {

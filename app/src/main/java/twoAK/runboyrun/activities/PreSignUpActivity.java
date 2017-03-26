@@ -161,7 +161,7 @@ public class PreSignUpActivity extends AppCompatActivity {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
-                mCheckIdentificatorTask = new PreSignUpActivity.CheckEmailTask("vk.com/id" + userId, accessToken);
+                mCheckIdentificatorTask = new PreSignUpActivity.CheckEmailTask(userId, accessToken);
 
                 String OAuth = "vk";
                 String name = null;
@@ -191,6 +191,9 @@ public class PreSignUpActivity extends AppCompatActivity {
                     sex = -1;
                 else if (sex == 2)
                     sex = 0;
+
+                //TODO: DEBUG
+                System.out.println("TOKEN = "+accessToken);
 
                 // show a progress spinner and kick off a background task to perform the user login attempt
                 showProgress(true);

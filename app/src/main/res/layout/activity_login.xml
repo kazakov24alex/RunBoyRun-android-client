@@ -62,6 +62,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/signin_button_sendSignIn" />
 
+            <Button
+                android:id="@+id/signin_vk_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/vk_color"
+                android:text="VK SIGN IN"
+                android:textColor="@color/vk_white"
+                android:textSize="18sp" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -17,10 +17,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CitiesSpinnerAdapter;
@@ -138,6 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
+    /** The method autocomplete registration form if registration via social network. */
     private void formAutocomplete() {
         // obtaining values from the previous activity
         mName       = getIntent().getExtras().getString("name");
@@ -146,7 +147,6 @@ public class SignUpActivity extends AppCompatActivity {
         mCity       = getIntent().getExtras().getString("city");
         mBirthday   = getIntent().getExtras().getString("birthday");
         mSex        = getIntent().getExtras().getInt("sex");
-
 
         // set values to NameField and SurnameField
         if(mName != null)
@@ -157,7 +157,6 @@ public class SignUpActivity extends AppCompatActivity {
         // set value to SetSpinner (VK: 1-famale, 2-male, APP: 0-male, 1-female)
         if(mSex != -1)
             mSexSpinner.setSelection(mSex);
-
 
         // set value to DatePicker of Birthday button
         if(mBirthday != null) {
@@ -179,10 +178,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-
+    /** BIRTHDAY button handler */
     public void onBithdayButtonClick(View view)
     {
-        // инициализируем диалог выбора даты текущими значениями
+        // date picker dialog initialization
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -198,11 +197,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
+    /** REGISTER button handler */
     public void onRegisterClick()
     {
+        // collection of all data specified in the registration form
         CountryObject countryObject = mCountriesList.getByPosition(mCountrySpinner.getSelectedItemPosition());
         CityObject cityObject = mCitiesList.getByPosition(mCitySpinner.getSelectedItemPosition());
-
         String name     = mNameEdit.getText().toString();
         String surname  = mSurnameEdit.getText().toString();
         String country  = countryObject.getName();
@@ -212,16 +212,20 @@ public class SignUpActivity extends AppCompatActivity {
 
         // TODO: DEBUG
         System.out.println(mOAuth + mIdentificator + mPassword + name + surname + country + city + birthday + sex);
+
+        // initialization and starting task for registration
         mSignUpTask = new SignUpActivity.SignupTask(mOAuth, mIdentificator, mPassword, name, surname, country, city, birthday, sex);
         mSignUpTask.execute((Void) null);
     }
 
 
-    /////////////////////////////////////////////////////////////////////////
+    /**
+     * Represents an asynchronous country list loading task used to fill COUNTRY SPINNER.
+     */
     public class CountryLoadingTask extends AsyncTask<Void, Void, Boolean> {
 
-
         CountryLoadingTask() {
+            // show loading dailog
             mDialogText.setText("Loading a list of countries");
             mDialog.show();
         }
@@ -230,8 +234,8 @@ public class SignUpActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Log.i("SignUpActivity", "Trying to load countries.");
 
+            // loading country list
             mCountriesList = new CountriesList(ApiClient.instance());
-
             return mCountriesList.load();
         }
 
@@ -239,7 +243,7 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mDialog.dismiss();
 
-
+            // check success of country loading
             if(mCountriesList.getAll() == null) {
                 mCountryLoadingTask = new CountryLoadingTask();
                 mCountryLoadingTask.execute((Void) null);
@@ -249,16 +253,16 @@ public class SignUpActivity extends AppCompatActivity {
             CountriesSpinnerAdapter countryAdapter = new CountriesSpinnerAdapter(self, mCountriesList.getAll());
             mCountrySpinner.setAdapter(countryAdapter);
 
+            // select country, if registration via social network.
             int countryFromSN = mCountriesList.getPositionByTitle(mCountry);
             if(countryFromSN != -1) {
                 mCountrySpinner.setSelection(countryFromSN);
             }
 
+            // handler of country spinner select
             mCountrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent,
                                            View itemSelected, int selectedItemPosition, long selectedId) {
-
-
                     mPosPreviousCountry = mPosSelectedCountry;
                     mPosSelectedCountry = selectedItemPosition;
                     mSelectedCountry = mCountriesList.getByPosition(selectedItemPosition);
@@ -270,19 +274,22 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
 
-
         }
 
     }
 
-    /////////////////////////////////////////////////////////////////////////
+    /**
+     * Represents an asynchronous city list loading task used to fill CITY SPINNER.
+     */
     public class CitiesLoadTask extends AsyncTask<Void, Void, Boolean> {
 
-        private String countryCode;
+        private String countryCode; // base country
+
 
         CitiesLoadTask(String countryCode) {
             this.countryCode = countryCode;
 
+            // show loading dailog
             mDialogText.setText("Loading a list of cities");
             mDialog.show();
         }
@@ -290,16 +297,17 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             Log.i("SignUpActivity", "Trying to load cities.");
-            mCitiesList = new CitiesList(ApiClient.instance());
 
+            // loading city list
+            mCitiesList = new CitiesList(ApiClient.instance());
             return mCitiesList.load(countryCode);
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-
             mDialog.dismiss();
 
+            // check success of country loading
             if(mCitiesList.getAll() == null) {
                 mCountrySpinner.setSelection(mPosPreviousCountry);
                 mPosSelectedCountry = mPosPreviousCountry;
@@ -314,6 +322,7 @@ public class SignUpActivity extends AppCompatActivity {
             CitiesSpinnerAdapter cityAdapter = new CitiesSpinnerAdapter(self, mCitiesList.getAll());
             mCitySpinner.setAdapter(cityAdapter);
 
+            // select country, if registration via social network.
             int cityFromSN = mCitiesList.getPositionByTitle(mCity);
             if(cityFromSN != -1) {
                 mCitySpinner.setSelection(cityFromSN);
@@ -324,6 +333,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Represents an asynchronous sign up task used to user registration.
+     */
     public class SignupTask extends AsyncTask<Void, Void, Boolean> {
 
         private String OAuth;
@@ -335,6 +347,7 @@ public class SignUpActivity extends AppCompatActivity {
         private String city;
         private String bithday;
         private String sex;
+
 
         SignupTask(String OAuth, String identificator,String password,String name,String surname,String country,
                    String city, String bithday, String sex) {
@@ -348,7 +361,7 @@ public class SignUpActivity extends AppCompatActivity {
             this.bithday        = bithday;
             this.sex            = sex;
 
-
+            // show registration dialog
             mDialogText.setText("Wait for second...");
             mDialog.show();
         }
@@ -357,7 +370,7 @@ public class SignUpActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Log.i("SignUpActivity", "Trying to registrate user.");
 
-
+            // sending request to registration
             return mAuth.signup(OAuth, identificator, password, name, surname, country, city, bithday, sex);
         }
 
@@ -365,12 +378,15 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mSignUpTask = null;
             mDialog.dismiss();
+
+            // check success of task
             if (success){
                 //setToken(Auth.getToken());
                 startActivity(new Intent(SignUpActivity.this, Activity1.class));
             } else{
-                mNameEdit.setError("registration failed");
-                mNameEdit.requestFocus();
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Registration failed", Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
 

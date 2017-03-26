@@ -21,7 +21,7 @@ public interface IApiClient {
             throws RequestFailedException, InsuccessfulResponseException;
 
 
-    public String login(String login, String password)
+    public String login(String oauth, String login, String password)
             throws LoginFailedException;
 
     public boolean check(String identificator)
