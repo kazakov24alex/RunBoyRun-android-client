@@ -30,7 +30,7 @@ public class CountriesSpinnerAdapter extends BaseAdapter {
     // кол-во элементов
     @Override
     public int getCount() {
-        return countries.size();
+         return countries.size();
     }
 
     // элемент по позиции

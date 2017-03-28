@@ -24,7 +24,6 @@ import com.vk.sdk.api.VKError;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
-import twoAK.runboyrun.exceptions.api.LoginFailedException;
 
 import static twoAK.runboyrun.auth.Auth.setToken;
 
@@ -171,6 +170,8 @@ public class SignInActivity extends AppCompatActivity {
      */
     public class SignInTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String errorMes;
+
         private final String mOAuth;            // type of authorization
         private final String mIdentificator;    // entered EMAIL
         private final String mPassword;         // entered PASSWORD
@@ -189,7 +190,12 @@ public class SignInActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Log.i("SignInActivity", "Trying to login.");
 
-            return mAuth.signin(mOAuth, mIdentificator, mPassword);
+            errorMes = mAuth.signin(mOAuth, mIdentificator, mPassword);
+            if (errorMes == null) {
+                return true;
+            } else {
+                return false;
+            }
 
         }
 
@@ -208,8 +214,7 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this, Activity1.class));
             } else {
                 // show the error and focus on the wrong field
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                Toast.makeText(getApplicationContext(), errorMes, Toast.LENGTH_LONG).show();
             }
         }
 

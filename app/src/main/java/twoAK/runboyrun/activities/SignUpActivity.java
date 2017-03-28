@@ -244,7 +244,7 @@ public class SignUpActivity extends AppCompatActivity {
             mDialog.dismiss();
 
             // check success of country loading
-            if(mCountriesList.getAll() == null) {
+            if(mCountriesList == null) {
                 mCountryLoadingTask = new CountryLoadingTask();
                 mCountryLoadingTask.execute((Void) null);
             };
@@ -308,7 +308,7 @@ public class SignUpActivity extends AppCompatActivity {
             mDialog.dismiss();
 
             // check success of country loading
-            if(mCitiesList.getAll() == null) {
+            if(mCitiesList == null) {
                 mCountrySpinner.setSelection(mPosPreviousCountry);
                 mPosSelectedCountry = mPosPreviousCountry;
                 Toast toast = Toast.makeText(getApplicationContext(),
