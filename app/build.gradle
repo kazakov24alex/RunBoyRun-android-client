@@ -8,7 +8,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -24,6 +25,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'com.android.support:design:25.1.1'
@@ -31,6 +33,15 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
-    compile 'com.vk:androidsdk:1.6.5'
+
+    compile 'com.google.android.gms:play-services:10.2.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.1'
+
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.github.asne:asne-vk:0.3.1'
+    compile 'com.github.asne:asne-odnoklassniki:0.3.1'
+    compile 'com.github.asne:asne-facebook:0.3.1'
+    compile 'com.github.asne:asne-linkedin:0.3.1'
+    compile 'com.github.asne:asne-twitter:0.3.1'
 
 }

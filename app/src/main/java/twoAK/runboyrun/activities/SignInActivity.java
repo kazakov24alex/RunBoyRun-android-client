@@ -16,12 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
 
@@ -33,8 +27,6 @@ import static twoAK.runboyrun.auth.Auth.setToken;
 */
 public class SignInActivity extends AppCompatActivity {
 
-
-
     private Auth        mAuth;          // authorization module
     private SignInTask  mSignInTask;    // task to attempt sign in
 
@@ -42,7 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText    mPasswordView;  // password input field
 
     private Button      mSignInButton;  // button to attempt sign in
-    private Button      mVKSignInButton;// button to attempt sign in via VK
+    private Button      mSNSignInButton;// button to attempt sign in via VK
 
     private View        mProgressView;  // view of a progress spinner
     private View        mLoginFormView; // view of login form
@@ -58,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         mEmailView      = (EditText) findViewById(R.id.signin_editText_email);
         mPasswordView   = (EditText) findViewById(R.id.sign_in_editText_password);
         mSignInButton   = (Button) findViewById(R.id.signin_button_sendSignIn);
-        mVKSignInButton = (Button) findViewById(R.id.signin_vk_button);
+        mSNSignInButton = (Button) findViewById(R.id.signin_social_nets);
         mLoginFormView  = findViewById(R.id.signin_login_form);
         mProgressView   = findViewById(R.id.signin_login_progress);
 
@@ -69,10 +61,10 @@ public class SignInActivity extends AppCompatActivity {
                 attemptSignIn();
             }
         });
-        mVKSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSNSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptVKSignIn();
+                startActivityForResult(new Intent(SignInActivity.this, SocialNetworksAuthActivity.class), 111);
             }
         });
     }
@@ -125,32 +117,20 @@ public class SignInActivity extends AppCompatActivity {
 
 
 
-    public void attemptVKSignIn() {
-        String[] scope = new String[] {VKScope.OFFLINE };
-        VKSdk.login(this, scope);
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-            @Override
-            public void onResult(VKAccessToken res) {
-                showProgress(true);
+        if(resultCode == SignInActivity.RESULT_OK) {
+            showProgress(true);
+            mSignInTask = new SignInActivity.SignInTask(
+                    data.getExtras().getString("oauth"),
+                    data.getExtras().getString("id"),
+                    data.getExtras().getString("access_token")
+            );
+            mSignInTask.execute((Void) null);
 
-                mSignInTask = new SignInActivity.SignInTask("vk", res.userId, res.accessToken);
-                mSignInTask.execute((Void) null);
-            }
-
-            @Override
-            public void onError(VKError err) {
-                Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
-            }
-
-        })) {
-            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Toast.makeText(getApplicationContext(), "Social network data not received" , Toast.LENGTH_LONG).show();
         }
-
     }
 
 

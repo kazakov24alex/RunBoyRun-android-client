@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">Run Boy Run</string>
-    <integer name="com_vk_sdk_AppId">5944334</integer>
+    <string name="app_name">RunBoyRun</string>
     <string name="server_url">https://runboyrun.herokuapp.com/</string>
+
+    <string name="vk_app_id">5944334</string>
+    <string name="facebook_app_id">1449271205145331</string>
+    <string name="twitter_consumer_key">d8E0D0D3TQRd1qsR3gmBLAb9L</string>
+    <string name="twitter_consumer_secret">0JUDeL7ZmJvPd1KinwbkZnBkTWaFPxfbFjYG047yXXV40NJwRP</string>
+    <string name="google_client_id">1098093132900-dmb49sod7fcbvgj6mtbdoq80rlha1o78.apps.googleusercontent.com</string>
 
 
     <string name="action_settings">Settings</string>

@@ -17,10 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CitiesSpinnerAdapter;
@@ -143,38 +140,12 @@ public class SignUpActivity extends AppCompatActivity {
         // obtaining values from the previous activity
         mName       = getIntent().getExtras().getString("name");
         mSurname    = getIntent().getExtras().getString("surname");
-        mCountry    = getIntent().getExtras().getString("country");
-        mCity       = getIntent().getExtras().getString("city");
-        mBirthday   = getIntent().getExtras().getString("birthday");
-        mSex        = getIntent().getExtras().getInt("sex");
 
         // set values to NameField and SurnameField
         if(mName != null)
             mNameEdit.setText(mName);
-        if(mName != null)
+        if(mSurname != null)
             mSurnameEdit.setText(mSurname);
-
-        // set value to SetSpinner (VK: 1-famale, 2-male, APP: 0-male, 1-female)
-        if(mSex != -1)
-            mSexSpinner.setSelection(mSex);
-
-        // set value to DatePicker of Birthday button
-        if(mBirthday != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-            Date parsingDate = new Date();
-            try {
-                parsingDate = dateFormat.parse(mBirthday);
-            } catch (ParseException e) {
-                return;
-            }
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(parsingDate);
-            mDay = calendar.get(Calendar.DAY_OF_MONTH);
-            mMonth = calendar.get(Calendar.MONTH);
-            mYear = calendar.get(Calendar.YEAR);
-            mBithdayButton.setText(getString(R.string.signup_birthday)+": "+mDay+"."+mMonth+"."+mYear);
-        }
 
     }
 

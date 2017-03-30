@@ -63,13 +63,10 @@
                 android:id="@+id/signin_button_sendSignIn" />
 
             <Button
-                android:id="@+id/signin_vk_button"
+                android:id="@+id/signin_social_nets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/vk_color"
-                android:text="VK SIGN IN"
-                android:textColor="@color/vk_white"
-                android:textSize="18sp" />
+                android:text="SIGN IN VIA SOCIAL NETWORKS" />
 
         </LinearLayout>
     </ScrollView>

@@ -64,13 +64,10 @@
                 android:id="@+id/pre_signup_button_sign_up" />
 
             <Button
-                android:id="@+id/pre_signup_vk_button"
+                android:text="SIGN UP via Social Networks"
+                android:id="@+id/pre_signup_socialnets_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/vk_color"
-                android:text="VK SIGN UP"
-                android:textColor="@color/vk_white"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>
