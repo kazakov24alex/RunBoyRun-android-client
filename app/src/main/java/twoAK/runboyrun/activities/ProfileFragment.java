@@ -18,7 +18,6 @@ import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
-import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 
 import twoAK.runboyrun.R;
@@ -96,10 +95,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             case FacebookSocialNetwork.ID:
                 returnIntent.putExtra("oauth", "facebook");
                 break;
-            case TwitterSocialNetwork.ID:
-                returnIntent.putExtra("oauth", "twitter");
-                break;
         }
+
         returnIntent.putExtra("id", socialPerson.id);
         returnIntent.putExtra("access_token", socialNetwork.getAccessToken().token);
         returnIntent.putExtra("name", name);

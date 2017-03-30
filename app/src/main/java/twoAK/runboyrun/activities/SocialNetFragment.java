@@ -13,7 +13,6 @@ import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
 import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
 import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
-import com.github.gorbin.asne.twitter.TwitterSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
 
@@ -40,7 +39,6 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
     private Button googleplusButton;
     private Button vkButton;
     private Button facebookButton;
-    private Button twitterButton;
 
     public SocialNetFragment() {
     }
@@ -56,16 +54,11 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
         vkButton.setOnClickListener(loginClick);
         facebookButton = (Button) rootView.findViewById(R.id.socialnets_fbButton);
         facebookButton.setOnClickListener(loginClick);
-        twitterButton = (Button) rootView.findViewById(R.id.socialnets_twButton);
-        twitterButton.setOnClickListener(loginClick);
         googleplusButton = (Button) rootView.findViewById(R.id.socialnets_gpButton);
         googleplusButton.setOnClickListener(loginClick);
 
         //Get Keys for initiate SocialNetworks
         String VK_KEY = getActivity().getString(R.string.vk_app_id);
-        String TWITTER_CONSUMER_KEY = getActivity().getString(R.string.twitter_consumer_key);
-        String TWITTER_CONSUMER_SECRET = getActivity().getString(R.string.twitter_consumer_secret);
-        String TWITTER_CALLBACK_URL = "oauth://RunBoyRun";
 
         //Chose permissions
         String[] vkScope = new String[] { VKScope.NOHTTPS };
@@ -86,10 +79,6 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
             //Init and add to manager FacebookSocialNetwork
             FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
             mSocialNetworkManager.addSocialNetwork(fbNetwork);
-
-            //Init and add to manager TwitterSocialNetwork
-            TwitterSocialNetwork twNetwork = new TwitterSocialNetwork(this, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALLBACK_URL);
-            mSocialNetworkManager.addSocialNetwork(twNetwork);
 
             //Initiate every network from mSocialNetworkManager
             getFragmentManager().beginTransaction().add(mSocialNetworkManager, SocialNetworksAuthActivity.SOCIAL_NETWORK_TAG).commit();
@@ -116,9 +105,6 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
                 case FacebookSocialNetwork.ID:
                     facebookButton.setText("Show Facebook profile");
                     break;
-                case TwitterSocialNetwork.ID:
-                    twitterButton.setText("Show Twitter profile");
-                    break;
             }
         }
     }
@@ -142,9 +128,6 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
                     break;
                 case R.id.socialnets_fbButton:
                     networkId = FacebookSocialNetwork.ID;
-                    break;
-                case R.id.socialnets_twButton:
-                    networkId = TwitterSocialNetwork.ID;
                     break;
             }
             SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);

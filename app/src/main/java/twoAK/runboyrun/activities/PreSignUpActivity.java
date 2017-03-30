@@ -193,7 +193,6 @@ public class PreSignUpActivity extends AppCompatActivity {
                 // show the error and focus on the wrong field
                 mEmailView.setError(getString(R.string.error_identificator_busy));
                 mEmailView.requestFocus();
-
             } else {
                 // go to the SIGN UP activity and send identificator and password there
                 Intent intent = new Intent(PreSignUpActivity.this, SignUpActivity.class);

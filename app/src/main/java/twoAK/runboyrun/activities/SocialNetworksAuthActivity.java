@@ -140,7 +140,7 @@ public class SocialNetworksAuthActivity extends AppCompatActivity implements Goo
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // if VK, Twitter, Facebook
+        // if VK,  Facebook
         if(requestCode != 123) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(SOCIAL_NETWORK_TAG);
             if (fragment != null) {

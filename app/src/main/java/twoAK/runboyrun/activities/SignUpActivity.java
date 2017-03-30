@@ -146,10 +146,6 @@ public class SignUpActivity extends AppCompatActivity {
             mTitle.setText(mTitle.getText().toString()+" VIA FACEBOOK");
             mTitle.setBackgroundResource(R.color.facebook);
             mTitle.setTextColor(getResources().getColor(R.color.vk_white));
-        } else if(mOAuth.equals("twitter")) {
-            mTitle.setText(mTitle.getText().toString()+" VIA TWITTER");
-            mTitle.setBackgroundResource(R.color.twitter);
-            mTitle.setTextColor(getResources().getColor(R.color.vk_white));
         } else if(mOAuth.equals("google")) {
             mTitle.setText(mTitle.getText().toString()+" VIA GOOGLE PLUS");
             mTitle.setBackgroundResource(R.color.googleplus);
