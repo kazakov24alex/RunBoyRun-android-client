@@ -6,7 +6,6 @@
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/signup_progress"
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -24,10 +23,10 @@
             android:orientation="vertical" >
 
             <TextView
+                android:id="@+id/signup_text_title"
                 android:text="REGISTER"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
                 android:textStyle="normal|bold"
                 android:textAlignment="center"
                 android:textSize="24sp"

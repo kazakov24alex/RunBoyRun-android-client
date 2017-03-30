@@ -38,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Auth mAuth;
 
     // Views
+    private TextView mTitle;
     private EditText mNameEdit;
     private EditText mSurnameEdit;
     private Spinner mCountrySpinner;
@@ -89,6 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
         mOAuth          = getIntent().getExtras().getString("oauth");
 
         // initialization of views
+        mTitle          = (TextView)findViewById(R.id.signup_text_title);
         mNameEdit       = (EditText)findViewById(R.id.signup_editText_name);
         mSurnameEdit    = (EditText)findViewById(R.id.signup_editText_surname);
         mCountrySpinner = (Spinner)findViewById(R.id.signup_spinner_country);
@@ -124,9 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
         mYear = calendar.get(Calendar.YEAR);
 
         // registration form autocomplete, if register via socail network
-        if(mOAuth != "own") {
-            formAutocomplete();
-        }
+        if(mOAuth != "own") { formAutocomplete(); }
 
         // starting countries loading task
         mCountryLoadingTask = new CountryLoadingTask();
@@ -137,6 +137,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     /** The method autocomplete registration form if registration via social network. */
     private void formAutocomplete() {
+
+        if(mOAuth.equals("vk")) {
+            mTitle.setText(mTitle.getText().toString()+" VIA VK");
+            mTitle.setBackgroundResource(R.color.vk_color);
+            mTitle.setTextColor(getResources().getColor(R.color.vk_white));
+        } else if(mOAuth.equals("facebook")) {
+            mTitle.setText(mTitle.getText().toString()+" VIA FACEBOOK");
+            mTitle.setBackgroundResource(R.color.facebook);
+            mTitle.setTextColor(getResources().getColor(R.color.vk_white));
+        } else if(mOAuth.equals("twitter")) {
+            mTitle.setText(mTitle.getText().toString()+" VIA TWITTER");
+            mTitle.setBackgroundResource(R.color.twitter);
+            mTitle.setTextColor(getResources().getColor(R.color.vk_white));
+        } else if(mOAuth.equals("google")) {
+            mTitle.setText(mTitle.getText().toString()+" VIA GOOGLE PLUS");
+            mTitle.setBackgroundResource(R.color.googleplus);
+            mTitle.setTextColor(getResources().getColor(R.color.vk_white));
+        }
+
         // obtaining values from the previous activity
         mName       = getIntent().getExtras().getString("name");
         mSurname    = getIntent().getExtras().getString("surname");
