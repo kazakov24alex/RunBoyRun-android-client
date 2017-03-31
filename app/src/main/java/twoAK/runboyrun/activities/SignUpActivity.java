@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -103,9 +104,64 @@ public class SignUpActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onRegisterClick();
+                //validation
+                boolean cancelFlag = false; // attempt cancellation flag
+                View focusView = null;
+
+                String name = mNameEdit.getText().toString().trim();
+                String surname = mSurnameEdit.getText().toString().trim();
+
+                if (TextUtils.isEmpty(name) || !isNameValid(name)) {
+                    mNameEdit.setError(getString(R.string.error_invalid_name));
+                    focusView = mNameEdit;
+                    cancelFlag = true;
+                }
+
+                if (TextUtils.isEmpty(surname) || !isSurameValid(surname)) {
+                    mSurnameEdit.setError(getString(R.string.error_invalid_surname));
+                    focusView = mSurnameEdit;
+                    cancelFlag = true;
+                }
+
+                if (mDay == 0 && mMonth == 0 && mYear == 0){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Сities were not loaded. try it again", Toast.LENGTH_SHORT);
+                    toast.show();
+                    cancelFlag = true;
+                }
+
+                if (cancelFlag) {
+                    // there was an error; don't attempt registration and focus the first form field with an error
+                    focusView.requestFocus();
+                }else {
+                    onRegisterClick();
+                }
+            }
+
+            private boolean isNameValid(String name) {
+                if ((name.length()<3) || (name.length()>20)){
+                    return false;
+                }else
+                    if(!(name.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
+                        return false;
+                    }else {
+                        return true;
+                    }
+            }
+
+            private boolean isSurameValid(String surname) {
+                if (surname.length()<3 || surname.length()>20){
+                    return false;
+                }else
+                if(!(surname.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
+                    return false;
+                }else {
+                    return true;
+                }
             }
         });
+
+
         mBithdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,6 +250,7 @@ public class SignUpActivity extends AppCompatActivity {
         String country  = countryObject.getName();
         String city     = cityObject.getName();
         String sex      = mSexSpinner.getSelectedItem().toString();
+        mMonth++;
         String birthday = mYear+"-"+mMonth+"-"+mDay;
 
         // TODO: DEBUG

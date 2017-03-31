@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.vk.sdk.VKSdk;
+
 import twoAK.runboyrun.R;
 
 
@@ -34,9 +36,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(WelcomeActivity.this, PreSignUpActivity.class));
             }
         });
-
     }
-
 
 
 }
