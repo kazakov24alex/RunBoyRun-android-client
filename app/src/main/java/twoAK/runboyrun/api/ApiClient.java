@@ -103,8 +103,8 @@ import twoAK.runboyrun.responses.objects.CountryObject;
     }
 
     @Override
-    public boolean check(String identificator) throws CheckFailedException {
-        Call<CheckResponse> req = service.check(new CheckBody(identificator));
+    public boolean check(String oauth, String identificator) throws CheckFailedException {
+        Call<CheckResponse> req = service.check(new CheckBody(oauth, identificator));
         try {
             Response<CheckResponse> response = req.execute();
 

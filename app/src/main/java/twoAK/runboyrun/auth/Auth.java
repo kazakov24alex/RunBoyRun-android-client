@@ -64,9 +64,9 @@ public class Auth {
     }
 
 
-    public static boolean check(String identificator) {
+    public static boolean check(String oauth, String identificator) {
         try {
-            return ApiClient.instance().check(identificator);
+            return ApiClient.instance().check(oauth, identificator);
         }
         catch (CheckFailedException e) {
             return false;

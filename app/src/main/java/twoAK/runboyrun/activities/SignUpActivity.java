@@ -34,8 +34,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
 public class SignUpActivity extends AppCompatActivity {
 
     SignUpActivity self = this;
-    private ProgressDialog mDialog;
-    private TextView mDialogText;
+    private ProgressDialog mProgressDialog;
     private Auth mAuth;
 
     // Views
@@ -80,9 +79,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_signup);
-        mDialog = ProgressDialog.show(self,null,null);
-        mDialog.setContentView(R.layout.loader);
-        mDialogText = (TextView) mDialog.findViewById(R.id.signup_dialog_text);
         mAuth = new Auth();
 
         // obtaining values of Identificator and Password from the previous activity
@@ -262,6 +258,20 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
+    protected void showProgressDialog(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
+
     /**
      * Represents an asynchronous country list loading task used to fill COUNTRY SPINNER.
      */
@@ -269,8 +279,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         CountryLoadingTask() {
             // show loading dailog
-            mDialogText.setText("Loading a list of countries");
-            mDialog.show();
+            showProgressDialog(getString(R.string.signup_dialog_country_loading));
         }
 
         @Override
@@ -284,7 +293,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mDialog.dismiss();
+            hideProgressDialog();
 
             // check success of country loading
             if(mCountriesList == null) {
@@ -332,9 +341,7 @@ public class SignUpActivity extends AppCompatActivity {
         CitiesLoadTask(String countryCode) {
             this.countryCode = countryCode;
 
-            // show loading dailog
-            mDialogText.setText("Loading a list of cities");
-            mDialog.show();
+            showProgressDialog(getString(R.string.signup_dialog_city_loading));
         }
 
         @Override
@@ -348,7 +355,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mDialog.dismiss();
+            hideProgressDialog();
 
             // check success of country loading
             if(mCitiesList == null) {
@@ -404,9 +411,7 @@ public class SignUpActivity extends AppCompatActivity {
             this.bithday        = bithday;
             this.sex            = sex;
 
-            // show registration dialog
-            mDialogText.setText("Wait for second...");
-            mDialog.show();
+            showProgressDialog(getString(R.string.signup_dialog_registration_waiting));
         }
 
         @Override
@@ -420,7 +425,7 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mSignUpTask = null;
-            mDialog.dismiss();
+            hideProgressDialog();
 
             // check success of task
             if (success){

@@ -29,7 +29,7 @@ public interface RunBoyRunServerApi {
     Call<TokenResponse> signin(@Body LoginBody login_password);
 
     @POST("check")
-    Call<CheckResponse> check(@Body CheckBody identificator);
+    Call<CheckResponse> check(@Body CheckBody oauth_identificator);
 
     @GET("countries")
     Call<CountriesResponse> countries();

@@ -24,7 +24,7 @@ public interface IApiClient {
     public String login(String oauth, String login, String password)
             throws LoginFailedException;
 
-    public boolean check(String identificator)
+    public boolean check(String oauth, String identificator)
             throws CheckFailedException;
 
     public String signup(String oauth, String identificator,String password,String name,

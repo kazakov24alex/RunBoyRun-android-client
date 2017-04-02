@@ -1,12 +1,9 @@
 package twoAK.runboyrun.activities;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -23,13 +20,15 @@ import twoAK.runboyrun.auth.Auth;
 public class PreSignUpActivity extends AppCompatActivity {
 
     private Auth mAuth;      // authorization module
+    private ProgressDialog mProgressDialog;
+
     private CheckIdentificatorTask mCheckIdentificatorTask; // task to check free identificator
 
     private EditText    mEmailView;     // email input field
     private EditText    mPasswordView;  // password input field
 
-    private Button  mSignUpButton;  // button to check EMAIL
-    private Button mSocialNetsButton;// button to registration by VK oAuth
+    private Button  mSignUpButton;      // button to check EMAIL
+    private Button  mSocialNetsButton;  // button to registration by VK oAuth
 
 
     private View        mProgressView;  // view of a progress spinner
@@ -102,8 +101,7 @@ public class PreSignUpActivity extends AppCompatActivity {
             // there was an error; don't attempt check identificator and focus the first form field with an error
             focusView.requestFocus();
         } else {
-            // show a progress spinner and kick off a background task to perform the user login attempt
-            showProgress(true);
+            // kick off a background task to perform the user login attempt
             mCheckIdentificatorTask = new CheckIdentificatorTask(identificator, password);
             mCheckIdentificatorTask.execute((Void) null);
         }
@@ -123,7 +121,6 @@ public class PreSignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == SignInActivity.RESULT_OK) {
-            showProgress(true);
             mCheckIdentificatorTask = new PreSignUpActivity.CheckIdentificatorTask(
                     data.getExtras().getString("id"),
                     data.getExtras().getString("access_token")
@@ -155,6 +152,7 @@ public class PreSignUpActivity extends AppCompatActivity {
         private String mSurname;
 
         CheckIdentificatorTask(String email, String password) {
+            showProgress(getString(R.string.presignup_dialog_check_id));
             mOAuth = "own";
 
             mIdentificator = email;
@@ -176,8 +174,10 @@ public class PreSignUpActivity extends AppCompatActivity {
          */
         @Override
         protected Boolean doInBackground(Void... params) {
+            System.out.println("OAUTH="+mOAuth+" ID="+mIdentificator);
+
             Log.i("PreSignUpActivity", "Check identificator: "+mIdentificator+".");
-            return mAuth.check(mIdentificator);
+            return mAuth.check(mOAuth, mIdentificator);
         }
 
         /** Actions after task execution
@@ -187,11 +187,11 @@ public class PreSignUpActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             // reset the task and hide a progress spinner
             mCheckIdentificatorTask = null;
-            showProgress(false);
+            hideProgressDialog();
 
             if (success) {
                 // show the error and focus on the wrong field
-                mEmailView.setError(getString(R.string.error_identificator_busy));
+                mEmailView.setError(getString(R.string.presignup_error_user_exist));
                 mEmailView.requestFocus();
             } else {
                 // go to the SIGN UP activity and send identificator and password there
@@ -210,44 +210,25 @@ public class PreSignUpActivity extends AppCompatActivity {
         protected void onCancelled() {
             // reset the task and hide a progress spinner
             mCheckIdentificatorTask = null;
-            showProgress(false);
+            hideProgressDialog();
         }
     }
 
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mSignUpFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mSignUpFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mSignUpFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mSignUpFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+    protected void showProgress(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
     }
+
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
 }

@@ -20,8 +20,16 @@
     <string name="title_activity_2">Activity2</string>
 
 
-    <!-- SignUp activiry -->
+    <!-- PreSignUp activity-->
+    <string name="presignup_dialog_check_id">Identificator checking\nWait a moment please</string>
+    <string name="presignup_error_user_exist">The user already exist</string>
+
+
+    <!-- SignUp activity -->
     <string name="signup_birthday">Birthday</string>
+    <string name="signup_dialog_country_loading">Loading a list of countries</string>
+    <string name="signup_dialog_city_loading">"Loading a list of cities"</string>
+    <string name="signup_dialog_registration_waiting">Register you - please wait</string>
 
 
 
@@ -33,7 +41,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="error_identificator_busy">Already registered</string>
+
     <string-array name="sex">
         <item>male</item>
         <item>female</item>
