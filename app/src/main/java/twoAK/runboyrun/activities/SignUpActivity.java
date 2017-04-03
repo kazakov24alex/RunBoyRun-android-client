@@ -55,10 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String mPassword;
     private String mName;
     private String mSurname;
-    private String mCountry;
-    private String mCity;
-    private String mBirthday;
-    private int    mSex;
+
 
     // Containers
     private CountriesList   mCountriesList;
@@ -115,8 +112,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-
-
         mBithdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSexSpinner.setAdapter(adapter);
 
-        // registration form autocomplete, if register via socail network
+        // standart - own. Registration form autocomplete, if register via social network.
         if(mOAuth != "own") { formAutocomplete(); }
 
         // starting countries loading task
@@ -140,6 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /** Validation for fields: name, surname, birthday */
     public boolean validation(){
         View focusView = null;
 
@@ -153,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
 
-        if (TextUtils.isEmpty(surname) || !isSurameValid(surname)) {
+        if (TextUtils.isEmpty(surname) || !isNameValid(surname)) {
             mSurnameEdit.setError(getString(R.string.error_invalid_surname));
             focusView = mSurnameEdit;
             focusView.requestFocus();
@@ -175,25 +171,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private boolean isNameValid(String name) {
-        if ((name.length()<3) || (name.length()>20)){
-            return false;
-        }else
-        if(!(name.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
-            return false;
-        }else {
-            return true;
-        }
-    }
-
-    private boolean isSurameValid(String surname) {
-        if (surname.length()<3 || surname.length()>20){
-            return false;
-        }else
-        if(!(surname.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
-            return false;
-        }else {
-            return true;
-        }
+        return name.matches("^[a-zA-Z][a-zA-Z-]{1,20}$");
     }
 
 
@@ -259,9 +237,6 @@ public class SignUpActivity extends AppCompatActivity {
         mMonth++;
         String birthday = mYear+"-"+mMonth+"-"+mDay;
 
-        // TODO: DEBUG
-        System.out.println(mOAuth + mIdentificator + mPassword + name + surname + country + city + birthday + sex);
-
         // initialization and starting task for registration
         mSignUpTask = new SignUpActivity.SignupTask(mOAuth, mIdentificator, mPassword, name, surname, country, city, birthday, sex);
         mSignUpTask.execute((Void) null);
@@ -315,11 +290,6 @@ public class SignUpActivity extends AppCompatActivity {
             CountriesSpinnerAdapter countryAdapter = new CountriesSpinnerAdapter(self, mCountriesList.getAll());
             mCountrySpinner.setAdapter(countryAdapter);
 
-            // select country, if registration via social network.
-            int countryFromSN = mCountriesList.getPositionByTitle(mCountry);
-            if(countryFromSN != -1) {
-                mCountrySpinner.setSelection(countryFromSN);
-            }
 
             // handler of country spinner select
             mCountrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -381,13 +351,6 @@ public class SignUpActivity extends AppCompatActivity {
             // create an adapter and assign the adapter to the list
             CitiesSpinnerAdapter cityAdapter = new CitiesSpinnerAdapter(self, mCitiesList.getAll());
             mCitySpinner.setAdapter(cityAdapter);
-
-            // select country, if registration via social network.
-            int cityFromSN = mCitiesList.getPositionByTitle(mCity);
-            if(cityFromSN != -1) {
-                mCitySpinner.setSelection(cityFromSN);
-            }
-
         }
 
     }

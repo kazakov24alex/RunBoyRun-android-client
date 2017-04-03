@@ -146,6 +146,7 @@ public class SocialNetworksAuthActivity extends AppCompatActivity implements Goo
             if (fragment != null) {
                 fragment.onActivityResult(requestCode, resultCode, data);
             }
+
         // if GooglePlus
         } else if (resultCode == RESULT_OK) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
