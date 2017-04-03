@@ -3,7 +3,9 @@ package twoAK.runboyrun.auth;
 
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
+import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
+import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
 //import exception.api.SignupFailedException;
 
@@ -47,6 +49,19 @@ public class Auth {
     }
 
 
+
+    public Boolean checkToken(String token) {
+        try {
+            return ApiClient.instance().checkToken(token);
+        } catch(RequestFailedException e) {
+            System.out.println("EXCEPTION!!!!!!!!!! RequestFailedException");
+            return false;
+        } catch(InsuccessfulResponseException e) {
+            System.out.println("EXCEPTION!!!!!!!!!! RequestFailedException");
+            return false;
+        }
+    }
+
     /** Sending a request to the server to receive a token.
      * @param login     - login of user
      * @param password  - password of user
@@ -55,11 +70,10 @@ public class Auth {
      * */
     public String signin(String oauth, String login, String password)  {
         try {
-            token = ApiClient.instance().login(oauth, login, password);
-            return null;
+            return ApiClient.instance().login(oauth, login, password);
         }
         catch (LoginFailedException e) {
-            return e.getMessage();
+            return null;
         }
     }
 
@@ -74,15 +88,14 @@ public class Auth {
     }
 
 
-    public static boolean signup(String oAuth, String identificator,String password,String name,String surname,String country,
+    public static String signup(String oAuth, String identificator,String password,String name,String surname,String country,
                                  String city, String birthday, String sex) {
         try {
-            token = ApiClient.instance().signup(oAuth, identificator, password, name, surname, country, city, birthday, sex);
-            return true;
+            return token = ApiClient.instance().signup(oAuth, identificator, password, name, surname, country, city, birthday, sex);
         }
         catch (SignupFailedException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 }

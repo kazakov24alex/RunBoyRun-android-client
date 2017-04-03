@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Login progress -->
@@ -13,40 +13,40 @@
         android:visibility="gone" />
 
     <ScrollView
+        android:id="@+id/welcome_form"
         android:layout_width="match_parent"
-        android:layout_height="442dp"
-        android:id="@+id/welcome_form">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
+            <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="WELCOME"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
-                android:textStyle="normal|bold"
-            android:layout_weight="1" />
+                android:textStyle="normal|bold" />
 
-        <Button
-            android:id="@+id/welcome_button_signin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SIGN IN" />
+            <Button
+                android:id="@+id/welcome_button_signin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SIGN IN" />
 
-        <Button
-            android:id="@+id/welcome_button_signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SIGN UP" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/welcome_button_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SIGN UP" />
+        </LinearLayout>
 
     </ScrollView>
 

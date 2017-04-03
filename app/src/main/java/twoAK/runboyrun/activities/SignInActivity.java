@@ -4,7 +4,9 @@ package twoAK.runboyrun.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,8 +20,6 @@ import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
-
-import static twoAK.runboyrun.auth.Auth.setToken;
 
 
 /** This class is designed to control the functional activity of the login and the login proсess.
@@ -150,13 +150,14 @@ public class SignInActivity extends AppCompatActivity {
      */
     public class SignInTask extends AsyncTask<Void, Void, Boolean> {
 
-        private String errorMes;
+        private String mToken;
 
         private final String mOAuth;            // type of authorization
         private final String mIdentificator;    // entered EMAIL
         private final String mPassword;         // entered PASSWORD
 
         SignInTask(String oauth, String email, String password) {
+            mToken = null;
             mOAuth = oauth;
             mIdentificator = email;
             mPassword = password;
@@ -170,11 +171,11 @@ public class SignInActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Log.i("SignInActivity", "Trying to login.");
 
-            errorMes = mAuth.signin(mOAuth, mIdentificator, mPassword);
-            if (errorMes == null) {
-                return true;
-            } else {
+            mToken = mAuth.signin(mOAuth, mIdentificator, mPassword);
+            if (mToken == null) {
                 return false;
+            } else {
+                return true;
             }
 
         }
@@ -190,11 +191,15 @@ public class SignInActivity extends AppCompatActivity {
 
             if (success) {
                 // set the received token and go to the "NewsFeed" activity
-                setToken(Auth.getToken());
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("token", mToken);
+                editor.commit();
+
                 startActivity(new Intent(SignInActivity.this, Activity1.class));
             } else {
                 // show the error and focus on the wrong field
-                Toast.makeText(getApplicationContext(), errorMes, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "LOGIN REQUEST NOT PASSED", Toast.LENGTH_LONG).show();
             }
         }
 

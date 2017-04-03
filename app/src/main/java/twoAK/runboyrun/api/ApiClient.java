@@ -17,6 +17,7 @@ import twoAK.runboyrun.exceptions.api.SignupFailedException;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
+import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
@@ -59,6 +60,25 @@ import twoAK.runboyrun.responses.objects.CountryObject;
                 .build();
 
         service = retrofit.create(RunBoyRunServerApi.class);
+    }
+
+
+    @Override
+    public boolean checkToken(String token) throws RequestFailedException, InsuccessfulResponseException {
+        Call<BaseResponse> req = service.checkToken("JWT "+token);
+        try {
+            Response<BaseResponse> response = req.execute();
+            System.out.println("CODE = "+response.code());
+            if(response.code() == 401) {
+                return false;
+            } else if (response.code() == 200) {
+                return true;
+            } else {
+                throw new InsuccessfulResponseException("Failed to check token on server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
     }
 
 

@@ -20,6 +20,8 @@ public interface IApiClient {
     public List<CityObject>     cities(String countryCode)
             throws RequestFailedException, InsuccessfulResponseException;
 
+    public boolean checkToken(String token)
+            throws RequestFailedException, InsuccessfulResponseException;
 
     public String login(String oauth, String login, String password)
             throws LoginFailedException;

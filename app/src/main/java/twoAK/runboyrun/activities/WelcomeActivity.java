@@ -3,14 +3,19 @@ package twoAK.runboyrun.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.auth.Auth;
 
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -21,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
     Button mSignInButton;
     Button mSignUpButton;
 
+    CheckTokenTask mCheckTokenTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,46 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        //showProgress(true);
+        SharedPreferences prefs = this.getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+        String token = prefs.getString("token", "");
+
+        if(token.equals("") == false) {
+            mCheckTokenTask = new WelcomeActivity.CheckTokenTask(token);
+            mCheckTokenTask.execute((Void) null);;
+        }
+
+    }
+
+
+    public class CheckTokenTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String token;
+
+        CheckTokenTask(String token) {
+            // show loading dailog
+            showProgress(true);
+
+            this.token = token;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.i("WelcomeActivity", "Trying to check token on server.");
+            Auth mAuth = new Auth();
+            return mAuth.checkToken(token);
+
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                startActivity(new Intent(WelcomeActivity.this, Activity1.class));
+            } else {
+                showProgress(false);
+            }
+
+        }
+
     }
 
 

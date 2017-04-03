@@ -1,6 +1,8 @@
 package twoAK.runboyrun.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -155,7 +157,10 @@ public abstract class BaseActivity extends AppCompatActivity
                 createBackStack(new Intent(this, Activity2.class));
                 break;
             case R.id.nav_menu_exit:
-                mAuth.setToken("");
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("token", "");
+                editor.commit();
                 startActivity(new Intent(this, WelcomeActivity.class));
 
 

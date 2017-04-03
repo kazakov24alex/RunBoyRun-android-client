@@ -4,11 +4,13 @@ package twoAK.runboyrun.api;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
+import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
@@ -24,6 +26,9 @@ import twoAK.runboyrun.responses.TokenResponse;
 public interface RunBoyRunServerApi {
 
 /* OPEN ROUTES: */
+
+    @GET("check_token")
+    Call<BaseResponse> checkToken(@Header("Authorization") String token);
 
     @POST("signin")
     Call<TokenResponse> signin(@Body LoginBody login_password);

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RunBoyRun</string>
     <string name="server_url">https://runboyrun.herokuapp.com/</string>
-    qFUV2b27bY3GPkrYJSuR8qwcfIPUL2k
-    qFUV2b27bY3GPkrYJSuR8qwcfIPUL2k
+    <string name="preferences_file_key" translatable="false">twoAK.runboyrun.preferences</string>
+
     <string name="vk_app_id">5944334</string>
     <string name="facebook_app_id">1449271205145331</string>
     <string name="twitter_consumer_key">d8E0D0D3TQRd1qsR3gmBLAb9L</string>

@@ -2,7 +2,9 @@ package twoAK.runboyrun.activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CitiesSpinnerAdapter;
@@ -397,6 +398,8 @@ public class SignUpActivity extends AppCompatActivity {
      */
     public class SignupTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String mToken;
+
         private String OAuth;
         private String identificator;
         private String password;
@@ -410,6 +413,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         SignupTask(String OAuth, String identificator,String password,String name,String surname,String country,
                    String city, String bithday, String sex) {
+            this.mToken         = null;
+
             this.OAuth          = OAuth;
             this.identificator  = identificator;
             this.password       = password;
@@ -428,7 +433,12 @@ public class SignUpActivity extends AppCompatActivity {
             Log.i("SignUpActivity", "Trying to registrate user.");
 
             // sending request to registration
-            return mAuth.signup(OAuth, identificator, password, name, surname, country, city, bithday, sex);
+            mToken = mAuth.signup(OAuth, identificator, password, name, surname, country, city, bithday, sex);
+            if(mToken == null) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         @Override
@@ -438,7 +448,11 @@ public class SignUpActivity extends AppCompatActivity {
 
             // check success of task
             if (success){
-                //setToken(Auth.getToken());
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("token", mToken);
+                editor.commit();
+
                 startActivity(new Intent(SignUpActivity.this, Activity1.class));
             } else{
                 Toast toast = Toast.makeText(getApplicationContext(),
