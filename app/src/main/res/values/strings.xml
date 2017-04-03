@@ -37,6 +37,7 @@
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_name">This name is invalid</string>
+    <string name="error_invalid_birthday">Set correct birthday</string>
     <string name="error_invalid_surname">This surname is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>

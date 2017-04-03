@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CitiesSpinnerAdapter;
@@ -96,66 +97,23 @@ public class SignUpActivity extends AppCompatActivity {
         mSexSpinner     = (Spinner)findViewById(R.id.signup_spinner_sex);
         mRegisterButton = (Button)findViewById(R.id.signup_button_save);
 
+
+        // set current date on TImePicker
+        Calendar calendar = Calendar.getInstance();
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mMonth = calendar.get(Calendar.MONTH);
+        mYear = calendar.get(Calendar.YEAR);
+
         // function-handlers
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //validation
-                boolean cancelFlag = false; // attempt cancellation flag
-                View focusView = null;
-
-                String name = mNameEdit.getText().toString().trim();
-                String surname = mSurnameEdit.getText().toString().trim();
-
-                if (TextUtils.isEmpty(name) || !isNameValid(name)) {
-                    mNameEdit.setError(getString(R.string.error_invalid_name));
-                    focusView = mNameEdit;
-                    cancelFlag = true;
-                }
-
-                if (TextUtils.isEmpty(surname) || !isSurameValid(surname)) {
-                    mSurnameEdit.setError(getString(R.string.error_invalid_surname));
-                    focusView = mSurnameEdit;
-                    cancelFlag = true;
-                }
-
-                if (mDay == 0 && mMonth == 0 && mYear == 0){
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Сities were not loaded. try it again", Toast.LENGTH_SHORT);
-                    toast.show();
-                    cancelFlag = true;
-                }
-
-                if (cancelFlag) {
-                    // there was an error; don't attempt registration and focus the first form field with an error
-                    focusView.requestFocus();
-                }else {
+                if (validation() == true) {
                     onRegisterClick();
                 }
             }
-
-            private boolean isNameValid(String name) {
-                if ((name.length()<3) || (name.length()>20)){
-                    return false;
-                }else
-                    if(!(name.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
-                        return false;
-                    }else {
-                        return true;
-                    }
-            }
-
-            private boolean isSurameValid(String surname) {
-                if (surname.length()<3 || surname.length()>20){
-                    return false;
-                }else
-                if(!(surname.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
-                    return false;
-                }else {
-                    return true;
-                }
-            }
         });
+
 
 
         mBithdayButton.setOnClickListener(new View.OnClickListener() {
@@ -165,17 +123,12 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+
         // setting listenets on views
         ArrayAdapter<?> adapter =
                 ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSexSpinner.setAdapter(adapter);
-
-        // set current date on TImePicker
-        Calendar calendar = Calendar.getInstance();
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mMonth = calendar.get(Calendar.MONTH);
-        mYear = calendar.get(Calendar.YEAR);
 
         // registration form autocomplete, if register via socail network
         if(mOAuth != "own") { formAutocomplete(); }
@@ -184,6 +137,62 @@ public class SignUpActivity extends AppCompatActivity {
         mCountryLoadingTask = new CountryLoadingTask();
         mCountryLoadingTask.execute((Void) null);
 
+    }
+
+    public boolean validation(){
+        View focusView = null;
+
+        String name = mNameEdit.getText().toString().trim();
+        String surname = mSurnameEdit.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name) || !isNameValid(name)) {
+            mNameEdit.setError(getString(R.string.error_invalid_name));
+            focusView = mNameEdit;
+            focusView.requestFocus();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(surname) || !isSurameValid(surname)) {
+            mSurnameEdit.setError(getString(R.string.error_invalid_surname));
+            focusView = mSurnameEdit;
+            focusView.requestFocus();
+            return false;
+        }
+
+        Calendar date = Calendar.getInstance();
+        date.set(mYear,mMonth,mDay);
+        Calendar curDate = Calendar.getInstance();
+        if (date.before(curDate) == false){
+            Toast toast = Toast.makeText(getApplicationContext(),
+                   getString(R.string.error_invalid_birthday), Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private boolean isNameValid(String name) {
+        if ((name.length()<3) || (name.length()>20)){
+            return false;
+        }else
+        if(!(name.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    private boolean isSurameValid(String surname) {
+        if (surname.length()<3 || surname.length()>20){
+            return false;
+        }else
+        if(!(surname.matches("^[a-zA-Z][a-zA-Z-]{1,20}$"))){
+            return false;
+        }else {
+            return true;
+        }
     }
 
 
