@@ -3,13 +3,12 @@
     <string name="server_url">https://runboyrun.herokuapp.com/</string>
     <string name="preferences_file_key" translatable="false">twoAK.runboyrun.preferences</string>
 
+    <!-- Social networks key data-->
     <string name="vk_app_id">5944334</string>
     <string name="facebook_app_id">1449271205145331</string>
-    <string name="twitter_consumer_key">d8E0D0D3TQRd1qsR3gmBLAb9L</string>
-    <string name="twitter_consumer_secret">0JUDeL7ZmJvPd1KinwbkZnBkTWaFPxfbFjYG047yXXV40NJwRP</string>
     <string name="google_client_id">1098093132900-dmb49sod7fcbvgj6mtbdoq80rlha1o78.apps.googleusercontent.com</string>
 
-
+    <!-- Navigator Drawer -->
     <string name="action_settings">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -19,10 +18,38 @@
     <string name="title_activity_deleteme">deleteme</string>
     <string name="title_activity_2">Activity2</string>
 
+    <!-- Genelar errors -->
+    <string name="error_toast_no_internet_connection">Could not connect to the server\nPlease check connection</string>
+
+    <!-- Welcome activity -->
+    <string name="welcome_title">WELCOME</string>
+    <string name="welcome_buttontext_sign_in">SIGN IN</string>
+    <string name="welcome_buttontext_sign_up">SIGN UP</string>
+    <string name="welcome_error_toast_token_expired">Our token is expired\nPlease login again</string>
+
+    <!-- SignIn activity -->
+    <string name="signin_title">LOGIN</string>
+    <string name="signin_button_signin">SIGN IN</string>
+    <string name="signin_button_signin_via_sn">SIGN IN VIA SOCIAL NETWORKS</string>
+    <string name="signin_edittext_email">Email</string>
+    <string name="signin_edittext_password">Password</string>
+    <string name="signin_dialog_login">Log in, please wait</string>
+    <string name="signin_error_incorrect_email">incorrect email address</string>
+    <string name="signin_error_incorrect_password">incorrect password</string>
+    <string name="signin_toast_socialnets_no_data">Data from social network not recieved. Please try again</string>
+    <string name="signin_toast_incorrent_login_data">A user with such email and password is not registered</string>
 
     <!-- PreSignUp activity-->
-    <string name="presignup_dialog_check_id">Identificator checking\nWait a moment please</string>
-    <string name="presignup_error_user_exist">The user already exist</string>
+    <string name="presignup_title">REGISTRATION</string>
+    <string name="presignup_edittext_email">Email</string>
+    <string name="presignup_edittext_password">Password</string>
+    <string name="presignup_button_signup">SIGN UP</string>
+    <string name="presignup_button_signup_via_sn">SIGN UP VIA SOCIAL NETWORKS</string>
+    <string name="presignup_error_incorrect_email">incorrect email address</string>
+    <string name="presignup_error_incorrect_password">incorrect password</string>
+    <string name="presignup_dialog_check_id">Verification of uniqueness\nWait a moment please</string>
+    <string name="presignup_toast_socialnets_no_data">Data from social network not recieved. Please try again</string>
+    <string name="presignup_toast_id_not_unique">Such user is already registered</string>
 
 
     <!-- SignUp activity -->
@@ -32,6 +59,17 @@
     <string name="signup_dialog_registration_waiting">Register you - please wait</string>
 
 
+    <!-- Navigation Drawer -->
+    <string name="navdrawer_item_start_activity">Start activity</string>
+    <string name="navdrawer_item_personal_page">Personal page</string>
+    <string name="navdrawer_item_subscriptions">Subscriptions</string>
+    <string name="navdrawer_item_activities">Activities</string>
+    <string name="navdrawer_item_statistics">Statistics</string>
+    <string name="navdrawer_item_records">Records</string>
+    <string name="navdrawer_item_challenges">Challenges</string>
+    <string name="navdrawer_item_competitions">Competitions</string>
+    <string name="navdrawer_item_rates">Rates</string>
+    <string name="navdrawer_item_logout">Logout</string>
 
 
     <!--ERRORS-->

@@ -149,14 +149,14 @@ public abstract class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.nav_1:
+            case R.id.navdrawer_item_start_activity:
                 createBackStack(new Intent(this, Activity1.class));
                 break;
 
-            case R.id.nav_2:
+            case R.id.navdrawer_item_personal_page:
                 createBackStack(new Intent(this, Activity2.class));
                 break;
-            case R.id.nav_menu_exit:
+            case R.id.navdrawer_item_logout:
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", "");

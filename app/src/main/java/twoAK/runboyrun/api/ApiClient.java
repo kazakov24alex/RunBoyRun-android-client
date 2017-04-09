@@ -68,7 +68,6 @@ import twoAK.runboyrun.responses.objects.CountryObject;
         Call<BaseResponse> req = service.checkToken("JWT "+token);
         try {
             Response<BaseResponse> response = req.execute();
-            System.out.println("CODE = "+response.code());
             if(response.code() == 401) {
                 return false;
             } else if (response.code() == 200) {
@@ -131,7 +130,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
             if(response.body().isSuccess())
                 return response.body().getBusy();
             else
-                throw new CheckFailedException("Request is failed");
+                throw new CheckFailedException("Identificator not unique");
         }
         catch (IOException e) {
             throw new CheckFailedException(e);

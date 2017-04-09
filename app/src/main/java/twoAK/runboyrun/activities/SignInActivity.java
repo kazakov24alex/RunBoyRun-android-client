@@ -1,17 +1,13 @@
 package twoAK.runboyrun.activities;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,107 +16,134 @@ import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
+import twoAK.runboyrun.exceptions.api.LoginFailedException;
 
 
-/** This class is designed to control the functional activity of the login and the login proсess.
-*   @version in process
+/**
+ * Activity offers login via own login system and via social networks.
 */
 public class SignInActivity extends AppCompatActivity {
+    public int SIGNIN_ACTIVITY_REQUEST_CODE = 111;
 
-    private Auth        mAuth;          // authorization module
-    private SignInTask  mSignInTask;    // task to attempt sign in
+    private Auth        mAuth;              // authorization module
+    private SignInTask  mSignInTask;        // task to attempt sign in (own)
 
-    private EditText    mEmailView;     // email input field
-    private EditText    mPasswordView;  // password input field
+    private EditText    mIdentificatorView; // email input field
+    private EditText    mPasswordView;      // password input field
 
-    private Button      mSignInButton;  // button to attempt sign in
-    private Button      mSNSignInButton;// button to attempt sign in via VK
+    private Button      mSignInButton;      // button to attempt sign in
+    private Button      mSNSignInButton;    // button to attempt sign in via VK
 
-    private View        mProgressView;  // view of a progress spinner
-    private View        mLoginFormView; // view of login form
+    private ProgressDialog mProgressDialog; // view of a progress spinner
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signin);
+        mAuth = new Auth();
 
-        // initializing class members
-        mAuth           = new Auth();
-        mEmailView      = (EditText) findViewById(R.id.signin_editText_email);
-        mPasswordView   = (EditText) findViewById(R.id.sign_in_editText_password);
-        mSignInButton   = (Button) findViewById(R.id.signin_button_sendSignIn);
-        mSNSignInButton = (Button) findViewById(R.id.signin_social_nets);
-        mLoginFormView  = findViewById(R.id.signin_login_form);
-        mProgressView   = findViewById(R.id.signin_login_progress);
+        // View initialization
+        mIdentificatorView  = (EditText) findViewById(R.id.signin_editText_identificator);
+        mPasswordView       = (EditText) findViewById(R.id.signin_editText_password);
+        mSignInButton       = (Button) findViewById(R.id.signin_button_sendSignIn);
+        mSNSignInButton     = (Button) findViewById(R.id.signin_button_socialnets_sign_in);
 
-        // setting click listener on SIGN IN button
+        // Setting click listeners
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptSignIn();
+                if(validation()) {
+                    signInAttempt();
+                }
             }
         });
         mSNSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(SignInActivity.this, SocialNetworksAuthActivity.class), 111);
+                startActivityForResult(new Intent(SignInActivity.this, SocialNetworksAuthActivity.class),
+                        SIGNIN_ACTIVITY_REQUEST_CODE);
             }
         });
     }
 
 
-    /** This method tries to login with the data available in the EMAIL and PASSWORD fields.
-     *
+    /** This method checks syntax correctness of identificator and password field.
+     * @return (boolean) success - success of checking
      */
-    private void attemptSignIn() {
-        boolean cancelFlag = false; // attempt cancellation flag
-        View focusView = null;      // focus on field with error
+    private boolean validation() {
+        View focusView = null; // focus on field with error
 
         // сheck if the task is already running
         if(mSignInTask != null) {
-            return;
-        }
-
-        // store values at the time of the identificator attempt
-        String identificator    = mEmailView.getText().toString().trim();
-        String password         = mPasswordView.getText().toString().trim();
-
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // check for a valid password, if the user entered one
-        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancelFlag = true;
+            return false;
         }
 
         // check for a valid email
-        if (TextUtils.isEmpty(identificator)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancelFlag = true;
-        }
-
-        if (cancelFlag) {
-            // there was an error; don't attempt login and focus the first form field with an error
+        String email = mIdentificatorView.getText().toString().trim();
+        mIdentificatorView.setError(null);
+        if (!isEmailValid(email)) {
+            mIdentificatorView.setError(getString(R.string.signin_error_incorrect_email));
+            focusView = mIdentificatorView;
             focusView.requestFocus();
-        } else {
-            // show a progress spinner and kick off a background task to perform the user login attempt
-            showProgress(true);
-            mSignInTask = new SignInActivity.SignInTask("own", identificator, password);
-            mSignInTask.execute((Void) null);
+            return false;
         }
 
+        // check for a valid password, if the user entered one
+        String password = mPasswordView.getText().toString().trim();
+        mPasswordView.setError(null);
+        if (!isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.signin_error_incorrect_password));
+            focusView = mPasswordView;
+            focusView.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
 
+    /** This method сhecks the entered email for validity.
+     * @param email - verifiable email
+     * @return (boolean) correct or not
+     */
+    private boolean isEmailValid(String email) {
+        return email.matches("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$");
+    }
 
+
+    /** This method сhecks the entered password for validity.
+     * Lowercase and uppercase Latin letters, numbers, special characters. Minimum 6 characters.
+     * @param password - verifiable password
+     * @return (boolean) correct or not
+     */
+    private boolean isPasswordValid(String password) {
+        return password.matches("(?=^.{6,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$");
+    }
+
+
+    /** This method tries to login with the data available in the EMAIL and PASSWORD fields. */
+    private void signInAttempt() {
+        String identificator = mIdentificatorView.getText().toString().trim();
+        String password      = mPasswordView.getText().toString().trim();
+
+        mSignInTask = new SignInActivity.SignInTask("own", identificator, password);
+        mSignInTask.execute((Void) null);
+    }
+
+
+    /**
+     * This method gets data from SocialNetworksAuthActivity from social networks accounts of users.
+     * @param requestCode   - code=111 of request from this activity
+     * @param resultCode    - RESULT_OK, if it was success
+     * @param data          - contains the following extras:
+     *                          "oauth" - authorizing social network
+     *                          "id" - user id from the social network
+     *                          "access_token" - access token of the user
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == SignInActivity.RESULT_OK) {
-            showProgress(true);
+        if((requestCode == SIGNIN_ACTIVITY_REQUEST_CODE) && (resultCode == SignInActivity.RESULT_OK)) {
             mSignInTask = new SignInActivity.SignInTask(
                     data.getExtras().getString("oauth"),
                     data.getExtras().getString("id"),
@@ -129,35 +152,29 @@ public class SignInActivity extends AppCompatActivity {
             mSignInTask.execute((Void) null);
 
         } else {
-            Toast.makeText(getApplicationContext(), "Social network data not received" , Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.signin_toast_socialnets_no_data) , Toast.LENGTH_LONG).show();
         }
     }
 
-
-
-
-    /** This method сhecks the entered password for validity.
-     * @param password - verifiable password
-     * @return correct or not
-     */
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
-    }
 
 
     /**
      * Represents an asynchronous login task used to authenticate the user.
      */
     public class SignInTask extends AsyncTask<Void, Void, Boolean> {
-
-        private String mToken;
+        private String mToken;  // received token
+        private String errMes;  // error message possible
 
         private final String mOAuth;            // type of authorization
         private final String mIdentificator;    // entered EMAIL
         private final String mPassword;         // entered PASSWORD
 
         SignInTask(String oauth, String email, String password) {
+            showProgress(getString(R.string.signin_dialog_login));
             mToken = null;
+            errMes = null;
+
             mOAuth = oauth;
             mIdentificator = email;
             mPassword = password;
@@ -170,36 +187,38 @@ public class SignInActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             Log.i("SignInActivity", "Trying to login.");
-
-            mToken = mAuth.signin(mOAuth, mIdentificator, mPassword);
-            if (mToken == null) {
-                return false;
-            } else {
+            try {
+                mToken = mAuth.signin(mOAuth, mIdentificator, mPassword);
                 return true;
+            } catch(LoginFailedException e) {
+                errMes = getString(R.string.signin_toast_incorrent_login_data);
             }
-
+            return false;
         }
+
 
         /** Actions after task execution
          * @param success - success of the task
          *  */
         @Override
         protected void onPostExecute(final Boolean success) {
-            // reset the task and hide a progress spinner
+            // reset the task and hide a progressbar
             mSignInTask = null;
-            showProgress(false);
+            hideProgressDialog();
 
             if (success) {
+                Log.i("SignInActivity", "Login was success.");
+
                 // set the received token and go to the "NewsFeed" activity
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("token", mToken);
+                editor.putString("token", mToken).commit();
                 editor.commit();
-
                 startActivity(new Intent(SignInActivity.this, Activity1.class));
             } else {
+                Log.i("SignInActivity", "Login is unsuccessful.");
                 // show the error and focus on the wrong field
-                Toast.makeText(getApplicationContext(), "LOGIN REQUEST NOT PASSED", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
             }
         }
 
@@ -208,44 +227,23 @@ public class SignInActivity extends AppCompatActivity {
         protected void onCancelled() {
             // reset the task and hide a progress spinner
             mSignInTask = null;
-            showProgress(false);
+            hideProgressDialog();
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    /** Show the progress dialog.*/
+    protected void showProgress(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+    /** Hide the progress dialog.*/
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
     }
 
 }

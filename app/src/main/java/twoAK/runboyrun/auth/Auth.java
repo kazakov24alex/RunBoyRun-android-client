@@ -50,15 +50,13 @@ public class Auth {
 
 
 
-    public Boolean checkToken(String token) {
+    public Boolean checkToken(String token) throws RequestFailedException, InsuccessfulResponseException {
         try {
             return ApiClient.instance().checkToken(token);
         } catch(RequestFailedException e) {
-            System.out.println("EXCEPTION!!!!!!!!!! RequestFailedException");
-            return false;
+            throw new RequestFailedException(e);
         } catch(InsuccessfulResponseException e) {
-            System.out.println("EXCEPTION!!!!!!!!!! RequestFailedException");
-            return false;
+            throw new InsuccessfulResponseException(e);
         }
     }
 
@@ -68,22 +66,22 @@ public class Auth {
      * @exception LoginFailedException login failed
      * @return the success of obtaining a token
      * */
-    public String signin(String oauth, String login, String password)  {
+    public String signin(String oauth, String login, String password) throws LoginFailedException  {
         try {
             return ApiClient.instance().login(oauth, login, password);
         }
         catch (LoginFailedException e) {
-            return null;
+            throw new LoginFailedException(e);
         }
     }
 
 
-    public static boolean check(String oauth, String identificator) {
+    public static boolean check(String oauth, String identificator) throws CheckFailedException {
         try {
             return ApiClient.instance().check(oauth, identificator);
         }
         catch (CheckFailedException e) {
-            return false;
+            throw new CheckFailedException(e);
         }
     }
 

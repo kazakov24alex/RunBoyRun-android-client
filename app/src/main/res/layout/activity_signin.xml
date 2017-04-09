@@ -5,7 +5,7 @@
 
     <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/signin_login_progress"
+        android:id="@+id/signin_progress_dialog"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:text="LOGIN"
+                android:text="@string/signin_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView2"
@@ -39,8 +39,8 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
-                    android:id="@+id/signin_editText_email"
+                    android:hint="@string/signin_edittext_email"
+                    android:id="@+id/signin_editText_identificator"
                     android:inputType="textEmailSubject" />
             </android.support.design.widget.TextInputLayout>
 
@@ -51,24 +51,25 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:id="@+id/sign_in_editText_password"
+                    android:hint="@string/signin_edittext_password"
+                    android:id="@+id/signin_editText_password"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:text="Sign In"
+                android:text="@string/signin_button_signin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/signin_button_sendSignIn" />
 
             <Button
-                android:id="@+id/signin_social_nets"
+                android:text="@string/signin_button_signin_via_sn"
+                android:id="@+id/signin_button_socialnets_sign_in"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SIGN IN VIA SOCIAL NETWORKS" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>
