@@ -214,7 +214,7 @@ public class SignInActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", mToken).commit();
                 editor.commit();
-                startActivity(new Intent(SignInActivity.this, Activity1.class));
+                startActivity(new Intent(SignInActivity.this, StartNewActivityActivity.class));
             } else {
                 Log.i("SignInActivity", "Login is unsuccessful.");
                 // show the error and focus on the wrong field

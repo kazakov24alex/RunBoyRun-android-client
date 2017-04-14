@@ -106,7 +106,7 @@ public class WelcomeActivity extends AppCompatActivity {
             mCheckTokenTask = null;
             if(success) {
                 Log.i("WelcomeActivity", "Token checked: correct");
-                startActivity(new Intent(WelcomeActivity.this, Activity1.class));
+                startActivity(new Intent(WelcomeActivity.this, StartNewActivityActivity.class));
             } else {
                 Log.i("WelcomeActivity", "Token checked: incorrect");
                 showProgressCircle(false);

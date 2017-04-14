@@ -1,15 +1,17 @@
 package twoAK.runboyrun.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 
-public class Activity1 extends BaseActivity {
+public class StartNewActivityActivity extends BaseActivity {
 
 
     private View rootView;
@@ -18,7 +20,7 @@ public class Activity1 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_1);
+        setContentView(R.layout.activity_start_activity);
         rootView = findViewById(R.id.activity1_container);
 
         /* use rootView to get UI content from main container */
@@ -29,7 +31,7 @@ public class Activity1 extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Activity1", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "StartNewActivityActivity", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -60,4 +62,20 @@ public class Activity1 extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.start_activity_button_enter_stat:
+                Toast.makeText(getApplicationContext(), "COMING SOON", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.start_activity_button_track_activity:
+                startActivity(new Intent(StartNewActivityActivity.this, TrackActivityActivity.class));
+                break;
+            default:
+                break;
+        }
+    }
+
+
 }

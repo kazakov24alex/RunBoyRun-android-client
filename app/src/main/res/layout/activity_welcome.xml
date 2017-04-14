@@ -8,8 +8,9 @@
     <ProgressBar
         android:id="@+id/welcome_progress_circle"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 

@@ -150,7 +150,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.navdrawer_item_start_activity:
-                createBackStack(new Intent(this, Activity1.class));
+                createBackStack(new Intent(this, StartNewActivityActivity.class));
                 break;
 
             case R.id.navdrawer_item_personal_page:
