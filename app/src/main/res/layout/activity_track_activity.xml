@@ -50,7 +50,7 @@
                 android:id="@+id/track_activity_text_time_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1:02:53"
+                android:text="0:00:00"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -103,7 +103,7 @@
             android:layout_weight="2">
 
             <TextView
-                android:id="@+id/track_activity_text_tracksign"
+                android:id="@+id/track_activity_text_provider_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="G"
@@ -112,12 +112,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/track_activity_text_tracktype"
+                android:id="@+id/track_activity_text_provider_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
-                android:background="@color/vk_color"
-                android:text="GPS"
+                android:background="@color/PROVIDER_not_available_color"
+                android:text="@string/track_activity_text_status_not_provider"
                 android:textAlignment="center"
                 android:textColor="@color/vk_white"
                 android:textSize="10sp"
@@ -134,21 +134,23 @@
         android:layout_height="match_parent">
 
         <fragment
-            android:id="@+id/mapView"
+            android:id="@+id/track_activity_mapview_google"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MapsActivity" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatBut"
+            android:id="@+id/track_activity_floatbut_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/mapView"
-            android:layout_alignEnd="@+id/mapView"
+            android:layout_alignBottom="@+id/track_activity_mapview_google"
+            android:layout_alignEnd="@+id/track_activity_mapview_google"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/quantum_ic_stop_white_24" />
+            android:clickable="true"
+            android:src="@drawable/quantum_ic_stop_white_24"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

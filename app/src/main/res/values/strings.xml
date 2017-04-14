@@ -82,17 +82,24 @@
     <!-- TrackActivity Activity -->
     <string name="track_activity_text_label_km">KILOMETERS</string>
     <string name="track_activity_text_label_time">ACTIVITY TIME</string>
-    <string name="track_activity_text_label_tempo">TEMPO</string>
+    <string name="track_activity_text_label_tempo">KM/MIN</string>
 
     <string name="track_activity_toast_not_location">Your location is not defined\n
         Make sure the access to a location is allowed</string>
     <string name="track_activity_toast_network_provider">Location data are provided by network provider\n
         They may not be accurate. We advise you to enable GPS</string>
     
-    
-    <string name="provider_gps">GPS</string>
-    <string name="provider_network">Network</string>
-    <string name="location_settings">Location settings</string>
+
+    <string name="track_activity_text_status_gps">GPS</string>
+    <string name="track_activity_text_status_network">NET</string>
+    <string name="track_activity_text_status_not_provider">NOT</string>
+
+    <string name="track_activity_dialog_notprovider_title">Problems with location</string>
+    <string name="track_activity_dialog_notprovider_text">Unable to determine your location.\nCheck in settings if you have permission to receive your current location.</string>
+    <string name="track_activity_dialog_button_check_settings">SETTINGS</string>
+    <string name="track_activity_dialog_button_cancel">CANCEL</string>
+
+
 
 
     <!--ERRORS-->
