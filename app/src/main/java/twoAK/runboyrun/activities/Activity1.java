@@ -19,7 +19,8 @@ public class Activity1 extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_1);
-        rootView = findViewById(R.id.activity1_container);
+
+       // rootView = findViewById(R.id.activity1_container);
 
         /* use rootView to get UI content from main container */
         //BT bt = (BT) rootView.findViewById(R.id.fab) ...;
