@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import retrofit2.Response;
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.adapters.SquareView;
+import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
@@ -25,7 +25,7 @@ import static twoAK.runboyrun.activities.SocialNetworksAuthActivity.showProgress
 
 public class Activity2 extends BaseActivity {
     private View rootView;
-    private SquareView avka;
+    private SquareImageView avka;
 
     private TextView name;
     private TextView surname;
@@ -54,8 +54,8 @@ public class Activity2 extends BaseActivity {
         //Set nav drawer selected to second item in list
         mNavigationView.getMenu().getItem(1).setChecked(true);
 
-        avka = (SquareView) findViewById(R.id.activity2_imageView_avatar);
-        avka.onMeasure(avka.getWidth(),avka.getWidth());
+        avka = (SquareImageView) findViewById(R.id.activity2_imageView_avatar);
+        avka.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         SharedPreferences prefs = this.getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
         String token = prefs.getString("token", "");

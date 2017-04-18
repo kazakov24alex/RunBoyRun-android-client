@@ -28,23 +28,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="2.5"
                 android:orientation="vertical">
 
-                <twoAK.runboyrun.adapters.SquareView
+                <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/activity2_imageView_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
