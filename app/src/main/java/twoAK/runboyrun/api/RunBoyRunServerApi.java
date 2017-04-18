@@ -14,6 +14,7 @@ import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 
@@ -44,4 +45,7 @@ public interface RunBoyRunServerApi {
 
     @POST("signup")
     Call<SignUpResponse> signup(@Body SignUpBody signUpBody);
+
+    @GET("api/profile_info")
+    Call<GetProfileInfoResponse> getProfileInfo(@Header("Authorization") String token);
 }

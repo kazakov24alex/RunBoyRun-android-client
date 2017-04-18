@@ -3,10 +3,12 @@ package twoAK.runboyrun.api;
 import java.util.List;
 
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
+import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
+import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
@@ -32,5 +34,8 @@ public interface IApiClient {
     public String signup(String oauth, String identificator,String password,String name,
                            String surname, String country, String city, String birthday, String sex)
             throws SignupFailedException;
+
+    public GetProfileInfoResponse getProfileInfo()
+        throws GetProfileInfoFailedException;
 
 }

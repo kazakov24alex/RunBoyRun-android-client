@@ -214,6 +214,7 @@ public class SignInActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", mToken).commit();
                 editor.commit();
+                Auth.setToken(mToken);
                 startActivity(new Intent(SignInActivity.this, Activity1.class));
             } else {
                 Log.i("SignInActivity", "Login is unsuccessful.");

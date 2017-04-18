@@ -1,6 +1,8 @@
 package twoAK.runboyrun.api;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -9,7 +11,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import twoAK.runboyrun.auth.Auth;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
+import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -21,6 +25,7 @@ import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
@@ -167,6 +172,18 @@ import twoAK.runboyrun.responses.objects.CountryObject;
         }
     }
 
-
-
+    @Override
+    public GetProfileInfoResponse getProfileInfo() throws GetProfileInfoFailedException {
+        Call<GetProfileInfoResponse> req = service.getProfileInfo(Auth.getHeaderField());
+        try {
+            Response<GetProfileInfoResponse> response = req.execute();
+            if(response.body().isSuccess()){
+                return response.body();
+            } else{
+                throw new GetProfileInfoFailedException("Failed Getting Profile Data");
+            }
+        }catch (IOException e){
+            throw new GetProfileInfoFailedException(e);
+        }
+    }
 }

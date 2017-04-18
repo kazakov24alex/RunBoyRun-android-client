@@ -415,7 +415,7 @@ public class SignUpActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", mToken);
                 editor.commit();
-
+                Auth.setToken(mToken);
                 startActivity(new Intent(SignUpActivity.this, Activity1.class));
             } else{
                 Toast toast = Toast.makeText(getApplicationContext(),

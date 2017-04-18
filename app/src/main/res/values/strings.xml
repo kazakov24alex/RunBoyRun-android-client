@@ -58,6 +58,9 @@
     <string name="signup_dialog_city_loading">"Loading a list of cities"</string>
     <string name="signup_dialog_registration_waiting">Register you - please wait</string>
 
+    <!--GetProfileInfo activity-->
+    <string name="getprofileinfo_error">incorrect data</string>
+
 
     <!-- Navigation Drawer -->
     <string name="navdrawer_item_start_activity">Start activity</string>
