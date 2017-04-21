@@ -13,88 +13,94 @@
     tools:context="learn.navdrawbase.Activity2"
     tools:showIn="@layout/activity_2">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Profile loading progress -->
+    <ProgressBar
+        android:id="@+id/profile_loading_progress_dialog"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="3">
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:weightSum="3">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/activity2_imageView_avatar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/activity2_textView_name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/activity2_textView_country_city"
-                    android:layout_weight="1.5"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_weight="2.5"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/activity2_textView_surname"
+                    <twoAK.runboyrun.adapters.SquareImageView
+                        android:id="@+id/activity2_imageView_avatar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/activity2_imageView_avatar"
-                    android:layout_alignStart="@+id/activity2_textView_name"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="normal" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity2_textView_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/activity2_textView_country_city"
+                        android:layout_weight="1.5"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/activity2_textView_surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/activity2_imageView_avatar"
+                        android:layout_alignStart="@+id/activity2_textView_name"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/activity2_textView_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/activity2_textView_country_city"
+                android:layout_below="@+id/activity2_textView_country_city"
+                android:layout_marginTop="11dp"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/activity2_textView_country_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/activity2_imageView_avatar"
+                android:layout_below="@+id/activity2_imageView_avatar"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="normal" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/activity2_textView_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/activity2_textView_country_city"
-            android:layout_below="@+id/activity2_textView_country_city"
-            android:layout_marginTop="11dp"
-            android:text="Age: 25"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal|bold" />
 
-        <TextView
-            android:id="@+id/activity2_textView_country_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/activity2_imageView_avatar"
-            android:layout_below="@+id/activity2_imageView_avatar"
-            android:text="Spain, Madrid"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal" />
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+    </RelativeLayout>

@@ -39,6 +39,7 @@
     <string name="signin_toast_socialnets_no_data">Data from social network not recieved. Please try again</string>
     <string name="signin_toast_incorrent_login_data">A user with such email and password is not registered</string>
 
+
     <!-- PreSignUp activity-->
     <string name="presignup_title">REGISTRATION</string>
     <string name="presignup_edittext_email">Email</string>
@@ -60,6 +61,7 @@
 
     <!--GetProfileInfo activity-->
     <string name="getprofileinfo_error">incorrect data</string>
+    <string name="profile_loading_progress_dialog">Loading data, please wait</string>
 
 
     <!-- Navigation Drawer -->

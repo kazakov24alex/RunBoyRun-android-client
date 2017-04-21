@@ -1,5 +1,6 @@
 package twoAK.runboyrun.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import retrofit2.Response;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.SquareImageView;
@@ -24,19 +27,23 @@ import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import static twoAK.runboyrun.activities.SocialNetworksAuthActivity.showProgress;
 
 public class Activity2 extends BaseActivity {
-    private View rootView;
     private SquareImageView avka;
 
     private TextView name;
     private TextView surname;
+    private TextView country_city;
+    private TextView age;
+
+    private int mYear, mMonth, mDay;
 
     private GetProfileInfoTask profileInfoTask;
+
+    private ProgressDialog mProgressDialog; // view of a progress spinner
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
-        rootView = findViewById(R.id.activity2_personal_page);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +57,8 @@ public class Activity2 extends BaseActivity {
         //View initialization
         name = (TextView) findViewById(R.id.activity2_textView_name);
         surname = (TextView) findViewById(R.id.activity2_textView_surname);
+        country_city = (TextView) findViewById(R.id.activity2_textView_country_city);
+        age = (TextView) findViewById(R.id.activity2_textView_age);
 
         //Set nav drawer selected to second item in list
         mNavigationView.getMenu().getItem(1).setChecked(true);
@@ -68,6 +77,7 @@ public class Activity2 extends BaseActivity {
 
         GetProfileInfoTask() {
             errMes = null;
+            showProgress(getString(R.string.profile_loading_progress_dialog));
         }
 
         @Override
@@ -83,17 +93,65 @@ public class Activity2 extends BaseActivity {
 
         @Override
         protected void onPostExecute(final GetProfileInfoResponse profileInfo) {
-
+            hideProgressDialog();
             if (profileInfo!=null) {
                 Log.i("GetProfileInfoActivity", "Getting profile info was success.");
                 name.setText(profileInfo.getName());
                 surname.setText(profileInfo.getSurname());
+                country_city.setText(profileInfo.getCountry()+", "+profileInfo.getCity());
+
+                Calendar calendar = Calendar.getInstance();
+                mDay = calendar.get(Calendar.DAY_OF_MONTH);
+                mMonth = calendar.get(Calendar.MONTH);
+                mYear = calendar.get(Calendar.YEAR);
+
+                int day = Integer.parseInt(profileInfo.getBirthday().substring(8,10));
+                int month = Integer.parseInt(profileInfo.getBirthday().substring(5,7));
+                int year = Integer.parseInt(profileInfo.getBirthday().substring(0,4));
+
+                if(mMonth>month){
+                    age.setText("Age:"+(mYear-year));
+                }else
+                    if(mMonth<month){
+                        age.setText("Age:"+(mYear-year-1));
+                    }else
+                        if(mMonth<month){
+                            if(mDay>=day){
+                                age.setText("Age:"+(mYear-year));
+                            }
+                            else{
+                                age.setText("Age:"+(mYear-year-1));
+                            }
+                        }
+
+                System.out.println("!!!!!"+day+"-"+month+"-"+year);
             } else {
                 Log.i("SignInActivity", "Login is unsuccessful.");
                 // show the error and focus on the wrong field
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
             }
         }
+
+        /** The task was canceled. */
+        @Override
+        protected void onCancelled() {
+            // reset the task and hide a progress spinner
+            hideProgressDialog();
+        }
+    }
+
+    protected void showProgress(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    /** Hide the progress dialog.*/
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
     }
 
 
