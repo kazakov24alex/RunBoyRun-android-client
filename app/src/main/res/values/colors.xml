@@ -15,5 +15,7 @@
     <color name="GPS_available_color">#16cc05</color>
     <color name="NETWORK_available_color">#fbf71f</color>
     <color name="PROVIDER_not_available_color">#fe3838</color>
+    <color name="GREEN_LIGHT">#4cfc57</color>
+    <color name="RED_LIGHT">#ff4350</color>
 
 </resources>

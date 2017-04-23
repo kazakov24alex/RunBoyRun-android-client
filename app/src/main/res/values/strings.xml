@@ -99,7 +99,16 @@
     <string name="track_activity_dialog_button_check_settings">SETTINGS</string>
     <string name="track_activity_dialog_button_cancel">CANCEL</string>
 
-
+    <string name="track_activity_dialog_start_activity_title">Начинаем активность!</string>
+    <string name="track_activity_dialog_setting_title">Setting sound alerts</string>
+    <string name="track_activity_dialog_setting_text_distance">Distance traveled</string>
+    <string name="track_activity_dialog_setting_text_time">Elapsed time</string>
+    <string name="track_activity_dialog_setting_text_tempo">Average tempo</string>
+    <string name="track_activity_dialog_setting_tint_distance">m</string>
+    <string name="track_activity_dialog_setting_tint_time">min</string>
+    <string name="track_activity_dialog_setting_tint_tempo">min</string>
+    <string name="track_activity_dialog_setting_negative">CANCEL</string>
+    <string name="track_activity_dialog_setting_positive">START!</string>
 
 
     <!--ERRORS-->

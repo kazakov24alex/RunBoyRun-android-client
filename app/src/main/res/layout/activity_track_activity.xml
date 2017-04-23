@@ -23,7 +23,7 @@
                 android:id="@+id/track_activity_text_km_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12.78"
+                android:text="0"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -46,11 +46,10 @@
             android:orientation="vertical"
             android:layout_weight="4">
 
-            <TextView
-                android:id="@+id/track_activity_text_time_number"
+            <Chronometer
+                android:id="@+id/track_activity_chronometer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0:00:00"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -98,9 +97,11 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:orientation="vertical"
-            android:layout_weight="2">
+            android:weightSum="5">
+
 
             <TextView
                 android:id="@+id/track_activity_text_provider_image"
@@ -116,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
+                android:layout_weight="1"
                 android:background="@color/PROVIDER_not_available_color"
                 android:text="@string/track_activity_text_status_not_provider"
                 android:textAlignment="center"
@@ -149,8 +151,9 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:clickable="true"
-            android:src="@drawable/quantum_ic_stop_white_24"
-            android:visibility="visible" />
+            android:src="@drawable/ic_directions_run_white_48dp"
+            android:visibility="visible"
+            app:backgroundTint="@color/GREEN_LIGHT" />
 
     </RelativeLayout>
 
