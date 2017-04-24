@@ -18,6 +18,7 @@ import java.util.Calendar;
 
 import retrofit2.Response;
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.SquareImageButtonView;
 import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
@@ -28,6 +29,10 @@ import static twoAK.runboyrun.activities.SocialNetworksAuthActivity.showProgress
 
 public class Activity2 extends BaseActivity {
     private SquareImageView avka;
+    private SquareImageButtonView friendsButton;
+    private SquareImageButtonView statsButton;
+    private SquareImageButtonView recordsButton;
+    private SquareImageButtonView victoriesButton;
 
     private TextView name;
     private TextView surname;
@@ -66,8 +71,20 @@ public class Activity2 extends BaseActivity {
         avka = (SquareImageView) findViewById(R.id.activity2_imageView_avatar);
         avka.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
-        SharedPreferences prefs = this.getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
-        String token = prefs.getString("token", "");
+        friendsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_friends);
+        friendsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+
+        statsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_stats);
+        statsButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
+
+        recordsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_records);
+        recordsButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
+
+        victoriesButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_victories);
+        victoriesButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
+
+
+
         profileInfoTask = new GetProfileInfoTask();
         profileInfoTask.execute((Void) null);
     }
@@ -152,6 +169,16 @@ public class Activity2 extends BaseActivity {
     /** Hide the progress dialog.*/
     protected void hideProgressDialog() {
         mProgressDialog.dismiss();
+    }
+
+    public void onClick(View view)
+    {
+// выводим сообщение
+        switch (view.getId()) {
+            case R.id.activity2_imageButtonView_friends:
+                Toast.makeText(this, "FRIENDS", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
 
