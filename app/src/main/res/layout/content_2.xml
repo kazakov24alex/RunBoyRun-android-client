@@ -104,7 +104,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="4">
+                android:weightSum="4"
+                android:paddingTop="32dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -112,12 +113,15 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
+
                     <twoAK.runboyrun.adapters.SquareImageButtonView
                         android:id="@+id/activity2_imageButtonView_friends"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:scaleType="fitXY"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:padding="2dp"
+                        android:background="@color/background_selector"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -131,7 +135,9 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:scaleType="fitXY"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:paddingBottom="2dp"
+                        android:paddingTop="2dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -145,7 +151,8 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:scaleType="fitXY"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:padding="2dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -159,7 +166,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:scaleType="fitXY"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:paddingBottom="2dp"
+                        android:paddingTop="2dp"
+                        android:paddingRight="2dp"/>
                 </LinearLayout>
             </LinearLayout>
 
