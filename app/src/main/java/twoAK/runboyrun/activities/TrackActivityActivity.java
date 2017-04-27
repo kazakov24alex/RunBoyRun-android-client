@@ -1,9 +1,13 @@
 package twoAK.runboyrun.activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,11 +15,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.Message;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -30,19 +35,27 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.pathsense.android.sdk.location.PathsenseInVehicleLocation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.pathsense.FusedLocationManager;
+import twoAK.runboyrun.pathsense.PathsenseInVehicleLocationUpdateRunnerService;
 
 
-public class TrackActivityActivity extends AppCompatActivity implements OnMapReadyCallback, TextToSpeech.OnInitListener {
+public class TrackActivityActivity extends FragmentActivity implements LocationListener, OnMapReadyCallback, TextToSpeech.OnInitListener {
     private Context ctx = this;
 
     private TextToSpeech mTTS;
@@ -82,11 +95,43 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
     private int mAlertTimeStep;
     private int mAlertTempoStep;
 
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    static final String TAG = TrackActivityActivity.class.getName();
+    // Messages
+    static final int MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE = 0;
+    static final int MESSAGE_ON_GROUND_TRUTH_LOCATION = 1;
+    //
+    double mHeadingGroundTruth;
+    double mHeadingRoad;
+    int mCreateFlag;
+    //Button mButtonStart;
+    GoogleMap mMap;
+    InternalGroundTruthLocationUpdateReceiver mGroundTruthLocationUpdateReceiver;
+    InternalHandler mHandler = new InternalHandler(this);
+    InternalInVehicleLocationUpdateReceiver mInVehicleLocationUpdateReceiver;
+    List<Circle> mInVehiclePointMarkers = new ArrayList<Circle>();
+    List<Location> mGroundTruthLocations = new ArrayList<Location>();
+    List<PathsenseInVehicleLocation> mInVehicleLocations = new ArrayList<PathsenseInVehicleLocation>();
+    Marker mMarkerGroundTruth;
+    Marker mMarkerInVehicle;
+    Polyline mPolylineGroundTruth;
+    Polyline mPolylineInVehicle;
+    SharedPreferences mPreferences;
+
+    private ProgressDialog mProgressDialog; // view of a progress spinner
+    boolean startLocatingFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_activity);
+        mPreferences = getSharedPreferences("PathsenseInVehicleLocationDemoPreferences", MODE_PRIVATE);
+
         mTTS = new TextToSpeech(this, this);
 
         isTracked = false;
@@ -96,10 +141,6 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         mAlertTimeInterval = 0;
         mAlertTempoInterval = 0;
 
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.track_activity_mapview_google);
-        mapFragment.getMapAsync(this);
         
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -162,10 +203,22 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
                 }
             }
         });
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.track_activity_mapview_google);
+        mapFragment.getMapAsync(this);
+        mCreateFlag = 1;
+
+        waitLocating();
+    }
+
+    private void waitLocating() {
+        startLocatingFlag = true;
     }
 
     private void startTracking() {
-        if(!checkProvider()) {
+        if(!checkProvider() || startLocatingFlag) {
             showNotProviderDialog();
         } else {
             startActivityTracking();
@@ -177,117 +230,20 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         mChronometer.stop();
         mStartButton.setBackgroundResource(R.color.GREEN_LIGHT);
         Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mChronometer.getBase()), Toast.LENGTH_SHORT).show();
+
+        //*********************************************************
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt("startedFlag", 0);
+        editor.commit();
+        // stop service
+        Intent stopIntent = new Intent(TrackActivityActivity.this, PathsenseInVehicleLocationUpdateRunnerService.class);
+        stopIntent.setAction("stop");
+        startService(stopIntent);
+        // stop updates
+        stopUpdates();
+        System.out.println("RUN-BOY-RUN: FINISH TRACKING");
+
     }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        mGoogleMap = map;
-
-        mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
-                .title("Start it!"));
-        mMarkerCurPos.setVisible(false);
-
-        rectOptions = new PolylineOptions().color(Color.RED).width(10);
-        polyline = mGoogleMap.addPolyline(rectOptions);
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        System.out.println("RUN-BOY-RUN : ON RESUME!!!");
-        super.onResume();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
-        mLocationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                locationListener);
-        checkProvider();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mLocationManager.removeUpdates(locationListener);
-    }
-
-    private LocationListener locationListener = new LocationListener() {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.track_activity_toast_not_location), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-                // TODO: WHAT FOR
-            }
-
-            if (location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) {
-                // TODO: WHAT FOR
-            }
-
-
-            // getting current position
-            curLat = location.getLatitude();
-            curLon = location.getLongitude();
-            LatLng myplace = new LatLng(curLat, curLon);
-
-            // marker movement
-            mMarkerCurPos.setPosition(myplace);
-            mMarkerCurPos.setVisible(true);
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 16));
-
-            if(isTracked) {
-                // polyline updating
-                if (rectOptions != null) {
-                    LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    List<LatLng> points = polyline.getPoints();
-                    points.add(myLatLng);
-                    polyline.setPoints(points);
-
-                    if (points.size() > 1) {
-                        Location locationA = new Location("point A");
-                        locationA.setLatitude(points.get(points.size() - 2).latitude);
-                        locationA.setLongitude(points.get(points.size() - 2).longitude);
-
-                        System.out.println("RUN-BOY-RUN LAT=" + points.get(points.size() - 2).latitude);
-                        System.out.println("RUN-BOY-RUN LON=" + points.get(points.size() - 2).longitude);
-
-                        Location locationB = new Location("point B");
-                        locationB.setLatitude(curLat);
-                        locationB.setLongitude(curLon);
-
-                        mDistance += locationA.distanceTo(locationB);
-                        mDistanceText.setText(String.format("%.2f", mDistance*0.001));
-
-                        Log.i("RUN-BOY-RUN", "[TrackActivity] TRACKED POSITION: lat=" + curLat + " lon=" + curLon + " DISTANCE=" + locationA.distanceTo(locationB));
-                    }
-                }
-            } else {
-                Log.i("RUN-BOY-RUN", "[TrackActivity] untracked position: lat="+curLat+" lon="+curLon);
-            }
-
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            checkProvider();
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            checkProvider();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            checkProvider();
-        }
-    };
 
 
     private boolean checkProvider() {
@@ -310,7 +266,6 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
             return false;
         }
     }
-
 
 
     private void showNotProviderDialog() {
@@ -414,6 +369,20 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
                                         mChronometer.setBase(SystemClock.elapsedRealtime());
                                         mChronometer.start();
+
+
+                                        // turn-on switch
+                                        SharedPreferences.Editor editor = mPreferences.edit();
+                                        editor.putInt("startedFlag", 1);
+                                        editor.commit();
+                                        // start service
+                                        Intent startIntent = new Intent(TrackActivityActivity.this, PathsenseInVehicleLocationUpdateRunnerService.class);
+                                        startIntent.setAction("start");
+                                        startService(startIntent);
+                                        // start updates
+                                        startUpdates();
+
+                                        System.out.println("RUN-BOY-RUN: START TRACKING");
                                     }
                                 }.start();
                             }
@@ -469,7 +438,6 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
     }
 
-
     @Override
     protected void onDestroy() {
         // Don't forget to shutdown mTTS!
@@ -478,5 +446,458 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
             mTTS.shutdown();
         }
         super.onDestroy();
+    }
+
+
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+    // *********************************************************************************************
+
+    static class InternalGroundTruthLocationUpdateReceiver extends BroadcastReceiver
+    {
+        TrackActivityActivity mActivity;
+        //
+        InternalGroundTruthLocationUpdateReceiver(TrackActivityActivity activity)
+        {
+            mActivity = activity;
+        }
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            final TrackActivityActivity activity = mActivity;
+            final InternalHandler handler = activity != null ? activity.mHandler : null;
+            //
+            if (activity != null && handler != null)
+            {
+                Location groundTruthLocation = intent.getParcelableExtra("groundTruthLocation");
+                Message msg = Message.obtain();
+                msg.what = MESSAGE_ON_GROUND_TRUTH_LOCATION;
+                msg.obj = groundTruthLocation;
+                handler.sendMessage(msg);
+            }
+        }
+    }
+    static class InternalHandler extends Handler
+    {
+        TrackActivityActivity mActivity;
+        //
+        InternalHandler(TrackActivityActivity activity)
+        {
+            mActivity = activity;
+        }
+        @Override
+        public void handleMessage(Message msg)
+        {
+            final TrackActivityActivity activity = mActivity;
+            final GoogleMap map = activity != null ? activity.mMap : null;
+            //
+            if (activity != null && map != null)
+            {
+                switch (msg.what)
+                {
+                    case MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE:
+                    {
+                        PathsenseInVehicleLocation inVehicleLocation = (PathsenseInVehicleLocation) msg.obj;
+                        LatLng position = new LatLng(inVehicleLocation.getLatitude(), inVehicleLocation.getLongitude());
+                        Marker markerInVehicle = activity.mMarkerInVehicle;
+                        if (markerInVehicle == null)
+                        {
+                            markerInVehicle = map.addMarker((new MarkerOptions()).icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_arrow)).anchor(.5f, .5f).position(position).title("PathsenseInVehicle"));
+                            activity.mMarkerInVehicle = markerInVehicle;
+                        } else
+                        {
+                            markerInVehicle.setPosition(position);
+                        }
+                        activity.mHeadingRoad = activity.unwrapHeading(inVehicleLocation.getBearing(), activity.mHeadingGroundTruth);
+                        markerInVehicle.setRotation((float) activity.mHeadingRoad + 90);
+                        map.moveCamera(CameraUpdateFactory.newLatLng(position));
+                        activity.drawPolylineInVehicle(inVehicleLocation);
+                        break;
+                    }
+                    case MESSAGE_ON_GROUND_TRUTH_LOCATION:
+                    {
+                        final Marker groundTruthMarker = activity.mMarkerGroundTruth;
+                        //
+                        if (groundTruthMarker != null)
+                        {
+                            Location groundTruthLocation = (Location) msg.obj;
+                            float bearing = groundTruthLocation.getBearing();
+                            if (bearing != 0)
+                            {
+                                activity.mHeadingGroundTruth = groundTruthLocation.getBearing();
+                            }
+                            groundTruthMarker.setRotation((float) activity.mHeadingGroundTruth - 90);
+                            LatLng position = new LatLng(groundTruthLocation.getLatitude(), groundTruthLocation.getLongitude());
+                            groundTruthMarker.setPosition(position);
+                            //map.moveCamera(CameraUpdateFactory.newLatLng(position));
+                            activity.drawPolylineGroundTruth(groundTruthLocation);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    static class InternalInVehicleLocationUpdateReceiver extends BroadcastReceiver
+    {
+        TrackActivityActivity mActivity;
+        //
+        InternalInVehicleLocationUpdateReceiver(TrackActivityActivity activity)
+        {
+            mActivity = activity;
+        }
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            final TrackActivityActivity activity = mActivity;
+            final InternalHandler handler = activity != null ? activity.mHandler : null;
+            //
+            if (activity != null && handler != null)
+            {
+                PathsenseInVehicleLocation inVehicleLocationUpdate = intent.getParcelableExtra("inVehicleLocation");
+                Message msg = Message.obtain();
+                msg.what = MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE;
+                msg.obj = inVehicleLocationUpdate;
+                handler.sendMessage(msg);
+            }
+        }
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        System.out.println("RUN-BOY-RUN: LOCATION CHANGED");
+
+        if(startLocatingFlag == true) {
+            startLocatingFlag = false;
+        }
+
+        final GoogleMap map = mMap;
+        final FloatingActionButton mButton = mStartButton;
+
+        //
+        if (map != null && mButton != null)
+        {
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newCameraPosition((new CameraPosition.Builder()).target(position).zoom(18).build()));
+            // initialize markers
+            mMarkerGroundTruth = mMap.addMarker((new MarkerOptions()).icon(BitmapDescriptorFactory.fromResource(R.drawable.red_arrow)).anchor(.5f, .5f).position(position).title("GroundTruth"));
+            //
+            if (isStarted())
+            {
+                startUpdates();
+            } else
+            {
+                stopUpdates();
+            }
+            mButton.setEnabled(true);
+        }
+    }
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        mMap = googleMap;
+        FusedLocationManager.getInstance(this).requestLocationUpdate(this);
+    }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        /*//
+        if (isStarted())
+        {
+            stopUpdates();
+        }*/
+    }
+    @Override
+    public void onProviderDisabled(String s)
+    {
+    }
+    @Override
+    public void onProviderEnabled(String s)
+    {
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        //
+        if (mCreateFlag == 0)
+        {
+            if (isStarted())
+            {
+                startUpdates();
+            }
+        }
+        mCreateFlag = 0;
+    }
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle)
+    {
+    }
+
+
+
+    void removePolylineGroundTruth()
+    {
+        final List<Location> groundTruthLocations = mGroundTruthLocations;
+        //
+        if (groundTruthLocations != null)
+        {
+            int numGroundTruthLocations = groundTruthLocations.size();
+            if (numGroundTruthLocations > 0)
+            {
+                for (int i = numGroundTruthLocations - 1; i > -1; i--)
+                {
+                    groundTruthLocations.remove(i);
+                }
+            }
+            if (mPolylineGroundTruth != null)
+            {
+                mPolylineGroundTruth.remove();
+                mPolylineGroundTruth = null;
+            }
+        }
+    }
+    void removePolylineInVehicle()
+    {
+        final List<PathsenseInVehicleLocation> inVehicleLocations = mInVehicleLocations;
+        final List<Circle> inVehiclePointMarkers = mInVehiclePointMarkers;
+        //
+        if (inVehicleLocations != null && inVehiclePointMarkers != null)
+        {
+            int numInVehicleLocations = inVehicleLocations.size();
+            if (numInVehicleLocations > 0)
+            {
+                for (int i = numInVehicleLocations - 1; i > -1; i--)
+                {
+                    inVehicleLocations.remove(i);
+                }
+            }
+            int numInVehiclePointMarkers = inVehiclePointMarkers.size();
+            if (numInVehiclePointMarkers > 0)
+            {
+                for (int i = numInVehiclePointMarkers - 1; i > -1; i--)
+                {
+                    Circle inVehiclePointMarker = inVehiclePointMarkers.remove(i);
+                    inVehiclePointMarker.remove();
+                }
+            }
+            if (mPolylineInVehicle != null)
+            {
+                mPolylineInVehicle.remove();
+                mPolylineInVehicle = null;
+            }
+        }
+    }
+
+
+    boolean isStarted()
+    {
+        final SharedPreferences preferences = mPreferences;
+        //
+        if (preferences != null)
+        {
+            return preferences.getInt("startedFlag", 0) == 1;
+        }
+        return false;
+    }
+
+
+    void startUpdates()
+    {
+        final FloatingActionButton buttonStart = mStartButton;
+        //
+        if (buttonStart != null)
+        {
+            // cleanup
+            removePolylineInVehicle();
+            removePolylineGroundTruth();
+            // register for updates
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+            if (mGroundTruthLocationUpdateReceiver == null)
+            {
+                mGroundTruthLocationUpdateReceiver = new InternalGroundTruthLocationUpdateReceiver(this);
+            }
+            localBroadcastManager.registerReceiver(mGroundTruthLocationUpdateReceiver, new IntentFilter("groundTruthLocationUpdate"));
+            if (mInVehicleLocationUpdateReceiver == null)
+            {
+                mInVehicleLocationUpdateReceiver = new InternalInVehicleLocationUpdateReceiver(this);
+            }
+            localBroadcastManager.registerReceiver(mInVehicleLocationUpdateReceiver, new IntentFilter("inVehicleLocationUpdate"));
+            // set stop button
+            //buttonStart.setText("Stop");
+
+            if(mMarkerGroundTruth == null) {
+                System.out.println("RUN-BOY-RUN: NULL");
+            } else {
+                
+            }
+            System.out.println("RUN-BOY-RUN: START UPDATES");
+        }
+    }
+    void stopUpdates()
+    {
+        final FloatingActionButton buttonStart = mStartButton;
+        //
+        if (buttonStart != null)
+        {
+            // unregister for updates
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+            if (mGroundTruthLocationUpdateReceiver != null)
+            {
+                localBroadcastManager.unregisterReceiver(mGroundTruthLocationUpdateReceiver);
+            }
+            if (mInVehicleLocationUpdateReceiver != null)
+            {
+                localBroadcastManager.unregisterReceiver(mInVehicleLocationUpdateReceiver);
+            }
+            // set start button
+            //buttonStart.setText("Start");
+
+            System.out.println("RUN-BOY-RUN: STOP UPDATES");
+        }
+    }
+    double unwrapHeading(double heading1, double heading2)
+    {
+        while (heading1 >= heading2 + 180)
+        {
+            heading1 -= 360;
+        }
+        while (heading1 < heading2 - 180)
+        {
+            heading1 += 360;
+        }
+        return heading1;
+    }
+
+
+
+    void drawPolylineGroundTruth(Location groundTruthLocation)
+    {
+        final List<Location> groundTruthLocations = mGroundTruthLocations;
+        final GoogleMap map = mMap;
+        //
+        if (groundTruthLocations != null && map != null)
+        {
+            int numGroundTruthLocations = groundTruthLocations.size();
+            if (numGroundTruthLocations > 0)
+            {
+                long timestamp = System.currentTimeMillis();
+                for (int i = numGroundTruthLocations - 1; i > -1; i--)
+                {
+                    Location q_groundTruthLocation = groundTruthLocations.get(i);
+                    if ((timestamp - q_groundTruthLocation.getTime()) > 60000)
+                    {
+                        groundTruthLocations.remove(i);
+                        numGroundTruthLocations--;
+                    }
+                }
+            }
+            groundTruthLocations.add(0, groundTruthLocation);
+            numGroundTruthLocations++;
+            //
+            if (numGroundTruthLocations > 1)
+            {
+                PolylineOptions polylineOptions = new PolylineOptions();
+                polylineOptions.width(15);
+                polylineOptions.color(Color.RED);
+                polylineOptions.geodesic(true);
+                for (int i = 0; i < numGroundTruthLocations; i++)
+                {
+                    Location q_groundTruthLocation = groundTruthLocations.get(i);
+                    polylineOptions.add(new LatLng(q_groundTruthLocation.getLatitude(), q_groundTruthLocation.getLongitude()));
+                }
+                if (mPolylineGroundTruth != null)
+                {
+                    mPolylineGroundTruth.remove();
+                }
+                mPolylineGroundTruth = map.addPolyline(polylineOptions);
+            }
+        }
+    }
+    void drawPolylineInVehicle(PathsenseInVehicleLocation inVehicleLocation)
+    {
+        final List<PathsenseInVehicleLocation> inVehicleLocations = mInVehicleLocations;
+        final List<Circle> inVehiclePointMarkers = mInVehiclePointMarkers;
+        final GoogleMap map = mMap;
+        //
+        if (inVehicleLocations != null && inVehiclePointMarkers != null && map != null)
+        {
+            int numInVehicleLocations = inVehicleLocations.size();
+            if (numInVehicleLocations > 0)
+            {
+                long timestamp = System.currentTimeMillis();
+                for (int i = numInVehicleLocations - 1; i > -1; i--)
+                {
+                    PathsenseInVehicleLocation q_inVehicleLocation = inVehicleLocations.get(i);
+                    if ((timestamp - q_inVehicleLocation.getTime()) > 60000)
+                    {
+                        inVehicleLocations.remove(i);
+                    }
+                }
+            }
+            int numInVehiclePointMarkers = inVehiclePointMarkers.size();
+            if (numInVehiclePointMarkers > 0)
+            {
+                for (int i = numInVehiclePointMarkers - 1; i > -1; i--)
+                {
+                    Circle inVehiclePointMarker = inVehiclePointMarkers.remove(i);
+                    inVehiclePointMarker.remove();
+                }
+            }
+            List<PathsenseInVehicleLocation> points = inVehicleLocation.getPoints();
+            int numPoints = points != null ? points.size() : 0;
+            if (numPoints > 0)
+            {
+                for (int i = 0; i < numPoints; i++)
+                {
+                    PathsenseInVehicleLocation point = points.get(i);
+                    inVehicleLocations.add(0, point);
+                    //
+                    Circle inVehiclePointMarker = map.addCircle((new CircleOptions()).center(new LatLng(point.getLatitude(), point.getLongitude())).fillColor(Color.BLACK).strokeColor(Color.BLACK).strokeWidth(5).radius(5));
+                    inVehiclePointMarkers.add(inVehiclePointMarker);
+                }
+            }
+            numInVehicleLocations = inVehicleLocations.size();
+            //
+            if (numInVehicleLocations > 1)
+            {
+                PolylineOptions polylineOptions = new PolylineOptions();
+                polylineOptions.width(15);
+                polylineOptions.color(Color.BLUE);
+                polylineOptions.geodesic(true);
+                for (int i = 0; i < numInVehicleLocations; i++)
+                {
+                    PathsenseInVehicleLocation q_inVehicleLocation = inVehicleLocations.get(i);
+                    polylineOptions.add(new LatLng(q_inVehicleLocation.getLatitude(), q_inVehicleLocation.getLongitude()));
+                }
+                if (mPolylineInVehicle != null)
+                {
+                    mPolylineInVehicle.remove();
+                }
+                mPolylineInVehicle = map.addPolyline(polylineOptions);
+            }
+        }
+    }
+
+
+    /** Show the progress dialog.*/
+    protected void showProgress(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    /** Hide the progress dialog.*/
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
     }
 }

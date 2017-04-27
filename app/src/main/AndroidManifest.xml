@@ -94,6 +94,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.pathsense.android.sdk.CLIENT_ID"
+            android:value="QjxFk1kW4kpcGCxA2A3jsy8NUSD4aDcneyEYvJIX" />
+        <meta-data
+            android:name="com.pathsense.android.sdk.API_KEY"
+            android:value="GTQKTB9s4A7zsAoyksbdl6kXboiF8zFOB2ajuYVc" />
 
     </application>
 

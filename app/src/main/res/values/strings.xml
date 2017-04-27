@@ -94,7 +94,7 @@
     <string name="track_activity_text_status_network">NET</string>
     <string name="track_activity_text_status_not_provider">NOT</string>
 
-    <string name="track_activity_dialog_notprovider_title">Problems with location</string>
+    <string name="track_activity_dialog_notprovider_title">Problems with locating</string>
     <string name="track_activity_dialog_notprovider_text">Unable to determine your location.\nCheck in settings if you have permission to receive your current location.</string>
     <string name="track_activity_dialog_button_check_settings">SETTINGS</string>
     <string name="track_activity_dialog_button_cancel">CANCEL</string>
