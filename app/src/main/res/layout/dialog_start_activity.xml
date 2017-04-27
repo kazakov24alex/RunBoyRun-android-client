@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:donut="http://schemas.android.com/apk/res/twoAK.runboyrun"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:id="@+id/donut_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        donut:donut_finished_color="#ffa500"
+        donut:donut_max="100"
+        donut:donut_progress="0"
+        donut:donut_text_color="#000000"
+        donut:donut_text_size="50sp"
+        donut:donut_unfinished_color="#808080" />
+
+</LinearLayout>
