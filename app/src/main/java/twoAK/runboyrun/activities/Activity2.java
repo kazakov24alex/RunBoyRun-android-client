@@ -1,38 +1,32 @@
 package twoAK.runboyrun.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
-import retrofit2.Response;
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.adapters.SquareImageButtonView;
 import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
-import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
-
-import static twoAK.runboyrun.activities.SocialNetworksAuthActivity.showProgress;
 
 public class Activity2 extends BaseActivity {
     private SquareImageView avka;
-    private SquareImageButtonView friendsButton;
-    private SquareImageButtonView statsButton;
-    private SquareImageButtonView recordsButton;
-    private SquareImageButtonView victoriesButton;
+    private ImageButton friendsButton;
+    private ImageButton statsButton;
+    private ImageButton recordsButton;
+    private ImageButton victoriesButton;
 
     private TextView name;
     private TextView surname;
@@ -71,18 +65,46 @@ public class Activity2 extends BaseActivity {
         avka = (SquareImageView) findViewById(R.id.activity2_imageView_avatar);
         avka.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
-        friendsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_friends);
-        friendsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
-        statsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_stats);
-        statsButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
+        // Initialization images of button panel
+        SquareImageView cell1 = (SquareImageView) findViewById(R.id.picture1);
+        cell1.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        SquareImageView cell2 = (SquareImageView) findViewById(R.id.picture2);
+        cell2.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        SquareImageView cell3 = (SquareImageView) findViewById(R.id.picture3);
+        cell3.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        SquareImageView cell4 = (SquareImageView) findViewById(R.id.picture4);
+        cell4.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
-        recordsButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_records);
-        recordsButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
+        // setting listeners on button panel
+        View.OnTouchListener panelTouchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent arg1) {
+                if (arg1.getAction() == MotionEvent.ACTION_DOWN) {
+                    view.setBackgroundResource(R.color.vk_color);
+                }
+                if (arg1.getAction() == MotionEvent.ACTION_UP) {
+                    view.setBackgroundResource(0);
+                    onClick(view);
+                }
+                return true;
+            }
+        };
+        cell1.setOnTouchListener(panelTouchListener);
+        cell2.setOnTouchListener(panelTouchListener);
+        cell3.setOnTouchListener(panelTouchListener);
+        cell4.setOnTouchListener(panelTouchListener);
 
-        victoriesButton = (SquareImageButtonView) findViewById(R.id.activity2_imageButtonView_victories);
-        victoriesButton.setImageResource(R.drawable.com_facebook_profile_default_icon);
-
+        // initialization text of button panel and setting custom font
+        Typeface squareFont = Typeface.createFromAsset(getAssets(), "fonts/square.ttf");
+        TextView text1 = (TextView) findViewById(R.id.text1);
+        text1.setTypeface(squareFont);
+        TextView text2 = (TextView) findViewById(R.id.text2);
+        text2.setTypeface(squareFont);
+        TextView text3 = (TextView) findViewById(R.id.text3);
+        text3.setTypeface(squareFont);
+        TextView text4 = (TextView) findViewById(R.id.text4);
+        text4.setTypeface(squareFont);
 
 
         profileInfoTask = new GetProfileInfoTask();
@@ -171,12 +193,21 @@ public class Activity2 extends BaseActivity {
         mProgressDialog.dismiss();
     }
 
-    public void onClick(View view)
-    {
-// выводим сообщение
+    public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.activity2_imageButtonView_friends:
-                Toast.makeText(this, "FRIENDS", Toast.LENGTH_SHORT).show();
+            case R.id.picture1:
+                System.out.println("FRIENDS WAS PRESSED");
+                break;
+            case R.id.picture2:
+                System.out.println("STATS WAS PRESSED");
+                break;
+            case R.id.picture3:
+                System.out.println("RECORDS WAS PRESSED");
+                break;
+            case R.id.picture4:
+                System.out.println("VICTORIES WAS PRESSED");
+                break;
+            default:
                 break;
         }
     }
