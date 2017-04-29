@@ -91,7 +91,7 @@
             android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/activity2_textView_country_city"
+            android:id="@+id/profile_textView_country_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/profile_imageView_avatar"

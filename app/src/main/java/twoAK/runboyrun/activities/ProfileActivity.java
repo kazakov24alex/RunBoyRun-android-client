@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +22,16 @@ import twoAK.runboyrun.responses.GetProfileInfoResponse;
 
 public class ProfileActivity extends BaseActivity {
     private SquareImageView avka;
-    private ImageButton friendsButton;
-    private ImageButton statsButton;
-    private ImageButton recordsButton;
-    private ImageButton victoriesButton;
+
+    SquareImageView mFriendsButton;
+    SquareImageView mStatsButton;
+    SquareImageView mRecordsButton;
+    SquareImageView mVictoriesButton;
+
+    TextView mTextFriendsButton;
+    TextView mTextStatsButton;
+    TextView mTextRecordsButton;
+    TextView mTextVictoriesButton;
 
     private TextView name;
     private TextView surname;
@@ -67,14 +72,14 @@ public class ProfileActivity extends BaseActivity {
 
 
         // Initialization images of button panel
-        SquareImageView cell1 = (SquareImageView) findViewById(R.id.profile_squareImage_friends);
-        cell1.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell2 = (SquareImageView) findViewById(R.id.profile_squareImage_stats);
-        cell2.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell3 = (SquareImageView) findViewById(R.id.profile_squareImage_records);
-        cell3.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell4 = (SquareImageView) findViewById(R.id.profile_squareImage_victories);
-        cell4.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mFriendsButton = (SquareImageView) findViewById(R.id.profile_squareImage_friends);
+        mFriendsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mStatsButton = (SquareImageView) findViewById(R.id.profile_squareImage_stats);
+        mStatsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mRecordsButton = (SquareImageView) findViewById(R.id.profile_squareImage_records);
+        mRecordsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mVictoriesButton = (SquareImageView) findViewById(R.id.profile_squareImage_victories);
+        mVictoriesButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         // setting listeners on button panel
         View.OnTouchListener panelTouchListener = new View.OnTouchListener() {
@@ -90,21 +95,21 @@ public class ProfileActivity extends BaseActivity {
                 return true;
             }
         };
-        cell1.setOnTouchListener(panelTouchListener);
-        cell2.setOnTouchListener(panelTouchListener);
-        cell3.setOnTouchListener(panelTouchListener);
-        cell4.setOnTouchListener(panelTouchListener);
+        mFriendsButton.setOnTouchListener(panelTouchListener);
+        mStatsButton.setOnTouchListener(panelTouchListener);
+        mRecordsButton.setOnTouchListener(panelTouchListener);
+        mVictoriesButton.setOnTouchListener(panelTouchListener);
 
         // initialization text of button panel and setting custom font
         Typeface squareFont = Typeface.createFromAsset(getAssets(), "fonts/square.ttf");
-        TextView text1 = (TextView) findViewById(R.id.profile_textView_friends_);
-        text1.setTypeface(squareFont);
-        TextView text2 = (TextView) findViewById(R.id.profile_textView_stats);
-        text2.setTypeface(squareFont);
-        TextView text3 = (TextView) findViewById(R.id.profile_textView_records);
-        text3.setTypeface(squareFont);
-        TextView text4 = (TextView) findViewById(R.id.profile_textView_victories);
-        text4.setTypeface(squareFont);
+        mTextFriendsButton = (TextView) findViewById(R.id.profile_textView_friends_);
+        mTextFriendsButton.setTypeface(squareFont);
+        mTextStatsButton = (TextView) findViewById(R.id.profile_textView_stats);
+        mTextStatsButton.setTypeface(squareFont);
+        mTextRecordsButton = (TextView) findViewById(R.id.profile_textView_records);
+        mTextRecordsButton.setTypeface(squareFont);
+        mTextVictoriesButton = (TextView) findViewById(R.id.profile_textView_victories);
+        mTextVictoriesButton.setTypeface(squareFont);
 
 
         profileInfoTask = new GetProfileInfoTask();
@@ -137,6 +142,8 @@ public class ProfileActivity extends BaseActivity {
                 Log.i("GetProfileInfoActivity", "Getting profile info was success.");
                 name.setText(profileInfo.getName());
                 surname.setText(profileInfo.getSurname());
+
+                System.out.println("OBJECT = "+country_city);
                 country_city.setText(profileInfo.getCountry()+", "+profileInfo.getCity());
 
                 Calendar calendar = Calendar.getInstance();
