@@ -21,7 +21,7 @@ import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 
-public class Activity2 extends BaseActivity {
+public class ProfileActivity extends BaseActivity {
     private SquareImageView avka;
     private ImageButton friendsButton;
     private ImageButton statsButton;
@@ -42,38 +42,38 @@ public class Activity2 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_2);
+        setContentView(R.layout.container_profile);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Activity2", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "ProfileActivity", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
         //View initialization
-        name = (TextView) findViewById(R.id.activity2_textView_name);
-        surname = (TextView) findViewById(R.id.activity2_textView_surname);
-        country_city = (TextView) findViewById(R.id.activity2_textView_country_city);
-        age = (TextView) findViewById(R.id.activity2_textView_age);
+        name = (TextView) findViewById(R.id.profile_textView_name);
+        surname = (TextView) findViewById(R.id.profile_textView_surname);
+        country_city = (TextView) findViewById(R.id.profile_textView_country_city);
+        age = (TextView) findViewById(R.id.profile_textView_age);
 
         //Set nav drawer selected to second item in list
         mNavigationView.getMenu().getItem(1).setChecked(true);
 
-        avka = (SquareImageView) findViewById(R.id.activity2_imageView_avatar);
+        avka = (SquareImageView) findViewById(R.id.profile_imageView_avatar);
         avka.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
 
         // Initialization images of button panel
-        SquareImageView cell1 = (SquareImageView) findViewById(R.id.picture1);
+        SquareImageView cell1 = (SquareImageView) findViewById(R.id.profile_squareImage_friends);
         cell1.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell2 = (SquareImageView) findViewById(R.id.picture2);
+        SquareImageView cell2 = (SquareImageView) findViewById(R.id.profile_squareImage_stats);
         cell2.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell3 = (SquareImageView) findViewById(R.id.picture3);
+        SquareImageView cell3 = (SquareImageView) findViewById(R.id.profile_squareImage_records);
         cell3.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        SquareImageView cell4 = (SquareImageView) findViewById(R.id.picture4);
+        SquareImageView cell4 = (SquareImageView) findViewById(R.id.profile_squareImage_victories);
         cell4.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         // setting listeners on button panel
@@ -97,13 +97,13 @@ public class Activity2 extends BaseActivity {
 
         // initialization text of button panel and setting custom font
         Typeface squareFont = Typeface.createFromAsset(getAssets(), "fonts/square.ttf");
-        TextView text1 = (TextView) findViewById(R.id.text1);
+        TextView text1 = (TextView) findViewById(R.id.profile_textView_friends_);
         text1.setTypeface(squareFont);
-        TextView text2 = (TextView) findViewById(R.id.text2);
+        TextView text2 = (TextView) findViewById(R.id.profile_textView_stats);
         text2.setTypeface(squareFont);
-        TextView text3 = (TextView) findViewById(R.id.text3);
+        TextView text3 = (TextView) findViewById(R.id.profile_textView_records);
         text3.setTypeface(squareFont);
-        TextView text4 = (TextView) findViewById(R.id.text4);
+        TextView text4 = (TextView) findViewById(R.id.profile_textView_victories);
         text4.setTypeface(squareFont);
 
 
@@ -195,16 +195,16 @@ public class Activity2 extends BaseActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.picture1:
+            case R.id.profile_squareImage_friends:
                 System.out.println("FRIENDS WAS PRESSED");
                 break;
-            case R.id.picture2:
+            case R.id.profile_squareImage_stats:
                 System.out.println("STATS WAS PRESSED");
                 break;
-            case R.id.picture3:
+            case R.id.profile_squareImage_records:
                 System.out.println("RECORDS WAS PRESSED");
                 break;
-            case R.id.picture4:
+            case R.id.profile_squareImage_victories:
                 System.out.println("VICTORIES WAS PRESSED");
                 break;
             default:

@@ -10,8 +10,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="learn.navdrawbase.Activity2"
-    tools:showIn="@layout/activity_2">
+    tools:context="twoAK.runboyrun.activities.ProfileActivity"
+    tools:showIn="@layout/container_profile">
 
     <!-- Profile loading progress -->
     <ProgressBar
@@ -40,7 +40,7 @@
                 android:orientation="vertical">
 
                 <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/activity2_imageView_avatar"
+                    android:id="@+id/profile_imageView_avatar"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" />
             </LinearLayout>
@@ -52,11 +52,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/activity2_textView_name"
+                    android:id="@+id/profile_textView_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/activity2_textView_country_city"
+                    android:layout_toEndOf="@+id/profile_textView_country_city"
                     android:layout_weight="1.5"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
@@ -64,11 +64,11 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/activity2_textView_surname"
+                    android:id="@+id/profile_textView_surname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/activity2_imageView_avatar"
-                    android:layout_alignStart="@+id/activity2_textView_name"
+                    android:layout_alignBottom="@+id/profile_imageView_avatar"
+                    android:layout_alignStart="@+id/profile_textView_name"
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
@@ -80,11 +80,11 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/activity2_textView_age"
+            android:id="@+id/profile_textView_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/activity2_textView_country_city"
-            android:layout_below="@+id/activity2_textView_country_city"
+            android:layout_alignStart="@+id/profile_textView_country_city"
+            android:layout_below="@+id/profile_textView_country_city"
             android:layout_marginTop="11dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -94,8 +94,8 @@
             android:id="@+id/activity2_textView_country_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/activity2_imageView_avatar"
-            android:layout_below="@+id/activity2_imageView_avatar"
+            android:layout_alignStart="@+id/profile_imageView_avatar"
+            android:layout_below="@+id/profile_imageView_avatar"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -110,13 +110,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/picture1"
+                    android:id="@+id/profile_squareImage_friends"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:padding="2dp"/>
                 <TextView
-                    android:id="@+id/text1"
+                    android:id="@+id/profile_textView_friends_"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -132,13 +132,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/picture2"
+                    android:id="@+id/profile_squareImage_stats"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:padding="2dp"/>
                 <TextView
-                    android:id="@+id/text2"
+                    android:id="@+id/profile_textView_stats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -154,12 +154,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/picture3"
+                    android:id="@+id/profile_squareImage_records"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"/>
                 <TextView
-                    android:id="@+id/text3"
+                    android:id="@+id/profile_textView_records"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -175,13 +175,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <twoAK.runboyrun.adapters.SquareImageView
-                    android:id="@+id/picture4"
+                    android:id="@+id/profile_squareImage_victories"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:padding="2dp"/>
                 <TextView
-                    android:id="@+id/text4"
+                    android:id="@+id/profile_textView_victories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"

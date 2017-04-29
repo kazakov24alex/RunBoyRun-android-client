@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context="learn.navdrawbase.Activity2">
+    tools:context="twoAK.runboyrun.activities.ProfileActivity">
 
 
     <android.support.design.widget.CoordinatorLayout
@@ -26,7 +26,7 @@
 
 
         <!-- Content -->
-    <include layout="@layout/content_2" />
+    <include layout="@layout/activity_profile" />
 
 
         <android.support.design.widget.FloatingActionButton

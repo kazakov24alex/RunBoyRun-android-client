@@ -154,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_personal_page:
-                createBackStack(new Intent(this, Activity2.class));
+                createBackStack(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.navdrawer_item_logout:
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
