@@ -32,10 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
-        <service
-            android:enabled="true"
-            android:name=".pathsense.PathSenseService">
-        </service>
+        <service android:name=".pathsense.PathsenseService" android:enabled="true" />
+        <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" />
+        <receiver android:name=".pathsense.PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver" />
 
         <activity
             android:name=".activities.WelcomeActivity"

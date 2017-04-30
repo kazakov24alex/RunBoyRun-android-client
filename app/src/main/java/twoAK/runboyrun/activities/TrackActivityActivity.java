@@ -39,10 +39,10 @@ import java.util.List;
 import java.util.Locale;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.pathsense.PathSenseService;
+import twoAK.runboyrun.pathsense.PathsenseService;
 
 
-public class TrackActivityActivity extends AppCompatActivity implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathSenseService.Callbacks {
+public class TrackActivityActivity extends AppCompatActivity implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathsenseService.Callbacks {
     private Context ctx = this;
 
     private TextToSpeech mTTS;
@@ -80,28 +80,27 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
 
     Intent serviceIntent;
-    PathSenseService mPathSenseService;
+    PathsenseService mPathSenseService;
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            Toast.makeText(TrackActivityActivity.this, "onServiceConnected called", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(TrackActivityActivity.this, "onServiceConnected called", Toast.LENGTH_SHORT).show();
             // We've binded to LocalService, cast the IBinder and get LocalService instance
-            PathSenseService.LocalBinder binder = (PathSenseService.LocalBinder) service;
+            PathsenseService.LocalBinder binder = (PathsenseService.LocalBinder) service;
             mPathSenseService = binder.getServiceInstance(); //Get instance of your service!
             mPathSenseService.registerClient(TrackActivityActivity.this); //Activity register in the service as client for callabcks!
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            Toast.makeText(TrackActivityActivity.this, "onServiceDisconnected called", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(TrackActivityActivity.this, "onServiceDisconnected called", Toast.LENGTH_SHORT).show();
         }
     };
 
     @Override
     public void updateClient(Location newLocation) {
-        System.out.println("RUN-BOY-RUN: UPDATE CLIENT");
         drawNewPointOnTheMap(newLocation);
     }
 
@@ -113,10 +112,9 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         mTTS = new TextToSpeech(this, this);
 
 
-        serviceIntent = new Intent(TrackActivityActivity.this, PathSenseService.class);
-        startService(serviceIntent);
+        serviceIntent = new Intent(TrackActivityActivity.this, PathsenseService.class);
         bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE); //Binding to the service!
-
+        startService(serviceIntent);
 
         isTracked = false;
         speechIsAvailable = false;
@@ -378,7 +376,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
                                     @Override
                                     public void onFinish() {
                                         startActivityDialog.dismiss();
-                                        mStartButton.setBackgroundColor(getColor(R.color.RED_LIGHT));
+                                        mStartButton.setBackgroundColor(R.color.RED_LIGHT);
                                         mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
 
                                         mDistance = 0;
