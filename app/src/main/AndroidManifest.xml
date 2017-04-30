@@ -31,7 +31,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        
+
+        <service
+            android:enabled="true"
+            android:name=".pathsense.PathSenseService">
+        </service>
+
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="RunBoyRun"
