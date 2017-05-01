@@ -28,6 +28,7 @@ public class PathsenseInVehicleLocationUpdateRunnerService extends Service
         @Override
         public void onLocationChanged(Location location)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
             final PathsenseInVehicleLocationUpdateRunnerService service = mService;
             //
             if (service != null)

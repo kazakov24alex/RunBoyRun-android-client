@@ -32,10 +32,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
-        <service android:name=".pathsense.PathsenseService" android:enabled="true" />
-        <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" />
-        <receiver android:name=".pathsense.PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver" />
-
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="RunBoyRun"
@@ -104,6 +100,11 @@
         <meta-data
             android:name="com.pathsense.android.sdk.API_KEY"
             android:value="GTQKTB9s4A7zsAoyksbdl6kXboiF8zFOB2ajuYVc" />
+
+
+        <service android:name=".pathsense.PathsenseService" android:enabled="true" />
+        <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" />
+        <receiver android:name=".pathsense.PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver" />
 
     </application>
 

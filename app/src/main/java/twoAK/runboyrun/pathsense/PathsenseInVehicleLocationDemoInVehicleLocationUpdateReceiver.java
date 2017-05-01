@@ -17,6 +17,7 @@ public class PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver exten
     @Override
     protected void onInVehicleLocationUpdate(Context context, PathsenseInVehicleLocation pathsenseInVehicleLocation)
     {
+        System.out.println("RUN-BOY-RUN: LA LA LA !");
         Log.i(TAG, "inVehicleLocation=" + pathsenseInVehicleLocation);
         // broadcast in-vehicle location update
         Intent inVehicleLocationUpdateIntent = new Intent("inVehicleLocationUpdate");

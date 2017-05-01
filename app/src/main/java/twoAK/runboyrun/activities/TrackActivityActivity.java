@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.pathsense.FusedLocationManager;
 import twoAK.runboyrun.pathsense.PathsenseService;
 
 
@@ -101,6 +102,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     public void updateClient(Location newLocation) {
+        System.out.println("RUN-BOY-RUN: [TAA] DRAWING");
         drawNewPointOnTheMap(newLocation);
     }
 
@@ -138,7 +140,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
 
-                System.out.println("RUN-BOY-RUN: NUMBER="+mPathSenseService.getCurrentLocation());
+                mPathSenseService.getCurrentLocation();
 
                 if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
                     int hours = mAlertTimeStep / (1000*60*60);
@@ -248,7 +250,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         // marker movement
         mMarkerCurPos.setPosition(myplace);
         mMarkerCurPos.setVisible(true);
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 16));
+        //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 16));
 
         if(isTracked) {
             // polyline updating
