@@ -1,11 +1,14 @@
 package twoAK.runboyrun.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,9 +16,12 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
@@ -29,6 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,7 +46,6 @@ import java.util.List;
 import java.util.Locale;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.pathsense.FusedLocationManager;
 import twoAK.runboyrun.pathsense.PathsenseService;
 
 
@@ -192,6 +198,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
                 }
             }
         });
+
     }
 
     private void startTracking() {
@@ -213,12 +220,27 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap map) {
         mGoogleMap = map;
 
+        View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_location_layout, null);
         mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(10, 10))
-                .title("Start it!"));
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
+        );
         mMarkerCurPos.setVisible(false);
 
-        rectOptions = new PolylineOptions().color(Color.RED).width(10);
+
+
+
+        /*View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.distance_marker_layout, null);
+        TextView numTxt = (TextView) marker.findViewById(R.id.num_txt);
+        numTxt.setText("24");
+
+        mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(10, 10))
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
+        );
+        mMarkerCurPos.setVisible(false);*/
+
+        rectOptions = new PolylineOptions().color(Color.YELLOW).width(10);
         polyline = mGoogleMap.addPolyline(rectOptions);
 
     }
@@ -248,9 +270,9 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         LatLng myplace = new LatLng(curLat, curLon);
 
         // marker movement
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 17));
         mMarkerCurPos.setPosition(myplace);
         mMarkerCurPos.setVisible(true);
-        //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 16));
 
         if(isTracked) {
             // polyline updating
@@ -423,6 +445,23 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+
+    // Convert a view to bitmap
+    public static Bitmap createDrawableFromView(Context context, View view) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        view.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.WRAP_CONTENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+
+        return bitmap;
+    }
+
     @Override
     public void onInit(int status) {
         // TODO Auto-generated method stub
@@ -447,6 +486,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         }
 
     }
+
 
 
     @Override
