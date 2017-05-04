@@ -53,14 +53,17 @@ public class FusedLocationManager
         @Override
         public void onProviderDisabled(String s)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
         @Override
         public void onProviderEnabled(String s)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
     }
     // ---------------------- Static Fields
@@ -115,7 +118,6 @@ public class FusedLocationManager
     }
     public void requestLocationUpdate(LocationListener listener)
     {
-        System.out.println("RUN-BOY-RUN: HAHAHAHAHAHAH");
         final LocationManager locationManager = mLocationManager;
         final Queue<InternalHolder> holders = mHolders;
         //

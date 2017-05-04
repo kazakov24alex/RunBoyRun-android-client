@@ -50,10 +50,12 @@ public class PathsenseInVehicleLocationUpdateRunnerService extends Service
         @Override
         public void onProviderEnabled(String provider)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras)
         {
+            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
     }
     //

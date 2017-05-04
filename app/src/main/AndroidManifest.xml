@@ -109,7 +109,7 @@
 
 
         <service android:name=".pathsense.PathsenseService" android:enabled="true" />
-        <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" />
+        <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" android:enabled="true" />
         <receiver android:name=".pathsense.PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver" />
 
     </application>

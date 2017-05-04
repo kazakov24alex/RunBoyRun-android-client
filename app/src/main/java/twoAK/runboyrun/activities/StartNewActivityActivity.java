@@ -7,24 +7,21 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewStub;
 
 import twoAK.runboyrun.R;
 
 public class StartNewActivityActivity extends BaseActivity {
 
 
-    private View rootView;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_activity);
-        rootView = findViewById(R.id.activity1_container);
+        setContentView(R.layout.general_template);
 
-        /* use rootView to get UI content from main container */
-        //BT bt = (BT) rootView.findViewById(R.id.fab) ...;
+        ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
+        stub.setLayoutResource(R.layout.content_start_activity);
+        View inflated = stub.inflate();
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

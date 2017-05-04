@@ -11,8 +11,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
@@ -49,10 +51,18 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.pathsense.PathsenseService;
 
 
-public class TrackActivityActivity extends AppCompatActivity implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathsenseService.Callbacks {
+public class TrackActivityActivity extends AppCompatActivity
+        implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathsenseService.Callbacks {
+    static final String APP_TAG = "RUN-BOY-RUN";
+    static final String ACTIVITY_TAG = "["+TrackActivityActivity.class.getName()+"]: ";
+
     private Context ctx = this;
 
     private TextToSpeech mTTS;
+    private Intent serviceIntent;
+    private PathsenseService mPathSenseService;
+    //private LocationManager locationManager;
+
     private Boolean speechIsAvailable;
 
     // Activity objects
@@ -60,8 +70,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
     private TextView mProviderTitle;
     private FloatingActionButton mStartButton;
 
-    private double curLat;
-    private double curLon;
+    private LatLng curPosition;
 
     // map objects
     private GoogleMap mGoogleMap;
@@ -71,7 +80,7 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
     // activity attributes
     private boolean isTracked;
-    private Chronometer mChronometer;
+    private Chronometer mTrackChronometer;
     List<LatLng> mRoutePoints;
 
     private float mDistance;
@@ -86,112 +95,81 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
     private int mAlertTempoStep;
 
 
-    Intent serviceIntent;
-    PathsenseService mPathSenseService;
+    Runnable run;
 
+    //**************************************************************************************************
+//  BINDING ACTIVITY TO PATHSENSE SERVICE
+//**************************************************************************************************
     private ServiceConnection mConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            //Toast.makeText(TrackActivityActivity.this, "onServiceConnected called", Toast.LENGTH_SHORT).show();
+            Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE CONNECTED");
             // We've binded to LocalService, cast the IBinder and get LocalService instance
             PathsenseService.LocalBinder binder = (PathsenseService.LocalBinder) service;
-            mPathSenseService = binder.getServiceInstance(); //Get instance of your service!
-            mPathSenseService.registerClient(TrackActivityActivity.this); //Activity register in the service as client for callabcks!
+            mPathSenseService = binder.getServiceInstance();                // Get instance of your service!
+            mPathSenseService.registerClient(TrackActivityActivity.this);   // Activity register in the service as client for callabacks!
+            //run.run();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            //Toast.makeText(TrackActivityActivity.this, "onServiceDisconnected called", Toast.LENGTH_SHORT).show();
+            Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE DISCONNECTED");
         }
     };
 
     @Override
     public void updateClient(Location newLocation) {
-        System.out.println("RUN-BOY-RUN: [TAA] DRAWING");
-        drawNewPointOnTheMap(newLocation);
+        Log.i(APP_TAG, ACTIVITY_TAG + "NEW LOCATION");
+        setCurrentPositionMarker(newLocation);
+
+        if(isTracked)
+            drawNewPointOnTheMap(newLocation);
     }
 
 
+//**************************************************************************************************
+//  ACTIVITY OVERRIDE METHODS
+//**************************************************************************************************
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY WAS CREATED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_activity);
+
+        // Google Voice
         mTTS = new TextToSpeech(this, this);
 
-
+        // Pathsense service
         serviceIntent = new Intent(TrackActivityActivity.this, PathsenseService.class);
         bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE); //Binding to the service!
         startService(serviceIntent);
 
+        // Variable-flags
         isTracked = false;
         speechIsAvailable = false;
 
+        // Google Voice time-intervals
         mAlertDistanceInterval = 0;
         mAlertTimeInterval = 0;
         mAlertTempoInterval = 0;
 
-
+        // Google Maps view
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.track_activity_mapview_google);
         mapFragment.getMapAsync(this);
 
-
-        mDistanceText= (TextView) findViewById(R.id.track_activity_text_km_number);
+        // View-elements initialization
+        mDistanceText = (TextView) findViewById(R.id.track_activity_text_km_number);
         mDistanceText.setText(String.format("%.2f", mDistance));
 
-        mChronometer = (Chronometer) findViewById(R.id.track_activity_chronometer);
-        mChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
-
-                mPathSenseService.getCurrentLocation();
-
-                if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
-                    int hours = mAlertTimeStep / (1000*60*60);
-                    int minutes = (mAlertTimeStep / (1000*60)) % 60;
-                    Log.i("RUN-BOY-RUN", "[TrackActivity] TimeAlert: HOURS = "+hours+" MINUTES="+minutes);
-
-                    if(hours == 0) {
-                        String speakString = getOrdinalFromNumber(minutes)+" minute of training";
-                        mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-                    } else if (minutes != 0){
-                        String speakString = " Training lasts "+hours+" hours and "+minutes+" minutes";
-                        mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-                    }
-
-                    mAlertTimeStep += mAlertTimeInterval * (60*1000);
-                }
-
-                if ( (mAlertTempoInterval != 0) && (elapsedMillis > mAlertTempoStep) ) {
-                    float tempo = 2.524f;
-
-                    int integerPart = (int)Math.floor(tempo);
-                    int fractionalPart = (int)Math.floor((tempo-integerPart)*10);
-                    Log.i("RUN-BOY-RUN", "[TrackActivity] TempoAlert: TEMPO = "+integerPart+"."+fractionalPart);
-
-                    if(mAlertTempoStep != 0) {
-                        if (fractionalPart == 0) {
-                            String speakString = "You pace is " + integerPart + " kilometers per minute";
-                            mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-                        } else {
-                            String speakString = "You pace is " + integerPart + "." + fractionalPart + " kilometers per minute";
-                            mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-                        }
-                    }
-
-                    mAlertTempoStep += mAlertTempoInterval * (60*1000);
-                }
-            }
-        });
-
         mProviderTitle = (TextView) findViewById(R.id.track_activity_text_provider_title);
+
         mStartButton = (FloatingActionButton) findViewById(R.id.track_activity_floatbut_start);
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isTracked){
+                if (isTracked) {
                     finishTracking();
                 } else {
                     startTracking();
@@ -199,38 +177,83 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
+        mTrackChronometer = (Chronometer) findViewById(R.id.track_activity_chronometer);
+        mTrackChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                long elapsedMillis = SystemClock.elapsedRealtime() - mTrackChronometer.getBase();
+                makeVoicePrompt(elapsedMillis);
+
+                mPathSenseService.getCurrentLocation();
+            }
+        });
+
+        //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+       /* final Handler h = new Handler();
+        run = new Runnable() {
+
+            @Override
+            public void run() {
+                if(mPathSenseService != null) {
+                    mPathSenseService.getCurrentLocation();
+                    Log.i(APP_TAG, ACTIVITY_TAG + "HANDLER WORKS");
+                }
+                h.postDelayed(this, 1000);
+            }
+        };*/
     }
 
-    private void startTracking() {
-        if(!checkProvider()) {
-            showNotProviderDialog();
-        } else {
-            startActivityTracking();
+    @Override
+    protected void onResume() {
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY ON RESUME");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY ON PAUSE");
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY WAS DESTROYED");
+
+        // Shutdown Pathsense service
+        unbindService(mConnection);
+        stopService(serviceIntent);
+
+        // Shutdown Google Voice
+        if (mTTS != null) {
+            mTTS.stop();
+            mTTS.shutdown();
         }
-    }
 
-    private void finishTracking() {
-        isTracked = false;
-        mChronometer.stop();
-        mStartButton.setBackgroundResource(R.color.GREEN_LIGHT);
-        Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mChronometer.getBase()), Toast.LENGTH_SHORT).show();
+        super.onDestroy();
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
+        Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP ON READY");
+
         mGoogleMap = map;
 
+        // Add current position marker on map
+        curPosition = new LatLng(10, 10);
         View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_location_layout, null);
         mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
+                .position(curPosition)
                 .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
         );
         mMarkerCurPos.setVisible(false);
 
+        // Add polyline of route on map
+        rectOptions = new PolylineOptions().color(Color.YELLOW).width(10);
+        polyline = mGoogleMap.addPolyline(rectOptions);
 
 
-
-        /*View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.distance_marker_layout, null);
+        /*View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_distance_layout, null);
         TextView numTxt = (TextView) marker.findViewById(R.id.num_txt);
         numTxt.setText("24");
 
@@ -240,22 +263,59 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         );
         mMarkerCurPos.setVisible(false);*/
 
-        rectOptions = new PolylineOptions().color(Color.YELLOW).width(10);
-        polyline = mGoogleMap.addPolyline(rectOptions);
+    }
+
+    @Override
+    public void onInit(int status) {
+        // TODO Auto-generated method stub
+        if (status == TextToSpeech.SUCCESS) {
+
+            Locale locale = new Locale("en");
+
+            int result = mTTS.setLanguage(locale);
+            mTTS.setLanguage(Locale.US);
+            //int result = mTTS.setLanguage(Locale.getDefault());
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                speechIsAvailable = false;
+                Log.e(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE ERROR: THIS LANGUAGE NOT SUPPORTED");
+            } else {
+                speechIsAvailable = true;
+            }
+
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE ERROR");
+        }
 
     }
 
 
-    @Override
-    protected void onResume() {
-        System.out.println("RUN-BOY-RUN : [TrackActivity] ON RESUME");
-        super.onResume();
-        checkProvider();
+//**************************************************************************************************
+//  ACTIVITY OVERRIDE METHODS
+//**************************************************************************************************
+
+    private void startTracking() {
+        mPathSenseService.getCurrentLocation();
+
+        /*if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "GPS ENABLED");
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "GPS DISABLED");
+        }*/
+
+        if(!isLocatingAvailable()) {
+            showNotProviderDialog();
+        } else {
+            startActivityTracking();
+        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void finishTracking() {
+        isTracked = false;
+        mTrackChronometer.stop();
+        mStartButton.setBackgroundResource(R.color.GREEN_LIGHT);
+        Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mTrackChronometer.getBase()), Toast.LENGTH_SHORT).show();
     }
 
     public boolean drawNewPointOnTheMap(Location location) {
@@ -265,14 +325,14 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         }
 
         // getting current position
-        curLat = location.getLatitude();
-        curLon = location.getLongitude();
-        LatLng myplace = new LatLng(curLat, curLon);
+        /*curLat = location.getLatitude();
+        curLng = location.getLongitude();
+        LatLng myplace = new LatLng(curLat, curLng);
 
         // marker movement
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 17));
+
         mMarkerCurPos.setPosition(myplace);
-        mMarkerCurPos.setVisible(true);
+        mMarkerCurPos.setVisible(true);*/
 
         if(isTracked) {
             // polyline updating
@@ -291,50 +351,21 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
                     System.out.println("RUN-BOY-RUN LON=" + points.get(points.size() - 2).longitude);
 
                     Location locationB = new Location("point B");
-                    locationB.setLatitude(curLat);
-                    locationB.setLongitude(curLon);
+                    locationB.setLatitude(curPosition.latitude);
+                    locationB.setLongitude(curPosition.longitude);
 
                     mDistance += locationA.distanceTo(locationB);
                     mDistanceText.setText(String.format("%.2f", mDistance*0.001));
 
-                    Log.i("RUN-BOY-RUN", "[TrackActivity] TRACKED POSITION: lat=" + curLat + " lon=" + curLon + " DISTANCE=" + locationA.distanceTo(locationB));
+                    Log.i(APP_TAG, ACTIVITY_TAG + "TRACKED LOCATION CHANGED (LAT="+curPosition.latitude+" LNG="+curPosition.longitude);
                 }
             }
         } else {
-            Log.i("RUN-BOY-RUN", "[TrackActivity] untracked position: lat="+curLat+" lon="+curLon);
+            Log.i(APP_TAG, ACTIVITY_TAG + "untracked LOCATION CHANGED (LAT="+curPosition.latitude+" LNG="+curPosition.longitude);
         }
 
         return true;
     }
-
-
-    private boolean checkProvider() {
-        return true;
-    }
-
-
-
-    private void showNotProviderDialog() {
-        AlertDialog.Builder mNotProviderDialog;
-        mNotProviderDialog = new AlertDialog.Builder(ctx);
-        mNotProviderDialog.setCancelable(true);
-        mNotProviderDialog.setTitle(getString(R.string.track_activity_dialog_notprovider_title));  // заголовок
-        mNotProviderDialog.setMessage(getString(R.string.track_activity_dialog_notprovider_text)); // сообщение
-        mNotProviderDialog.setPositiveButton(getString(R.string.track_activity_dialog_button_check_settings),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-                        startActivity(new Intent(
-                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                });
-        mNotProviderDialog.setNegativeButton(getString(R.string.track_activity_dialog_button_cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) { }
-                });
-
-        mNotProviderDialog.show();
-    }
-
 
     public void startActivityTracking() {
         View settingDialogContent = getLayoutInflater().inflate(R.layout.dialog_setting_activity, null);
@@ -413,8 +444,8 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
                                         isTracked = true;
 
-                                        mChronometer.setBase(SystemClock.elapsedRealtime());
-                                        mChronometer.start();
+                                        mTrackChronometer.setBase(SystemClock.elapsedRealtime());
+                                        mTrackChronometer.start();
                                     }
                                 }.start();
                             }
@@ -431,6 +462,83 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
         settingActivityDialog.show();
     }
 
+    private void makeVoicePrompt(long elapsedMillis) {
+        if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
+            int hours = mAlertTimeStep / (1000*60*60);
+            int minutes = (mAlertTimeStep / (1000*60)) % 60;
+            Log.i("RUN-BOY-RUN", "[TrackActivity] TimeAlert: HOURS = "+hours+" MINUTES="+minutes);
+
+            if(hours == 0) {
+                String speakString = getOrdinalFromNumber(minutes)+" minute of training";
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            } else if (minutes != 0){
+                String speakString = " Training lasts "+hours+" hours and "+minutes+" minutes";
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            }
+
+            mAlertTimeStep += mAlertTimeInterval * (60*1000);
+        }
+
+        if ( (mAlertTempoInterval != 0) && (elapsedMillis > mAlertTempoStep) ) {
+            float tempo = 2.524f;
+
+            int integerPart = (int)Math.floor(tempo);
+            int fractionalPart = (int)Math.floor((tempo-integerPart)*10);
+            Log.i("RUN-BOY-RUN", "[TrackActivity] TempoAlert: TEMPO = "+integerPart+"."+fractionalPart);
+
+            if(mAlertTempoStep != 0) {
+                if (fractionalPart == 0) {
+                    String speakString = "You pace is " + integerPart + " kilometers per minute";
+                    mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+                } else {
+                    String speakString = "You pace is " + integerPart + "." + fractionalPart + " kilometers per minute";
+                    mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+                }
+            }
+
+            mAlertTempoStep += mAlertTempoInterval * (60*1000);
+        }
+    }
+
+    private void setCurrentPositionMarker(Location newLocation) {
+        LatLng position = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+        mMarkerCurPos.setPosition(position);
+        mMarkerCurPos.setVisible(true);
+
+        if(!isLocatingAvailable()) {
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
+        }
+        curPosition = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+    }
+
+//**************************************************************************************************
+//  AUXILIARY METHODS
+//**************************************************************************************************
+
+    private boolean isLocatingAvailable() {
+        return true;//locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void showNotProviderDialog() {
+        AlertDialog.Builder mNotProviderDialog;
+        mNotProviderDialog = new AlertDialog.Builder(ctx);
+        mNotProviderDialog.setCancelable(true);
+        mNotProviderDialog.setTitle(getString(R.string.track_activity_dialog_notprovider_title));
+        mNotProviderDialog.setMessage(getString(R.string.track_activity_dialog_notprovider_text));
+        mNotProviderDialog.setPositiveButton(getString(R.string.track_activity_dialog_button_check_settings),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        startActivity(new Intent(
+                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                });
+        mNotProviderDialog.setNegativeButton(getString(R.string.track_activity_dialog_button_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) { }
+                });
+
+        mNotProviderDialog.show();
+    }
 
     public static String getOrdinalFromNumber(int i) {
         String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
@@ -444,7 +552,6 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
         }
     }
-
 
     // Convert a view to bitmap
     public static Bitmap createDrawableFromView(Context context, View view) {
@@ -461,47 +568,6 @@ public class TrackActivityActivity extends AppCompatActivity implements OnMapRea
 
         return bitmap;
     }
-
-    @Override
-    public void onInit(int status) {
-        // TODO Auto-generated method stub
-        if (status == TextToSpeech.SUCCESS) {
-
-            Locale locale = new Locale("en");
-
-            int result = mTTS.setLanguage(locale);
-            mTTS.setLanguage(Locale.US);
-            //int result = mTTS.setLanguage(Locale.getDefault());
-
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                speechIsAvailable = false;
-                Log.e("RUN-BOY-RUN", "TTS Извините, этот язык не поддерживается");
-            } else {
-                speechIsAvailable = true;
-            }
-
-        } else {
-            Log.e("RUN-BOY-RUN", "TTS Ошибка!");
-        }
-
-    }
-
-
-
-    @Override
-    protected void onDestroy() {
-        unbindService(mConnection);
-        stopService(serviceIntent);
-
-        // Don't forget to shutdown mTTS!
-        if (mTTS != null) {
-            mTTS.stop();
-            mTTS.shutdown();
-        }
-        super.onDestroy();
-    }
-
 
 
 }

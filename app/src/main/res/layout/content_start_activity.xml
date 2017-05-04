@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="twoAK.runboyrun.activities.StartNewActivityActivity"
-    tools:showIn="@layout/activity_start_activity"
+    tools:showIn="@layout/general_template"
     android:id="@+id/activity1_container">
 
     <LinearLayout

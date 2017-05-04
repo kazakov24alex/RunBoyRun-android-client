@@ -61,13 +61,14 @@ public class PathsenseService extends Service implements LocationListener {
 		mGroundTruthLocationUpdateReceiver = null;
 		mInVehicleLocationUpdateReceiver = null;
 
-		mFusedLocationManager = FusedLocationManager.getInstance(this);
-		mFusedLocationManager.requestLocationUpdate(this);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE WAS STARTED");
+
+		mFusedLocationManager = FusedLocationManager.getInstance(this);
+		//mFusedLocationManager.requestLocationUpdate(this);
 
 		api = PathsenseLocationProviderApi.getInstance(this);
 		api.requestInVehicleLocationUpdates(PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver.class);
@@ -77,6 +78,7 @@ public class PathsenseService extends Service implements LocationListener {
 
 		if (preferences != null) {
 			if (isStarted()) {
+				Log.i(APP_TAG, ACTIVITY_TAG + "stop service");
 				// turn-off switch
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putInt("startedPathsenseFlag", 0);
@@ -88,6 +90,7 @@ public class PathsenseService extends Service implements LocationListener {
 				// stop updates
 				stopUpdates();
 			} else {
+				Log.i(APP_TAG, ACTIVITY_TAG + "start service");
 				// turn-on switch
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putInt("startedPathsenseFlag", 1);
@@ -139,26 +142,26 @@ public class PathsenseService extends Service implements LocationListener {
 		return mBinder;
 	}
 
-    //returns the instance of the service
-    public class LocalBinder extends Binder {
-        public PathsenseService getServiceInstance(){
-            return PathsenseService.this;
-        }
-    }
+	//returns the instance of the service
+	public class LocalBinder extends Binder {
+		public PathsenseService getServiceInstance(){
+			return PathsenseService.this;
+		}
+	}
 
-    //Here Activity register to the service as Callbacks client
-    public void registerClient(TrackActivityActivity activity){
-        this.mActivity = (Callbacks)activity;
-    }
+	//Here Activity register to the service as Callbacks client
+	public void registerClient(TrackActivityActivity activity){
+		this.mActivity = (Callbacks)activity;
+	}
 
-    //callbacks interface for communication with service clients!
-    public interface Callbacks {
-        public void updateClient(Location newLocation);
-    }
+	//callbacks interface for communication with service clients!
+	public interface Callbacks {
+		public void updateClient(Location newLocation);
+	}
 
-    public void getCurrentLocation(){
+	public void getCurrentLocation(){
 		startUpdates();
-    }
+	}
 
 
 
@@ -174,8 +177,6 @@ public class PathsenseService extends Service implements LocationListener {
 		}
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			System.out.println("RUN-BOY-RUN: 1");
-
 			final PathsenseService service = mPathsenseService;
 			final InternalHandler handler = service != null ? service.mHandler : null;
 			//
@@ -199,8 +200,6 @@ public class PathsenseService extends Service implements LocationListener {
 		}
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			System.out.println("RUN-BOY-RUN: 1");
-
 			final PathsenseService service = mPathsenseService;
 			final InternalHandler handler = service != null ? service.mHandler : null;
 			//
@@ -223,8 +222,6 @@ public class PathsenseService extends Service implements LocationListener {
 		}
 		@Override
 		public void handleMessage(Message msg) {
-			System.out.println("RUN-BOY-RUN: 1");
-
 			final PathsenseService service = mPathsenseService;
 
 			if (service != null) {
@@ -256,12 +253,12 @@ public class PathsenseService extends Service implements LocationListener {
 //**************************************************************************************************
 
 	@Override
-	public void onLocationChanged(Location location) {
+	public void onLocationChanged(Location location) 	{
 		Log.i(APP_TAG, ACTIVITY_TAG + "LOCATION (LAT="+location.getLatitude()+", LON="+location.getLongitude()+")");
 		mCurrentLocation = location;
 
-        if(mActivity != null)
-		    mActivity.updateClient(location);
+		//if(mActivity != null)
+			mActivity.updateClient(location);
 
 		/*if (isStarted()) {
 			System.out.println("RUN-BOY-RUN: start updates");
@@ -296,7 +293,6 @@ public class PathsenseService extends Service implements LocationListener {
 		final SharedPreferences preferences = mPreferences;
 		//
 		if (preferences != null) {
-			System.out.println("RUN-BOY-RUN: PREFERENCES");
 			return preferences.getInt("startedPathsenseFlag", 0) == 1;
 		}
 
@@ -304,6 +300,8 @@ public class PathsenseService extends Service implements LocationListener {
 	}
 
 	void startUpdates() {
+		Log.i(APP_TAG, ACTIVITY_TAG + "start updates");
+
 		// register for updates
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
