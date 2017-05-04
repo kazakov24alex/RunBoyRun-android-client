@@ -66,6 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity
 
         //Global methods as
         /*
+        akup@mail.ru
+        Akup12
             mImageLoader = new ImageLoader(this);
             mHandler = new Handler();
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);

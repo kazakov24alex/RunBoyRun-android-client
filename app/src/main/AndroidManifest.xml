@@ -84,6 +84,12 @@
             android:label="TrackActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".activities.EnterCompletedActivity"
+            android:label="EnterComplitedActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
 
         <meta-data
             android:name="com.google.android.gms.version"
