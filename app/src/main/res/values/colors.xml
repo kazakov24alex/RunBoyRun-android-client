@@ -17,6 +17,6 @@
     <color name="PROVIDER_not_available_color">#fe3838</color>
     <color name="GREEN_LIGHT">#4cfc57</color>
     <color name="RED_LIGHT">#ff4350</color>
-    <color name="ORANGE_custom_marker">#d46904</color>
+    <color name="ORANGE_custom_marker">#ff9900</color>
 
 </resources>

@@ -22,7 +22,7 @@
             android:layout_marginTop="11dp"
             android:gravity="center"
             android:text="24"
-            android:textColor="@color/ORANGE_custom_marker"
+            android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
     </FrameLayout>

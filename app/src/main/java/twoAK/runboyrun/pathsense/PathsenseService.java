@@ -78,7 +78,6 @@ public class PathsenseService extends Service implements LocationListener {
 
 		if (preferences != null) {
 			if (isStarted()) {
-				Log.i(APP_TAG, ACTIVITY_TAG + "stop service");
 				// turn-off switch
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putInt("startedPathsenseFlag", 0);
@@ -90,7 +89,6 @@ public class PathsenseService extends Service implements LocationListener {
 				// stop updates
 				stopUpdates();
 			} else {
-				Log.i(APP_TAG, ACTIVITY_TAG + "start service");
 				// turn-on switch
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putInt("startedPathsenseFlag", 1);
@@ -253,20 +251,11 @@ public class PathsenseService extends Service implements LocationListener {
 //**************************************************************************************************
 
 	@Override
-	public void onLocationChanged(Location location) 	{
-		Log.i(APP_TAG, ACTIVITY_TAG + "LOCATION (LAT="+location.getLatitude()+", LON="+location.getLongitude()+")");
+	public void onLocationChanged(Location location) {
 		mCurrentLocation = location;
 
-		//if(mActivity != null)
+		if(mActivity != null)
 			mActivity.updateClient(location);
-
-		/*if (isStarted()) {
-			System.out.println("RUN-BOY-RUN: start updates");
-			startUpdates();
-		} else {
-			System.out.println("RUN-BOY-RUN: stop updates");
-			stopUpdates();
-		}*/
 	}
 
 	@Override
@@ -300,8 +289,6 @@ public class PathsenseService extends Service implements LocationListener {
 	}
 
 	void startUpdates() {
-		Log.i(APP_TAG, ACTIVITY_TAG + "start updates");
-
 		// register for updates
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
 

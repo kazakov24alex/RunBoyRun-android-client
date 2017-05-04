@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -38,21 +37,25 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.objects.route.PointTime;
 import twoAK.runboyrun.pathsense.PathsenseService;
 
 
 public class TrackActivityActivity extends AppCompatActivity
         implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathsenseService.Callbacks {
+
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+TrackActivityActivity.class.getName()+"]: ";
 
@@ -60,8 +63,10 @@ public class TrackActivityActivity extends AppCompatActivity
 
     private TextToSpeech mTTS;
     private Intent serviceIntent;
+
     private PathsenseService mPathSenseService;
-    //private LocationManager locationManager;
+    private LocationManager locationManager;
+    private Runnable mGPSrun;
 
     private Boolean speechIsAvailable;
 
@@ -73,16 +78,23 @@ public class TrackActivityActivity extends AppCompatActivity
     private LatLng curPosition;
 
     // map objects
+
     private GoogleMap mGoogleMap;
     private Marker mMarkerCurPos;
     private PolylineOptions rectOptions;
-    private Polyline polyline;
+    private Polyline mRoutePolyline;
+    private List<PointTime> mRoutePointTimeList;
 
     // activity attributes
     private boolean isTracked;
     private Chronometer mTrackChronometer;
     List<LatLng> mRoutePoints;
 
+    List<Marker> mKmLabelMarkerList;
+    boolean isKmLabelMarkersHidden;
+
+
+    private int mKmTraveled;
     private float mDistance;
     private float mTempo;
 
@@ -95,7 +107,7 @@ public class TrackActivityActivity extends AppCompatActivity
     private int mAlertTempoStep;
 
 
-    Runnable run;
+
 
     //**************************************************************************************************
 //  BINDING ACTIVITY TO PATHSENSE SERVICE
@@ -108,7 +120,7 @@ public class TrackActivityActivity extends AppCompatActivity
             PathsenseService.LocalBinder binder = (PathsenseService.LocalBinder) service;
             mPathSenseService = binder.getServiceInstance();                // Get instance of your service!
             mPathSenseService.registerClient(TrackActivityActivity.this);   // Activity register in the service as client for callabacks!
-            //run.run();
+            mGPSrun.run();
         }
 
         @Override
@@ -119,9 +131,11 @@ public class TrackActivityActivity extends AppCompatActivity
 
     @Override
     public void updateClient(Location newLocation) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "NEW LOCATION");
-        setCurrentPositionMarker(newLocation);
+        if(curPosition.latitude == newLocation.getLatitude() && curPosition.longitude == newLocation.getLongitude())
+            if(!isTracked || mRoutePointTimeList.size()!=0)
+                return;
 
+        setCurrentPositionMarker(newLocation);
         if(isTracked)
             drawNewPointOnTheMap(newLocation);
     }
@@ -137,10 +151,10 @@ public class TrackActivityActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_activity);
 
-        // Google Voice
-        mTTS = new TextToSpeech(this, this);
+        mTTS = new TextToSpeech(this, this); // Google Voice
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); // GPS Manager
 
-        // Pathsense service
+        // Pathsense service start
         serviceIntent = new Intent(TrackActivityActivity.this, PathsenseService.class);
         bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE); //Binding to the service!
         startService(serviceIntent);
@@ -148,11 +162,16 @@ public class TrackActivityActivity extends AppCompatActivity
         // Variable-flags
         isTracked = false;
         speechIsAvailable = false;
+        isKmLabelMarkersHidden = false;
 
         // Google Voice time-intervals
-        mAlertDistanceInterval = 0;
-        mAlertTimeInterval = 0;
-        mAlertTempoInterval = 0;
+        mAlertDistanceInterval  = 0;
+        mAlertTimeInterval      = 0;
+        mAlertTempoInterval     = 0;
+
+        mRoutePointTimeList = new ArrayList<PointTime>();
+        mKmLabelMarkerList = new ArrayList<Marker>();
+        mKmTraveled = 0;
 
         // Google Maps view
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -188,20 +207,21 @@ public class TrackActivityActivity extends AppCompatActivity
             }
         });
 
-        //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-       /* final Handler h = new Handler();
-        run = new Runnable() {
+
+        final Handler h = new Handler();
+        mGPSrun = new Runnable() {
+            boolean shutdown;
+
 
             @Override
             public void run() {
-                if(mPathSenseService != null) {
+                if(mPathSenseService != null && !isTracked) {
                     mPathSenseService.getCurrentLocation();
-                    Log.i(APP_TAG, ACTIVITY_TAG + "HANDLER WORKS");
                 }
                 h.postDelayed(this, 1000);
             }
-        };*/
+        };
     }
 
     @Override
@@ -235,9 +255,33 @@ public class TrackActivityActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap map) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP ON READY");
+        Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP IS READY");
 
         mGoogleMap = map;
+        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(16.0f));
+        mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                CameraPosition cameraPosition = mGoogleMap.getCameraPosition();
+
+                if(cameraPosition.zoom < 12.5 && !isKmLabelMarkersHidden) {
+                    isKmLabelMarkersHidden = true;
+                    for (int i = 0; i < mKmLabelMarkerList.size(); i++) {
+                        mKmLabelMarkerList.get(i).setVisible(false);
+                    }
+                    return;
+                }
+
+                if(cameraPosition.zoom > 12.5 && isKmLabelMarkersHidden) {
+                    isKmLabelMarkersHidden = false;
+                    for (int i = 0; i < mKmLabelMarkerList.size(); i++) {
+                        mKmLabelMarkerList.get(i).setVisible(true);
+                    }
+                    return;
+                }
+            }
+        });
+
 
         // Add current position marker on map
         curPosition = new LatLng(10, 10);
@@ -248,21 +292,12 @@ public class TrackActivityActivity extends AppCompatActivity
         );
         mMarkerCurPos.setVisible(false);
 
-        // Add polyline of route on map
-        rectOptions = new PolylineOptions().color(Color.YELLOW).width(10);
-        polyline = mGoogleMap.addPolyline(rectOptions);
 
-
-        /*View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_distance_layout, null);
-        TextView numTxt = (TextView) marker.findViewById(R.id.num_txt);
-        numTxt.setText("24");
-
-        mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
-        );
-        mMarkerCurPos.setVisible(false);*/
-
+        // Add mRoutePolyline of route on map
+        rectOptions = new PolylineOptions()
+                .color(getResources().getColor(R.color.ORANGE_custom_marker))
+                .width(10);
+        mRoutePolyline = mGoogleMap.addPolyline(rectOptions);
     }
 
     @Override
@@ -296,14 +331,6 @@ public class TrackActivityActivity extends AppCompatActivity
 //**************************************************************************************************
 
     private void startTracking() {
-        mPathSenseService.getCurrentLocation();
-
-        /*if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "GPS ENABLED");
-        } else {
-            Log.i(APP_TAG, ACTIVITY_TAG + "GPS DISABLED");
-        }*/
-
         if(!isLocatingAvailable()) {
             showNotProviderDialog();
         } else {
@@ -318,53 +345,38 @@ public class TrackActivityActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mTrackChronometer.getBase()), Toast.LENGTH_SHORT).show();
     }
 
-    public boolean drawNewPointOnTheMap(Location location) {
+    public void drawNewPointOnTheMap(Location location) {
         if (location == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.track_activity_toast_not_location), Toast.LENGTH_LONG).show();
-            return false;
+            return;
         }
 
-        // getting current position
-        /*curLat = location.getLatitude();
-        curLng = location.getLongitude();
-        LatLng myplace = new LatLng(curLat, curLng);
+        if (rectOptions != null) {
 
-        // marker movement
+            LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            List<LatLng> points = mRoutePolyline.getPoints();
+            points.add(myLatLng);
+            mRoutePolyline.setPoints(points);
 
-        mMarkerCurPos.setPosition(myplace);
-        mMarkerCurPos.setVisible(true);*/
+            int elapsedSeconds = (int) ( (SystemClock.elapsedRealtime() - mTrackChronometer.getBase()) / 1000 );
+            mRoutePointTimeList.add(new PointTime(myLatLng, elapsedSeconds));
 
-        if(isTracked) {
-            // polyline updating
-            if (rectOptions != null) {
-                LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                List<LatLng> points = polyline.getPoints();
-                points.add(myLatLng);
-                polyline.setPoints(points);
+            if (points.size() > 1) {
+                Location locationOld = new Location("LOCATION OLD");
+                locationOld.setLatitude(points.get(points.size() - 2).latitude);
+                locationOld.setLongitude(points.get(points.size() - 2).longitude);
 
-                if (points.size() > 1) {
-                    Location locationA = new Location("point A");
-                    locationA.setLatitude(points.get(points.size() - 2).latitude);
-                    locationA.setLongitude(points.get(points.size() - 2).longitude);
+                mDistance += location.distanceTo(locationOld);
+                mDistanceText.setText(String.format("%.2f", mDistance*0.001));
 
-                    System.out.println("RUN-BOY-RUN LAT=" + points.get(points.size() - 2).latitude);
-                    System.out.println("RUN-BOY-RUN LON=" + points.get(points.size() - 2).longitude);
-
-                    Location locationB = new Location("point B");
-                    locationB.setLatitude(curPosition.latitude);
-                    locationB.setLongitude(curPosition.longitude);
-
-                    mDistance += locationA.distanceTo(locationB);
-                    mDistanceText.setText(String.format("%.2f", mDistance*0.001));
-
-                    Log.i(APP_TAG, ACTIVITY_TAG + "TRACKED LOCATION CHANGED (LAT="+curPosition.latitude+" LNG="+curPosition.longitude);
+                if(mDistance*0.001 > mKmTraveled) {
+                    setKmLabelMarker(myLatLng);
                 }
             }
-        } else {
-            Log.i(APP_TAG, ACTIVITY_TAG + "untracked LOCATION CHANGED (LAT="+curPosition.latitude+" LNG="+curPosition.longitude);
+
+            Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+myLatLng.latitude+"\tLNG="+myLatLng.longitude+"\tSEC="+elapsedSeconds);
         }
 
-        return true;
     }
 
     public void startActivityTracking() {
@@ -418,6 +430,7 @@ public class TrackActivityActivity extends AppCompatActivity
                                         .setIcon(android.R.drawable.btn_star_big_on)
                                         .setTitle(getString(R.string.track_activity_dialog_start_activity_title))
                                         .setView(startDialogContent)
+                                        .setCancelable(false)
                                         .create();
                                 startActivityDialog.show();
 
@@ -505,10 +518,32 @@ public class TrackActivityActivity extends AppCompatActivity
         mMarkerCurPos.setPosition(position);
         mMarkerCurPos.setVisible(true);
 
-        if(!isLocatingAvailable()) {
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
+        if(isLocatingAvailable()) {
+            if(curPosition.latitude == 10 && curPosition.longitude == 10) {
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(16.5f));
+            }
+            /*else {
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+            }*/
         }
+
         curPosition = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+    }
+
+    private void setKmLabelMarker(LatLng myLatLng) {
+        View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_distance_layout, null);
+        TextView numTxt = (TextView) marker.findViewById(R.id.num_txt);
+        numTxt.setText(Integer.toString(mKmTraveled));
+        mKmTraveled++;
+
+        Marker mKmLabelMarker = mGoogleMap.addMarker(new MarkerOptions()
+                .position(myLatLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
+        );
+        mKmLabelMarker.setVisible(true);
+        mKmLabelMarkerList.add(mKmLabelMarker);
+        Log.i(APP_TAG, ACTIVITY_TAG + "I SET IT");
     }
 
 //**************************************************************************************************
@@ -516,7 +551,7 @@ public class TrackActivityActivity extends AppCompatActivity
 //**************************************************************************************************
 
     private boolean isLocatingAvailable() {
-        return true;//locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     private void showNotProviderDialog() {
@@ -536,7 +571,6 @@ public class TrackActivityActivity extends AppCompatActivity
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) { }
                 });
-
         mNotProviderDialog.show();
     }
 
@@ -553,7 +587,6 @@ public class TrackActivityActivity extends AppCompatActivity
         }
     }
 
-    // Convert a view to bitmap
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

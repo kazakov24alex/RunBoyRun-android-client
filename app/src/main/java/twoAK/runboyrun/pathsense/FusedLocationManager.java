@@ -53,17 +53,14 @@ public class FusedLocationManager
         @Override
         public void onProviderDisabled(String s)
         {
-            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
         @Override
         public void onProviderEnabled(String s)
         {
-            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle)
         {
-            System.out.println("RUN-BOY-RUN: LA LA LA !");
         }
     }
     // ---------------------- Static Fields

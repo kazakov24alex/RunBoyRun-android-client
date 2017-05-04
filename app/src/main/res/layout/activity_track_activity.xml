@@ -107,7 +107,7 @@
                 android:id="@+id/track_activity_text_provider_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="G"
+                android:text="GPS"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
