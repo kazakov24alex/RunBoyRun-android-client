@@ -90,6 +90,11 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity android:name=".activities.ConditionActivity"
+            android:label="ConditionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -115,6 +115,12 @@
     <string name="track_activity_dialog_close_yes">YES</string>
     <string name="track_activity_dialog_close_no">NO</string>
 
+    <string name="track_activity_dialog_result_distance_title">DISTANCE:</string>
+    <string name="track_activity_dialog_result_tempo_title">TEMPO:</string>
+    <string name="track_activity_dialog_result_time_title">TIME:</string>
+    <string name="track_activity_dialog_result_button_cancel">CANCEL</string>
+    <string name="track_activity_dialog_result_button_record">RECORD</string>
+
 
 
     <!--ERRORS-->

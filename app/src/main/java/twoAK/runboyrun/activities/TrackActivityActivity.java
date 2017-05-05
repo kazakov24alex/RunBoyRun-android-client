@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -87,6 +88,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
     // activity attributes
     private boolean isTracked;
+    private boolean isResult;
     private Chronometer mTrackChronometer;
     private List<LatLng> mRoutePoints;
 
@@ -161,6 +163,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
         // Variable-flags
         isTracked = false;
+        isResult = true;
         speechIsAvailable = false;
         isKmLabelMarkersHidden = false;
 
@@ -277,7 +280,11 @@ public class TrackActivityActivity extends AppCompatActivity
                     });
             mNotProviderDialog.setNegativeButton(getString(R.string.track_activity_dialog_close_no),
                     new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int arg1) { }
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            if(isResult) {
+                                showFinishActivityDialogs();
+                            }
+                        }
                     });
             mNotProviderDialog.show();
         } else {
@@ -370,10 +377,9 @@ public class TrackActivityActivity extends AppCompatActivity
     }
 
     private void finishTracking() {
-        isTracked = false;
         mTrackChronometer.stop();
         mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.GREEN_LIGHT)));;
-        Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mTrackChronometer.getBase()), Toast.LENGTH_SHORT).show();
+        showFinishActivityDialogs();
     }
 
     private void showStartActivityDialogs() {
@@ -558,6 +564,43 @@ public class TrackActivityActivity extends AppCompatActivity
         mTempoText.setText(resultTempoText);
     }
 
+    private void showFinishActivityDialogs() {
+        isResult = true;
+
+        View resultDialogContent = getLayoutInflater().inflate(R.layout.dialog_result_activity, null);
+
+        final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.track_activity_dialog_setting_title))
+                .setView(resultDialogContent)
+                .setPositiveButton(getString(R.string.track_activity_dialog_result_button_record),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                isTracked = false;
+                                resultProcessing();
+                            }
+                        }
+                )
+                .setNegativeButton(getString(R.string.track_activity_dialog_result_button_cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //dialog.dismiss();
+                                onBackPressed();
+                            }
+                        }
+                )
+                .create();
+        settingActivityDialog.show();
+    }
+
+    private void resultProcessing() {
+        finish();
+        Intent intent = new Intent(TrackActivityActivity.this, ConditionActivity.class);
+
+        intent.putExtra("ROUTE", (Serializable) mRoutePointTimeList);
+
+        startActivity(intent);
+
+    }
 
 //**************************************************************************************************
 //  VOICE PROMPT METHODS
