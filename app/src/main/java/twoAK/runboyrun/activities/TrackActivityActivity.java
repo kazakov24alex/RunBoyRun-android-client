@@ -76,11 +76,9 @@ public class TrackActivityActivity extends AppCompatActivity
     private TextView mTempoText;
     private TextView mProviderStatus;
     private FloatingActionButton mStartButton;
-
     private LatLng curPosition;
 
-    // map objects
-
+    // Map objects
     private GoogleMap mGoogleMap;
     private Marker mMarkerCurPos;
     private PolylineOptions rectOptions;
@@ -90,10 +88,10 @@ public class TrackActivityActivity extends AppCompatActivity
     // activity attributes
     private boolean isTracked;
     private Chronometer mTrackChronometer;
-    List<LatLng> mRoutePoints;
+    private List<LatLng> mRoutePoints;
 
-    List<Marker> mKmLabelMarkerList;
-    boolean isKmLabelMarkersHidden;
+    private List<Marker> mKmLabelMarkerList;
+    private boolean isKmLabelMarkersHidden;
 
 
     private int mKmTraveled;
@@ -173,10 +171,11 @@ public class TrackActivityActivity extends AppCompatActivity
 
         mDistanceMeters = 0;
         mTempo = 0;
+        mKmTraveled = 0;
 
         mRoutePointTimeList = new ArrayList<PointTime>();
         mKmLabelMarkerList = new ArrayList<Marker>();
-        mKmTraveled = 0;
+
 
         // Google Maps view
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -209,23 +208,18 @@ public class TrackActivityActivity extends AppCompatActivity
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedMillis = SystemClock.elapsedRealtime() - mTrackChronometer.getBase();
 
-                isLocatingAvailable();
-
                 makeTimeVoicePrompt(elapsedMillis);
                 makeTempoVoicePrompt(elapsedMillis);
                 makeDistanceVoicePrompt(elapsedMillis);
 
+                isLocatingAvailable();
                 mPathSenseService.getCurrentLocation();
             }
         });
 
 
-
         final Handler h = new Handler();
         mGPSrun = new Runnable() {
-            boolean shutdown;
-
-
             @Override
             public void run() {
                 isLocatingAvailable();
@@ -259,6 +253,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
         // Shutdown Google Voice
         if (mTTS != null) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE SHUTDOWN");
             mTTS.stop();
             mTTS.shutdown();
         }
@@ -267,11 +262,36 @@ public class TrackActivityActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed(){
+        if(isTracked) {
+            AlertDialog.Builder mNotProviderDialog;
+            mNotProviderDialog = new AlertDialog.Builder(ctx);
+            mNotProviderDialog.setCancelable(true);
+            mNotProviderDialog.setTitle(getString(R.string.track_activity_dialog_close_title));
+            mNotProviderDialog.setMessage(getString(R.string.track_activity_dialog_close_message));
+            mNotProviderDialog.setPositiveButton(getString(R.string.track_activity_dialog_close_yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            finish();
+                        }
+                    });
+            mNotProviderDialog.setNegativeButton(getString(R.string.track_activity_dialog_close_no),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) { }
+                    });
+            mNotProviderDialog.show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap map) {
         Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP IS READY");
 
         mGoogleMap = map;
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(16.0f));
+        // listener for map zoom (hides KM LABEL MARKERS)
         mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
@@ -295,8 +315,7 @@ public class TrackActivityActivity extends AppCompatActivity
             }
         });
 
-
-        // Add current position marker on map
+        // Add primary position marker on map
         curPosition = new LatLng(10, 10);
         View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_location_layout, null);
         mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
@@ -305,8 +324,7 @@ public class TrackActivityActivity extends AppCompatActivity
         );
         mMarkerCurPos.setVisible(false);
 
-
-        // Add mRoutePolyline of route on map
+        // Add empty polyline of route on map
         rectOptions = new PolylineOptions()
                 .color(getResources().getColor(R.color.ORANGE_custom_marker))
                 .width(10);
@@ -347,7 +365,7 @@ public class TrackActivityActivity extends AppCompatActivity
         if(!isLocatingAvailable()) {
             showNotProviderDialog();
         } else {
-            startActivityTracking();
+            showStartActivityDialogs();
         }
     }
 
@@ -358,42 +376,7 @@ public class TrackActivityActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mTrackChronometer.getBase()), Toast.LENGTH_SHORT).show();
     }
 
-    public void drawNewPointOnTheMap(Location location) {
-        if (location == null) {
-            Toast.makeText(getApplicationContext(), getString(R.string.track_activity_toast_not_location), Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        List<LatLng> points = mRoutePolyline.getPoints();
-        points.add(myLatLng);
-        mRoutePolyline.setPoints(points);
-
-        int elapsedSeconds = (int) ( (SystemClock.elapsedRealtime() - mTrackChronometer.getBase()) / 1000 );
-        mRoutePointTimeList.add(new PointTime(myLatLng, elapsedSeconds));
-
-        if (points.size() > 1) {
-            Location locationOld = new Location("LOCATION OLD");
-            locationOld.setLatitude(points.get(points.size() - 2).latitude);
-            locationOld.setLongitude(points.get(points.size() - 2).longitude);
-
-            mDistanceMeters += location.distanceTo(locationOld);
-            mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters*0.001));
-
-
-            calculateTempo(elapsedSeconds);
-
-            if(mDistanceMeters *0.001 > mKmTraveled)
-                setKmLabelMarker(myLatLng);
-
-        } else {
-            setKmLabelMarker(myLatLng);
-        }
-
-        Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+myLatLng.latitude+"\tLNG="+myLatLng.longitude+"\tSEC="+elapsedSeconds);
-    }
-
-    public void startActivityTracking() {
+    private void showStartActivityDialogs() {
         View settingDialogContent = getLayoutInflater().inflate(R.layout.dialog_setting_activity, null);
 
         Switch mDistanceAlertSwitcher = (Switch) settingDialogContent.findViewById(R.id.dialog_setting_activity_switch_distance);
@@ -458,19 +441,8 @@ public class TrackActivityActivity extends AppCompatActivity
                                     @Override
                                     public void onFinish() {
                                         startActivityDialog.dismiss();
-                                        mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.RED_LIGHT)));
-                                        mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
 
-                                        mDistanceText.setText(String.format("%.2f", mDistanceMeters));
-
-                                        mAlertDistanceStep = mAlertDistanceInterval;
-                                        mAlertTimeStep = 0;
-                                        mAlertTempoStep = 0;
-
-                                        isTracked = true;
-
-                                        mTrackChronometer.setBase(SystemClock.elapsedRealtime());
-                                        mTrackChronometer.start();
+                                        startActivity();
                                     }
                                 }.start();
                             }
@@ -487,60 +459,55 @@ public class TrackActivityActivity extends AppCompatActivity
         settingActivityDialog.show();
     }
 
-    private void makeTimeVoicePrompt(long elapsedMillis) {
-        if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
-            int hours = mAlertTimeStep / (1000*60*60);
-            int minutes = (mAlertTimeStep / (1000*60)) % 60;
-            Log.i("RUN-BOY-RUN", "[TrackActivity] TimeAlert: HOURS = "+hours+" MINUTES="+minutes);
+    private void startActivity() {
+        mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.RED_LIGHT)));
+        mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
 
-            if(hours == 0) {
-                String speakString = getOrdinalFromNumber(minutes)+" minute of training";
-                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-            } else if (minutes != 0){
-                String speakString = " Training lasts "+hours+" hours and "+minutes+" minutes";
-                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-            }
+        mDistanceText.setText(String.format("%.2f", mDistanceMeters));
 
-            mAlertTimeStep += mAlertTimeInterval * (60*1000);
-        }
+        mAlertDistanceStep = mAlertDistanceInterval;
+        mAlertTimeStep = 0;
+        mAlertTempoStep = 0;
+
+        isTracked = true;
+
+        mTrackChronometer.setBase(SystemClock.elapsedRealtime());
+        mTrackChronometer.start();
     }
 
-    private void makeTempoVoicePrompt(long elapsedMillis) {
-        if ( (mAlertTempoInterval != 0) && (elapsedMillis > mAlertTempoStep) ) {
-            float tempo = 2.524f;
-
-            int integerPart = (int)Math.floor(tempo);
-            int fractionalPart = (int)Math.floor((tempo-integerPart)*10);
-            Log.i("RUN-BOY-RUN", "[TrackActivity] TempoAlert: TEMPO = "+integerPart+"."+fractionalPart);
-
-            if(mAlertTempoStep != 0 && mDistanceMeters > 1000) {
-                String speakString = "Your pace is ";
-                double tempoTime = (elapsedMillis/1000) / (mDistanceMeters *0.001);
-                if( (tempoTime / 3600) > 1) {
-                    speakString += (tempoTime / 3600) + " hours ";
-                }
-                speakString += (tempoTime / 60 % 60) + " minutes and ";
-                speakString += (tempoTime % 60) + " seconds";
-
-                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-            }
-
-            mAlertTempoStep += mAlertTempoInterval * (60*1000);
+    private void drawNewPointOnTheMap(Location location) {
+        if (location == null) {
+            Toast.makeText(getApplicationContext(), getString(R.string.track_activity_toast_not_location), Toast.LENGTH_LONG).show();
+            return;
         }
-    }
 
-    private void makeDistanceVoicePrompt(long elapsedMillis) {
-        if ( (mAlertDistanceInterval != 0) && (mDistanceMeters > mAlertDistanceStep) ) {
-            String speakString = "You ran ";
-            speakString += (mDistanceMeters / 1000) + " kilometers and ";
-            speakString += (mDistanceMeters % 1000) + " meters";
+        LatLng newLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        int elapsedSeconds = (int) ( (SystemClock.elapsedRealtime() - mTrackChronometer.getBase()) / 1000 );
 
-            mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+        // Add new point to polyline of route and to list of route
+        List<LatLng> points = mRoutePolyline.getPoints();
+        points.add(newLatLng);
+        mRoutePolyline.setPoints(points);
+        mRoutePointTimeList.add(new PointTime(newLatLng, elapsedSeconds));
 
-            Log.i(APP_TAG, ACTIVITY_TAG + speakString);
+        if (points.size() > 1) {
+            // distance calculating
+            Location locationOld = new Location("LOCATION OLD");
+            locationOld.setLatitude(points.get(points.size() - 2).latitude);
+            locationOld.setLongitude(points.get(points.size() - 2).longitude);
+            mDistanceMeters += location.distanceTo(locationOld);
+            mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters*0.001));
 
-            mAlertDistanceStep += mAlertDistanceInterval;
+            calculateTempo(elapsedSeconds);
+
+            if(mDistanceMeters *0.001 > mKmTraveled)
+                setKmLabelMarker(newLatLng);
+
+        } else {
+            setKmLabelMarker(newLatLng);
         }
+
+        Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+newLatLng.latitude+"\tLNG="+newLatLng.longitude+"\tSEC="+elapsedSeconds);
     }
 
     private void setCurrentPositionMarker(Location newLocation) {
@@ -591,6 +558,62 @@ public class TrackActivityActivity extends AppCompatActivity
         mTempoText.setText(resultTempoText);
     }
 
+
+//**************************************************************************************************
+//  VOICE PROMPT METHODS
+//**************************************************************************************************
+
+    private void makeTimeVoicePrompt(long elapsedMillis) {
+        if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
+            int hours = mAlertTimeStep / (1000*60*60);
+            int minutes = (mAlertTimeStep / (1000*60)) % 60;
+            Log.i("RUN-BOY-RUN", "[TrackActivity] TimeAlert: HOURS = "+hours+" MINUTES="+minutes);
+
+            if(hours == 0) {
+                String speakString = getOrdinalFromNumber(minutes)+" minute of training";
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            } else if (minutes != 0){
+                String speakString = " Training lasts "+hours+" hours and "+minutes+" minutes";
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            }
+
+            mAlertTimeStep += mAlertTimeInterval * (60*1000);
+        }
+    }
+
+    private void makeTempoVoicePrompt(long elapsedMillis) {
+        if ((mAlertTempoInterval != 0) && (elapsedMillis > mAlertTempoStep)) {
+            if(mAlertTempoStep != 0 && mDistanceMeters > 1000) {
+                String speakString = "Your pace is ";
+                double tempoTime = (elapsedMillis/1000) / (mDistanceMeters *0.001);
+                if( (tempoTime / 3600) > 1) {
+                    speakString += (tempoTime / 3600) + " hours ";
+                }
+                speakString += (tempoTime / 60 % 60) + " minutes and ";
+                speakString += (tempoTime % 60) + " seconds";
+
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            }
+
+            mAlertTempoStep += mAlertTempoInterval * (60*1000);
+        }
+    }
+
+    private void makeDistanceVoicePrompt(long elapsedMillis) {
+        if ( (mAlertDistanceInterval != 0) && (mDistanceMeters > mAlertDistanceStep) ) {
+            String speakString = "You ran ";
+            speakString += (mDistanceMeters / 1000) + " kilometers and ";
+            speakString += (mDistanceMeters % 1000) + " meters";
+
+            mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+
+            Log.i(APP_TAG, ACTIVITY_TAG + speakString);
+
+            mAlertDistanceStep += mAlertDistanceInterval;
+        }
+    }
+
+
 //**************************************************************************************************
 //  AUXILIARY METHODS
 //**************************************************************************************************
@@ -628,7 +651,7 @@ public class TrackActivityActivity extends AppCompatActivity
         mNotProviderDialog.show();
     }
 
-    public String getOrdinalFromNumber(int i) {
+    private String getOrdinalFromNumber(int i) {
         String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
         switch (i % 100) {
             case 11:
@@ -641,7 +664,7 @@ public class TrackActivityActivity extends AppCompatActivity
         }
     }
 
-    public Bitmap createDrawableFromView(Context context, View view) {
+    private Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         view.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.WRAP_CONTENT, AppBarLayout.LayoutParams.WRAP_CONTENT));

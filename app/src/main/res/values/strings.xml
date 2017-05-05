@@ -110,6 +110,12 @@
     <string name="track_activity_dialog_setting_negative">CANCEL</string>
     <string name="track_activity_dialog_setting_positive">START!</string>
 
+    <string name="track_activity_dialog_close_title">Are you sure?</string>
+    <string name="track_activity_dialog_close_message">Do you want to cancel tracking?</string>
+    <string name="track_activity_dialog_close_yes">YES</string>
+    <string name="track_activity_dialog_close_no">NO</string>
+
+
 
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>
