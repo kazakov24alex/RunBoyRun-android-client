@@ -568,6 +568,12 @@ public class TrackActivityActivity extends AppCompatActivity
         isResult = true;
 
         View resultDialogContent = getLayoutInflater().inflate(R.layout.dialog_result_activity, null);
+        TextView distanceText = (TextView) findViewById(R.id.dialog_result_activity_distance_value);
+        distanceText.setText(mDistanceText.getText());
+        TextView tempoText = (TextView) findViewById(R.id.dialog_result_activity_tempo_value);
+        tempoText.setText(mTempoText.getText());
+        TextView timeText = (TextView) findViewById(R.id.dialog_result_activity_time_value);
+        timeText.setText(mTrackChronometer.getText());
 
         final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.track_activity_dialog_setting_title))
