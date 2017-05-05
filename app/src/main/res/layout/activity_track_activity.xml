@@ -104,24 +104,23 @@
 
 
             <TextView
-                android:id="@+id/track_activity_text_provider_image"
+                android:id="@+id/track_activity_text_provider_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="GPS"
+                android:text="@string/track_activity_text_provide_status_title"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/track_activity_text_provider_title"
+                android:id="@+id/track_activity_text_provider_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
                 android:layout_weight="1"
                 android:background="@color/PROVIDER_not_available_color"
-                android:text="@string/track_activity_text_status_not_provider"
                 android:textAlignment="center"
-                android:textColor="@color/vk_white"
+                android:textColor="@color/white"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 

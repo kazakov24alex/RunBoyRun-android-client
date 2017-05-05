@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.Location;
@@ -72,7 +73,8 @@ public class TrackActivityActivity extends AppCompatActivity
 
     // Activity objects
     private TextView mDistanceText;
-    private TextView mProviderTitle;
+    private TextView mTempoText;
+    private TextView mProviderStatus;
     private FloatingActionButton mStartButton;
 
     private LatLng curPosition;
@@ -95,7 +97,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
 
     private int mKmTraveled;
-    private float mDistance;
+    private float mDistanceMeters;
     private float mTempo;
 
     // alert intervals
@@ -169,6 +171,9 @@ public class TrackActivityActivity extends AppCompatActivity
         mAlertTimeInterval      = 0;
         mAlertTempoInterval     = 0;
 
+        mDistanceMeters = 0;
+        mTempo = 0;
+
         mRoutePointTimeList = new ArrayList<PointTime>();
         mKmLabelMarkerList = new ArrayList<Marker>();
         mKmTraveled = 0;
@@ -180,9 +185,11 @@ public class TrackActivityActivity extends AppCompatActivity
 
         // View-elements initialization
         mDistanceText = (TextView) findViewById(R.id.track_activity_text_km_number);
-        mDistanceText.setText(String.format("%.2f", mDistance));
+        mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters));
+        mTempoText = (TextView) findViewById(R.id.track_activity_text_tempo_number);
+        mTempoText.setText("0:00");
 
-        mProviderTitle = (TextView) findViewById(R.id.track_activity_text_provider_title);
+        mProviderStatus = (TextView) findViewById(R.id.track_activity_text_provider_status);
 
         mStartButton = (FloatingActionButton) findViewById(R.id.track_activity_floatbut_start);
         mStartButton.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +208,12 @@ public class TrackActivityActivity extends AppCompatActivity
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedMillis = SystemClock.elapsedRealtime() - mTrackChronometer.getBase();
-                makeVoicePrompt(elapsedMillis);
+
+                isLocatingAvailable();
+
+                makeTimeVoicePrompt(elapsedMillis);
+                makeTempoVoicePrompt(elapsedMillis);
+                makeDistanceVoicePrompt(elapsedMillis);
 
                 mPathSenseService.getCurrentLocation();
             }
@@ -216,6 +228,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
             @Override
             public void run() {
+                isLocatingAvailable();
                 if(mPathSenseService != null && !isTracked) {
                     mPathSenseService.getCurrentLocation();
                 }
@@ -341,7 +354,7 @@ public class TrackActivityActivity extends AppCompatActivity
     private void finishTracking() {
         isTracked = false;
         mTrackChronometer.stop();
-        mStartButton.setBackgroundResource(R.color.GREEN_LIGHT);
+        mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.GREEN_LIGHT)));;
         Toast.makeText(getApplicationContext(), "SEC="+(SystemClock.elapsedRealtime() - mTrackChronometer.getBase()), Toast.LENGTH_SHORT).show();
     }
 
@@ -351,32 +364,33 @@ public class TrackActivityActivity extends AppCompatActivity
             return;
         }
 
-        if (rectOptions != null) {
+        LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        List<LatLng> points = mRoutePolyline.getPoints();
+        points.add(myLatLng);
+        mRoutePolyline.setPoints(points);
 
-            LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            List<LatLng> points = mRoutePolyline.getPoints();
-            points.add(myLatLng);
-            mRoutePolyline.setPoints(points);
+        int elapsedSeconds = (int) ( (SystemClock.elapsedRealtime() - mTrackChronometer.getBase()) / 1000 );
+        mRoutePointTimeList.add(new PointTime(myLatLng, elapsedSeconds));
 
-            int elapsedSeconds = (int) ( (SystemClock.elapsedRealtime() - mTrackChronometer.getBase()) / 1000 );
-            mRoutePointTimeList.add(new PointTime(myLatLng, elapsedSeconds));
+        if (points.size() > 1) {
+            Location locationOld = new Location("LOCATION OLD");
+            locationOld.setLatitude(points.get(points.size() - 2).latitude);
+            locationOld.setLongitude(points.get(points.size() - 2).longitude);
 
-            if (points.size() > 1) {
-                Location locationOld = new Location("LOCATION OLD");
-                locationOld.setLatitude(points.get(points.size() - 2).latitude);
-                locationOld.setLongitude(points.get(points.size() - 2).longitude);
+            mDistanceMeters += location.distanceTo(locationOld);
+            mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters*0.001));
 
-                mDistance += location.distanceTo(locationOld);
-                mDistanceText.setText(String.format("%.2f", mDistance*0.001));
 
-                if(mDistance*0.001 > mKmTraveled) {
-                    setKmLabelMarker(myLatLng);
-                }
-            }
+            calculateTempo(elapsedSeconds);
 
-            Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+myLatLng.latitude+"\tLNG="+myLatLng.longitude+"\tSEC="+elapsedSeconds);
+            if(mDistanceMeters *0.001 > mKmTraveled)
+                setKmLabelMarker(myLatLng);
+
+        } else {
+            setKmLabelMarker(myLatLng);
         }
 
+        Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+myLatLng.latitude+"\tLNG="+myLatLng.longitude+"\tSEC="+elapsedSeconds);
     }
 
     public void startActivityTracking() {
@@ -444,14 +458,12 @@ public class TrackActivityActivity extends AppCompatActivity
                                     @Override
                                     public void onFinish() {
                                         startActivityDialog.dismiss();
-                                        mStartButton.setBackgroundColor(R.color.RED_LIGHT);
+                                        mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.RED_LIGHT)));
                                         mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
 
-                                        mDistance = 0;
-                                        mDistanceText.setText(String.format("%.2f", mDistance));
-                                        mTempo = 0;
+                                        mDistanceText.setText(String.format("%.2f", mDistanceMeters));
 
-                                        mAlertDistanceStep = 0;
+                                        mAlertDistanceStep = mAlertDistanceInterval;
                                         mAlertTimeStep = 0;
                                         mAlertTempoStep = 0;
 
@@ -475,7 +487,7 @@ public class TrackActivityActivity extends AppCompatActivity
         settingActivityDialog.show();
     }
 
-    private void makeVoicePrompt(long elapsedMillis) {
+    private void makeTimeVoicePrompt(long elapsedMillis) {
         if ( (mAlertTimeInterval != 0) && (elapsedMillis > mAlertTimeStep) ) {
             int hours = mAlertTimeStep / (1000*60*60);
             int minutes = (mAlertTimeStep / (1000*60)) % 60;
@@ -491,7 +503,9 @@ public class TrackActivityActivity extends AppCompatActivity
 
             mAlertTimeStep += mAlertTimeInterval * (60*1000);
         }
+    }
 
+    private void makeTempoVoicePrompt(long elapsedMillis) {
         if ( (mAlertTempoInterval != 0) && (elapsedMillis > mAlertTempoStep) ) {
             float tempo = 2.524f;
 
@@ -499,17 +513,33 @@ public class TrackActivityActivity extends AppCompatActivity
             int fractionalPart = (int)Math.floor((tempo-integerPart)*10);
             Log.i("RUN-BOY-RUN", "[TrackActivity] TempoAlert: TEMPO = "+integerPart+"."+fractionalPart);
 
-            if(mAlertTempoStep != 0) {
-                if (fractionalPart == 0) {
-                    String speakString = "You pace is " + integerPart + " kilometers per minute";
-                    mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
-                } else {
-                    String speakString = "You pace is " + integerPart + "." + fractionalPart + " kilometers per minute";
-                    mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+            if(mAlertTempoStep != 0 && mDistanceMeters > 1000) {
+                String speakString = "Your pace is ";
+                double tempoTime = (elapsedMillis/1000) / (mDistanceMeters *0.001);
+                if( (tempoTime / 3600) > 1) {
+                    speakString += (tempoTime / 3600) + " hours ";
                 }
+                speakString += (tempoTime / 60 % 60) + " minutes and ";
+                speakString += (tempoTime % 60) + " seconds";
+
+                mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
             }
 
             mAlertTempoStep += mAlertTempoInterval * (60*1000);
+        }
+    }
+
+    private void makeDistanceVoicePrompt(long elapsedMillis) {
+        if ( (mAlertDistanceInterval != 0) && (mDistanceMeters > mAlertDistanceStep) ) {
+            String speakString = "You ran ";
+            speakString += (mDistanceMeters / 1000) + " kilometers and ";
+            speakString += (mDistanceMeters % 1000) + " meters";
+
+            mTTS.speak(speakString, TextToSpeech.QUEUE_ADD, null);
+
+            Log.i(APP_TAG, ACTIVITY_TAG + speakString);
+
+            mAlertDistanceStep += mAlertDistanceInterval;
         }
     }
 
@@ -535,15 +565,30 @@ public class TrackActivityActivity extends AppCompatActivity
         View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_distance_layout, null);
         TextView numTxt = (TextView) marker.findViewById(R.id.num_txt);
         numTxt.setText(Integer.toString(mKmTraveled));
-        mKmTraveled++;
 
         Marker mKmLabelMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(myLatLng)
                 .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker)))
         );
         mKmLabelMarker.setVisible(true);
+
         mKmLabelMarkerList.add(mKmLabelMarker);
-        Log.i(APP_TAG, ACTIVITY_TAG + "I SET IT");
+        mKmTraveled++;
+    }
+
+    private void calculateTempo(long elapsedSeconds) {
+        if(mDistanceMeters < 1000)
+            return;
+
+        double tempoTime = elapsedSeconds / (mDistanceMeters *0.001);
+
+        String resultTempoText = "";
+        if( (tempoTime / 3600) > 1) {
+            resultTempoText += String.format("%02d:", tempoTime / 3600);
+        }
+        resultTempoText += String.format("%02d:%02d", tempoTime / 60 % 60, tempoTime % 60);
+
+        mTempoText.setText(resultTempoText);
     }
 
 //**************************************************************************************************
@@ -551,7 +596,16 @@ public class TrackActivityActivity extends AppCompatActivity
 //**************************************************************************************************
 
     private boolean isLocatingAvailable() {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mProviderStatus.setText(getString(R.string.track_activity_text_provider_status_yes));
+            mProviderStatus.setBackgroundResource(R.color.GREEN_LIGHT);
+            return true;
+        } else {
+            mProviderStatus.setText(getString(R.string.track_activity_text_provider_status_no));
+            mProviderStatus.setBackgroundResource(R.color.RED_LIGHT);
+            return false;
+        }
+
     }
 
     private void showNotProviderDialog() {
