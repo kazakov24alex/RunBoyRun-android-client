@@ -108,26 +108,25 @@ public class PathsenseService extends Service implements LocationListener {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE WAS DESTROYED");
 
 		mPreferences = getSharedPreferences("PathsenseLocationPreferences", MODE_PRIVATE);
 		final SharedPreferences preferences = mPreferences;
 
-		if (preferences != null) {
-			if (!isStarted()) {
-				// turn-off switch
-				SharedPreferences.Editor editor = preferences.edit();
-				editor.putInt("startedFlag", 0);
-				editor.commit();
-				// stop service
-				Intent stopIntent = new Intent(PathsenseService.this, PathsenseInVehicleLocationUpdateRunnerService.class);
-				stopIntent.setAction("stop");
-				startService(stopIntent);
-				// stop updates
-				stopUpdates();
-			}
-		}
+/*		if (preferences != null) {
+			if (!isStarted()) {*/
 
+		// turn-off switch
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putInt("startedFlag", 0);
+		editor.commit();
+		// stop service
+		Intent stopIntent = new Intent(PathsenseService.this, PathsenseInVehicleLocationUpdateRunnerService.class);
+		stopIntent.setAction("stop");
+		startService(stopIntent);
+		// stop updates
+		stopUpdates();
+
+		Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE WAS DESTROYED");
 	}
 
 
@@ -167,7 +166,7 @@ public class PathsenseService extends Service implements LocationListener {
 //  LOCATION LISTENER (OVERRIDE METHODS)
 //**************************************************************************************************
 
-	static class InternalGroundTruthLocationUpdateReceiver extends BroadcastReceiver {
+	class InternalGroundTruthLocationUpdateReceiver extends BroadcastReceiver {
 		PathsenseService mPathsenseService;
 		//
 		InternalGroundTruthLocationUpdateReceiver(PathsenseService service) {
@@ -189,7 +188,7 @@ public class PathsenseService extends Service implements LocationListener {
 		}
 	}
 
-	static class InternalInVehicleLocationUpdateReceiver extends BroadcastReceiver {
+	class InternalInVehicleLocationUpdateReceiver extends BroadcastReceiver {
 		PathsenseService mPathsenseService;
 		//
 		InternalInVehicleLocationUpdateReceiver(PathsenseService service)
@@ -211,7 +210,7 @@ public class PathsenseService extends Service implements LocationListener {
 		}
 	}
 
-	static class InternalHandler extends Handler {
+	class InternalHandler extends Handler {
 		PathsenseService mPathsenseService;
 		//
 		InternalHandler(PathsenseService service)

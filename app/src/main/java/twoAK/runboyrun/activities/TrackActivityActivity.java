@@ -628,7 +628,7 @@ public class TrackActivityActivity extends AppCompatActivity
         mNotProviderDialog.show();
     }
 
-    public static String getOrdinalFromNumber(int i) {
+    public String getOrdinalFromNumber(int i) {
         String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
         switch (i % 100) {
             case 11:
@@ -641,7 +641,7 @@ public class TrackActivityActivity extends AppCompatActivity
         }
     }
 
-    public static Bitmap createDrawableFromView(Context context, View view) {
+    public Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         view.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.WRAP_CONTENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
