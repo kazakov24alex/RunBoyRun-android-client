@@ -127,6 +127,27 @@
     <string name="track_activity_dialog_result_button_record">RECORD</string>
 
 
+    <!-- Condition Activity -->
+    <string name="condition_title_text_weather">WEATHER</string>
+    <string name="condition_title_text_relief">RELIEF</string>
+    <string name="condition_title_text_condition">CONDITION</string>
+    <string name="condition_title_text_temperature">TEMPERATURE</string>
+
+    <string name="condition_imagetext_weather_sunny">SUNNY</string>
+    <string name="condition_imagetext_weather_normal">NORMAL</string>
+    <string name="condition_imagetext_weather_rainy">RAINY</string>
+    <string name="condition_imagetext_weather_snowy">SNOWY</string>
+
+    <string name="condition_imagetext_relief_stadium">STADIUM</string>
+    <string name="condition_imagetext_relief_cross">CROSS</string>
+    <string name="condition_imagetext_relief_hills">HILLS</string>
+    <string name="condition_imagetext_relief_park">PARK</string>
+
+    <string name="condition_imagetext_condition_good">GOOD</string>
+    <string name="condition_imagetext_condition_medium">MEDIUM</string>
+    <string name="condition_imagetext_condition_tired">TIRED</string>
+    <string name="condition_imagetext_condition_beated">BEATED</string>
+
 
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>

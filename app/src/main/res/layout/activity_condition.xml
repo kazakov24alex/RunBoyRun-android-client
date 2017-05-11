@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/textView4"
@@ -10,4 +12,326 @@
         android:text="ACTIVITY CONDITION"
         android:textAlignment="center"
         android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/condition_text_title_weather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/condition_title_text_weather"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_weather_sunny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:scaleType="centerCrop"
+                android:onClick="onWeatherButtonClick" />
+            <TextView
+                android:id="@+id/condition_text_weather_sunny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:padding="3dp"
+                android:text="@string/condition_imagetext_weather_sunny"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_weather_cloudy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onWeatherButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_weather_cloudy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_weather_normal"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_weather_rainy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:onClick="onWeatherButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_weather_rainy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_weather_rainy"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp" />
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_weather_snowy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onWeatherButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_weather_snowy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_weather_snowy"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/condition_text_title_relief"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/condition_title_text_relief"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_relief_stadium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onReliefButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_relief_stadium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_relief_stadium"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_relief_park"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onReliefButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_relief_park"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_relief_park"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_relief_cross"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onReliefButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_relief_cross"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_relief_cross"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_relief_hills"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:onClick="onReliefButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_relief_hills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_relief_hills"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/condition_text_title_condition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/condition_title_text_condition"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_condition_good"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onConditionButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_condition_good"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_condition_good"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_condition_medium"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onConditionButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_condition_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_condition_medium"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_condition_tired"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:onClick="onConditionButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_condition_tired"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_condition_tired"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <twoAK.runboyrun.adapters.SquareImageView
+                android:id="@+id/condition_squareimage_condition_beated"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:onClick="onConditionButtonClick"/>
+            <TextView
+                android:id="@+id/condition_text_condition_beated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/condition_imagetext_condition_beated"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:padding="3dp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
