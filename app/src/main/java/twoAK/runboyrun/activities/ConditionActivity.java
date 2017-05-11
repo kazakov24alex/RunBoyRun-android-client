@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lantouzi.wheelview.WheelView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class ConditionActivity extends AppCompatActivity {
     static final String ENUM_CONDITIOM_BEATED   = "BEATED";
 
 
+
     private List<PointTime> mRoutePointTimeList;
 
     private List<SquareImageView> mWeatherButtonsList;
@@ -54,7 +57,9 @@ public class ConditionActivity extends AppCompatActivity {
     private String mWeatherValue;
     private String mReliefValue;
     private String mConditionValue;
+    private int mTemperatureValue;
 
+    private WheelView mTemperatureWheelView;
 
     private SquareImageView mWeatherSunnyButton;
     private SquareImageView mWeatherCloudyButton;
@@ -95,8 +100,8 @@ public class ConditionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_condition);
 
-        Intent i = getIntent();
-        mRoutePointTimeList = (List<PointTime>) i.getSerializableExtra("ROUTE");
+        Intent intent = getIntent();
+        mRoutePointTimeList = (List<PointTime>) intent.getSerializableExtra("ROUTE");
 
         mWeatherButtonsList = new ArrayList<SquareImageView>();
         mReliefButtonsList = new ArrayList<SquareImageView>();
@@ -109,6 +114,7 @@ public class ConditionActivity extends AppCompatActivity {
         mWeatherValue   = "";
         mReliefValue    = "";
         mConditionValue = "";
+        mTemperatureValue = 0;
 
 
         // Initialization images of button panel
@@ -181,7 +187,22 @@ public class ConditionActivity extends AppCompatActivity {
         mConditionBeatedText = (TextView) findViewById(R.id.condition_text_condition_beated);
         mConditionBeatedText.setTypeface(squareFont);
 
-
+        mTemperatureWheelView = (WheelView) findViewById(R.id.condition_wheelview_temperature);
+        List<String> items = new ArrayList<>();
+        for(int i=-50; i<=50; i++) {
+            items.add(Integer.toString(i));
+        }
+        mTemperatureWheelView.setItems(items);
+        mTemperatureWheelView.setAdditionCenterMark("°C");
+        mTemperatureWheelView.selectIndex(60);
+        mTemperatureWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
+            @Override
+            public void onWheelItemSelected(WheelView wheelView, int position) {
+                mTemperatureValue = position-50;
+            }
+            @Override
+            public void onWheelItemChanged(WheelView wheelView, int position) { }
+        });
     }
 
 
@@ -213,7 +234,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.ORANGE_custom_marker);
+        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
     }
 
     public void onReliefButtonClick(View view) {
@@ -244,7 +265,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.ORANGE_custom_marker);
+        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
     }
 
     public void onConditionButtonClick(View view) {
@@ -275,7 +296,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.ORANGE_custom_marker);
+        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
     }
 
 }

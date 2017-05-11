@@ -59,4 +59,17 @@ public class StartNewActivityActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.start_activity_button_enter_stat:
+                startActivity(new Intent(StartNewActivityActivity.this, EnterCompletedActivity.class));
+                break;
+            case R.id.start_activity_button_track_activity:
+                startActivity(new Intent(StartNewActivityActivity.this, TrackActivityActivity.class));
+                break;
+            default:
+                break;
+        }
+    }
 }

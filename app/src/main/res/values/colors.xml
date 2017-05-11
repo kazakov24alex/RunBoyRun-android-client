@@ -19,5 +19,7 @@
     <color name="GREEN_LIGHT">#3dc745</color>
     <color name="RED_LIGHT">#ff4350</color>
     <color name="ORANGE_custom_marker">#f46f03</color>
+    <color name="IMAGE_BUTTON_SELECT">#f46f03</color>
+    <color name="TEMPERATURE_ARROW">#f46f03</color>
 
 </resources>
