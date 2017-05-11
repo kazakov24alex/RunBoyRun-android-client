@@ -113,7 +113,6 @@
             android:value="GTQKTB9s4A7zsAoyksbdl6kXboiF8zFOB2ajuYVc" />
 
 
-        <service android:name=".pathsense.PathsenseService" android:enabled="true" />
         <service android:name=".pathsense.PathsenseInVehicleLocationUpdateRunnerService" android:enabled="true" />
         <receiver android:name=".pathsense.PathsenseInVehicleLocationDemoInVehicleLocationUpdateReceiver" />
 

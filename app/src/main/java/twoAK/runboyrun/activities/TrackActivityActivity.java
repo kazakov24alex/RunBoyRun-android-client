@@ -2,24 +2,27 @@ package twoAK.runboyrun.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.IBinder;
+import android.os.Message;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,63 +47,79 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.pathsense.android.sdk.location.PathsenseInVehicleLocation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.objects.route.PointTime;
-import twoAK.runboyrun.pathsense.PathsenseService;
+import twoAK.runboyrun.pathsense.FusedLocationManager;
+import twoAK.runboyrun.pathsense.PathsenseInVehicleLocationUpdateRunnerService;
 
 
 public class TrackActivityActivity extends AppCompatActivity
-        implements OnMapReadyCallback, TextToSpeech.OnInitListener, PathsenseService.Callbacks {
+        implements LocationListener, OnMapReadyCallback, TextToSpeech.OnInitListener {
 
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+TrackActivityActivity.class.getName()+"]: ";
 
+    // PATHSENSE MEMBERS
+    static final int MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE = 0;
+    static final int MESSAGE_ON_GROUND_TRUTH_LOCATION = 1;
+    double mHeadingGroundTruth;
+    InternalHandler mHandler = new InternalHandler(this);
+    SharedPreferences mPreferences;
+    InternalGroundTruthLocationUpdateReceiver mGroundTruthLocationUpdateReceiver;
+    InternalInVehicleLocationUpdateReceiver mInVehicleLocationUpdateReceiver;
+
+
     private Context ctx = this;
 
+    // Google Voice
     private TextToSpeech mTTS;
-    private Intent serviceIntent;
-
-    private PathsenseService mPathSenseService;
-    private LocationManager locationManager;
-    private Runnable mGPSrun;
-
     private Boolean speechIsAvailable;
+
+    // GPS location
+    private LocationManager locationManager;
+    private Timer mGpsQuerist;
+    private LatLng curPosition;
+    private boolean isTracked;
+    private boolean isResult;
+
+    // Map objects
+    private GoogleMap mGoogleMap;
+    private Marker mMarkerCurPos;
+
+    // Map polyline
+    private PolylineOptions rectOptions;
+    private Polyline mRoutePolyline;
+
+
+    private Chronometer mTrackChronometer;
+    private List<PointTime> mRoutePointTimeList;
+
+    // Map KM labels
+    private List<Marker> mKmLabelMarkerList;
+    private boolean isKmLabelMarkersHidden;
+
 
     // Activity objects
     private TextView mDistanceText;
     private TextView mTempoText;
     private TextView mProviderStatus;
     private FloatingActionButton mStartButton;
-    private LatLng curPosition;
-
-    // Map objects
-    private GoogleMap mGoogleMap;
-    private Marker mMarkerCurPos;
-    private PolylineOptions rectOptions;
-    private Polyline mRoutePolyline;
-    private List<PointTime> mRoutePointTimeList;
-
-    // activity attributes
-    private boolean isTracked;
-    private boolean isResult;
-    private Chronometer mTrackChronometer;
-    private List<LatLng> mRoutePoints;
-
-    private List<Marker> mKmLabelMarkerList;
-    private boolean isKmLabelMarkersHidden;
-
 
     private int mKmTraveled;
     private float mDistanceMeters;
     private float mTempo;
 
-    // alert intervals
+
+    // Alert intervals
     private int mAlertDistanceInterval;
     private int mAlertTimeInterval;
     private int mAlertTempoInterval;
@@ -109,37 +128,38 @@ public class TrackActivityActivity extends AppCompatActivity
     private int mAlertTempoStep;
 
 
-
-
-    //**************************************************************************************************
-//  BINDING ACTIVITY TO PATHSENSE SERVICE
 //**************************************************************************************************
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE CONNECTED");
-            // We've binded to LocalService, cast the IBinder and get LocalService instance
-            PathsenseService.LocalBinder binder = (PathsenseService.LocalBinder) service;
-            mPathSenseService = binder.getServiceInstance();                // Get instance of your service!
-            mPathSenseService.registerClient(TrackActivityActivity.this);   // Activity register in the service as client for callabacks!
-            mGPSrun.run();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "PATHSENSE SERVICE DISCONNECTED");
-        }
-    };
-
+//  LOCATION PROVIDERS OVERRIDE METHODS
+//**************************************************************************************************
+    // TODO: int i = 0;
     @Override
-    public void updateClient(Location newLocation) {
-        if(curPosition.latitude == newLocation.getLatitude() && curPosition.longitude == newLocation.getLongitude())
+    public void onLocationChanged(Location location) {
+        // TODO: Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+location.getLatitude()+" LNG="+location.getLongitude()+" I="+i++);
+
+        // сheck whether the location has changed
+        if(curPosition.latitude == location.getLatitude() && curPosition.longitude == location.getLongitude())
             if(!isTracked || mRoutePointTimeList.size()!=0)
                 return;
 
-        setCurrentPositionMarker(newLocation);
+        setCurrentPositionMarker(location);
+
         if(isTracked)
-            drawNewPointOnTheMap(newLocation);
+            drawNewPointOnTheMap(location);
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        Log.i(APP_TAG, ACTIVITY_TAG + "PROVIDER DISABLED");
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        Log.i(APP_TAG,ACTIVITY_TAG + "PROVIDER ENABLED");
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        Log.i(APP_TAG, ACTIVITY_TAG + "PROVIDER STATUS CHANGE");
     }
 
 
@@ -153,15 +173,12 @@ public class TrackActivityActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_activity);
 
+
+        mPreferences = getSharedPreferences("PathsenseInVehicleLocationDemoPreferences", MODE_PRIVATE);
         mTTS = new TextToSpeech(this, this); // Google Voice
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); // GPS Manager
 
-        // Pathsense service start
-        serviceIntent = new Intent(TrackActivityActivity.this, PathsenseService.class);
-        bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE); //Binding to the service!
-        startService(serviceIntent);
-
-        // Variable-flags
+        // State-flags
         isTracked = false;
         isResult = true;
         speechIsAvailable = false;
@@ -172,13 +189,13 @@ public class TrackActivityActivity extends AppCompatActivity
         mAlertTimeInterval      = 0;
         mAlertTempoInterval     = 0;
 
+        // Activity statistics
         mDistanceMeters = 0;
-        mTempo = 0;
         mKmTraveled = 0;
+        mTempo = 0;
 
         mRoutePointTimeList = new ArrayList<PointTime>();
         mKmLabelMarkerList = new ArrayList<Marker>();
-
 
         // Google Maps view
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -190,7 +207,6 @@ public class TrackActivityActivity extends AppCompatActivity
         mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters));
         mTempoText = (TextView) findViewById(R.id.track_activity_text_tempo_number);
         mTempoText.setText("0:00");
-
         mProviderStatus = (TextView) findViewById(R.id.track_activity_text_provider_status);
 
         mStartButton = (FloatingActionButton) findViewById(R.id.track_activity_floatbut_start);
@@ -205,33 +221,45 @@ public class TrackActivityActivity extends AppCompatActivity
             }
         });
 
+        // Activity chronometer
         mTrackChronometer = (Chronometer) findViewById(R.id.track_activity_chronometer);
         mTrackChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedMillis = SystemClock.elapsedRealtime() - mTrackChronometer.getBase();
 
-                makeTimeVoicePrompt(elapsedMillis);
-                makeTempoVoicePrompt(elapsedMillis);
-                makeDistanceVoicePrompt(elapsedMillis);
-
                 isLocatingAvailable();
-                mPathSenseService.getCurrentLocation();
+
+                // Make voice alert
+                if(speechIsAvailable) {
+                    makeTimeVoicePrompt(elapsedMillis);
+                    makeTempoVoicePrompt(elapsedMillis);
+                    makeDistanceVoicePrompt(elapsedMillis);
+                }
             }
         });
 
-
-        final Handler h = new Handler();
-        mGPSrun = new Runnable() {
+        // GPS Querist
+        final Handler mGpsQueristHandler = new Handler();
+        mGpsQuerist = new Timer();
+        mGpsQuerist.schedule(new TimerTask() {
             @Override
             public void run() {
-                isLocatingAvailable();
-                if(mPathSenseService != null && !isTracked) {
-                    mPathSenseService.getCurrentLocation();
-                }
-                h.postDelayed(this, 1000);
+                mGpsQueristHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        startPathserviceUpdates();
+                    }
+                });
             }
-        };
+
+            @Override
+            public boolean cancel() {
+                stopPathserviceUpdates();
+                return super.cancel();
+            }
+        }, 0L, 1000);
+
     }
 
     @Override
@@ -248,19 +276,24 @@ public class TrackActivityActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY WAS DESTROYED");
+        // stop GPS querist
+        mGpsQuerist.cancel();
 
-        // Shutdown Pathsense service
-        unbindService(mConnection);
-        stopService(serviceIntent);
+        // deactivate Pathservice
+        deactivatePathservice();
+
+        // clean GoogleMap cache
+        mGoogleMap.clear();
+        Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP WAS CLEARED");
 
         // Shutdown Google Voice
         if (mTTS != null) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE SHUTDOWN");
             mTTS.stop();
             mTTS.shutdown();
+            Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE SHUTDOWN");
         }
 
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY WAS DESTROYED");
         super.onDestroy();
     }
 
@@ -289,6 +322,7 @@ public class TrackActivityActivity extends AppCompatActivity
             mNotProviderDialog.show();
         } else {
             finish();
+            Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY FINISHED");
         }
     }
 
@@ -298,6 +332,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
         mGoogleMap = map;
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(16.0f));
+
         // listener for map zoom (hides KM LABEL MARKERS)
         mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
@@ -322,7 +357,7 @@ public class TrackActivityActivity extends AppCompatActivity
             }
         });
 
-        // Add primary position marker on map
+        // add primary position marker on map
         curPosition = new LatLng(10, 10);
         View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.marker_location_layout, null);
         mMarkerCurPos = mGoogleMap.addMarker(new MarkerOptions()
@@ -336,6 +371,9 @@ public class TrackActivityActivity extends AppCompatActivity
                 .color(getResources().getColor(R.color.ORANGE_custom_marker))
                 .width(10);
         mRoutePolyline = mGoogleMap.addPolyline(rectOptions);
+
+        // Pathservice activating
+        activatePathservice();
     }
 
     @Override
@@ -355,6 +393,7 @@ public class TrackActivityActivity extends AppCompatActivity
                 Log.e(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE ERROR: THIS LANGUAGE NOT SUPPORTED");
             } else {
                 speechIsAvailable = true;
+                Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE VOICE IS INITIALIZED");
             }
 
         } else {
@@ -467,7 +506,8 @@ public class TrackActivityActivity extends AppCompatActivity
 
     private void startActivity() {
         mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.RED_LIGHT)));
-        mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
+        if(speechIsAvailable)
+            mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
 
         mDistanceText.setText(String.format("%.2f", mDistanceMeters));
 
@@ -479,6 +519,8 @@ public class TrackActivityActivity extends AppCompatActivity
 
         mTrackChronometer.setBase(SystemClock.elapsedRealtime());
         mTrackChronometer.start();
+
+        activatePathservice();
     }
 
     private void drawNewPointOnTheMap(Location location) {
@@ -568,11 +610,11 @@ public class TrackActivityActivity extends AppCompatActivity
         isResult = true;
 
         View resultDialogContent = getLayoutInflater().inflate(R.layout.dialog_result_activity, null);
-        TextView distanceText = (TextView) findViewById(R.id.dialog_result_activity_distance_value);
+        TextView distanceText = (TextView) resultDialogContent.findViewById(R.id.dialog_result_activity_distance_value);
         distanceText.setText(mDistanceText.getText());
-        TextView tempoText = (TextView) findViewById(R.id.dialog_result_activity_tempo_value);
+        TextView tempoText = (TextView) resultDialogContent.findViewById(R.id.dialog_result_activity_tempo_value);
         tempoText.setText(mTempoText.getText());
-        TextView timeText = (TextView) findViewById(R.id.dialog_result_activity_time_value);
+        TextView timeText = (TextView) resultDialogContent.findViewById(R.id.dialog_result_activity_time_value);
         timeText.setText(mTrackChronometer.getText());
 
         final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
@@ -599,14 +641,183 @@ public class TrackActivityActivity extends AppCompatActivity
     }
 
     private void resultProcessing() {
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY FINISHED");
         finish();
+
         Intent intent = new Intent(TrackActivityActivity.this, ConditionActivity.class);
-
         intent.putExtra("ROUTE", (Serializable) mRoutePointTimeList);
-
         startActivity(intent);
-
     }
+
+
+//**************************************************************************************************
+//  PATHSERVICE MANAGEMENTS METHODS
+//**************************************************************************************************
+    static class InternalHandler extends Handler {
+    TrackActivityActivity mActivity;
+    //
+    InternalHandler(TrackActivityActivity activity)
+    {
+        mActivity = activity;
+    }
+    @Override
+    public void handleMessage(Message msg)
+    {
+        final TrackActivityActivity activity = mActivity;
+        final GoogleMap map = activity != null ? activity.mGoogleMap : null;
+        //
+        if (activity != null && map != null)
+        {
+            switch (msg.what)
+            {
+                case MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE:
+                {
+                    Log.i(APP_TAG, ACTIVITY_TAG + "VEHICLE UPDATE");
+                }
+                case MESSAGE_ON_GROUND_TRUTH_LOCATION:
+                {
+                    final Marker groundTruthMarker = activity.mMarkerCurPos;
+                    //
+                    if (groundTruthMarker != null)
+                    {
+                        Location groundTruthLocation = (Location) msg.obj;
+                        float bearing = groundTruthLocation.getBearing();
+                        if (bearing != 0)
+                        {
+                            activity.mHeadingGroundTruth = groundTruthLocation.getBearing();
+                        }
+                        groundTruthMarker.setRotation((float) activity.mHeadingGroundTruth - 90);
+                        LatLng position = new LatLng(groundTruthLocation.getLatitude(), groundTruthLocation.getLongitude());
+                        groundTruthMarker.setPosition(position);
+                        //map.moveCamera(CameraUpdateFactory.newLatLng(position));
+                        activity.drawNewPointOnTheMap(groundTruthLocation);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+    static class InternalGroundTruthLocationUpdateReceiver extends BroadcastReceiver {
+        TrackActivityActivity mActivity;
+        //
+        InternalGroundTruthLocationUpdateReceiver(TrackActivityActivity activity)
+        {
+            mActivity = activity;
+        }
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            final TrackActivityActivity activity = mActivity;
+            final InternalHandler handler = activity != null ? activity.mHandler : null;
+            //
+            if (activity != null && handler != null)
+            {
+                Location groundTruthLocation = intent.getParcelableExtra("groundTruthLocation");
+                Message msg = Message.obtain();
+                msg.what = MESSAGE_ON_GROUND_TRUTH_LOCATION;
+                msg.obj = groundTruthLocation;
+                handler.sendMessage(msg);
+            }
+        }
+    }
+    static class InternalInVehicleLocationUpdateReceiver extends BroadcastReceiver {
+        TrackActivityActivity mActivity;
+        //
+        InternalInVehicleLocationUpdateReceiver(TrackActivityActivity activity)
+        {
+            mActivity = activity;
+        }
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            final TrackActivityActivity activity = mActivity;
+            final InternalHandler handler = activity != null ? activity.mHandler : null;
+            //
+            if (activity != null && handler != null)
+            {
+                PathsenseInVehicleLocation inVehicleLocationUpdate = intent.getParcelableExtra("inVehicleLocation");
+                Message msg = Message.obtain();
+                msg.what = MESSAGE_ON_IN_VEHICLE_LOCATION_UPDATE;
+                msg.obj = inVehicleLocationUpdate;
+                handler.sendMessage(msg);
+            }
+        }
+    }
+
+    private void activatePathservice() {
+        final SharedPreferences preferences = mPreferences;
+        // turn-on switch
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("startedFlag", 1);
+        editor.commit();
+        // start service
+        Intent startIntent = new Intent(TrackActivityActivity.this, PathsenseInVehicleLocationUpdateRunnerService.class);
+        startIntent.setAction("start");
+        startService(startIntent);
+        // start updates
+        startPathserviceUpdates();
+
+        Log.i(APP_TAG, ACTIVITY_TAG + "PATHSERVICE WAS ACTIVATED");
+    }
+
+    private void deactivatePathservice() {
+        final SharedPreferences preferences = mPreferences;
+        // turn-off switch
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("startedFlag", 0);
+        editor.commit();
+        // stop Pathservice
+        Intent stopIntent = new Intent(TrackActivityActivity.this, PathsenseInVehicleLocationUpdateRunnerService.class);
+        stopIntent.setAction("stop");
+        startService(stopIntent);
+        // stop updates
+        stopPathserviceUpdates();
+
+        Log.i(APP_TAG, ACTIVITY_TAG + "PATHSERVICE WAS DEACTIVATED");
+    }
+
+    private void startPathserviceUpdates() {
+        if (mStartButton != null)
+        {
+            FusedLocationManager.getInstance(this).requestLocationUpdate(this);
+            // register for updates
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+            if (mGroundTruthLocationUpdateReceiver == null)
+            {
+                mGroundTruthLocationUpdateReceiver = new InternalGroundTruthLocationUpdateReceiver(this);
+            }
+            localBroadcastManager.registerReceiver(mGroundTruthLocationUpdateReceiver, new IntentFilter("groundTruthLocationUpdate"));
+            if (mInVehicleLocationUpdateReceiver == null)
+            {
+                mInVehicleLocationUpdateReceiver = new InternalInVehicleLocationUpdateReceiver(this);
+            }
+            localBroadcastManager.registerReceiver(mInVehicleLocationUpdateReceiver, new IntentFilter("inVehicleLocationUpdate"));
+        }
+    }
+
+    private void stopPathserviceUpdates() {
+        if (mStartButton != null)
+        {
+            // unregister for updates
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+            if (mGroundTruthLocationUpdateReceiver != null)
+            {
+                localBroadcastManager.unregisterReceiver(mGroundTruthLocationUpdateReceiver);
+            }
+            if (mInVehicleLocationUpdateReceiver != null)
+            {
+                localBroadcastManager.unregisterReceiver(mInVehicleLocationUpdateReceiver);
+            }
+        }
+    }
+
+    private boolean isPathserviceStarted() {
+        final SharedPreferences preferences = mPreferences;
+
+        return preferences.getInt("startedFlag", 0) == 1;
+    }
+
 
 //**************************************************************************************************
 //  VOICE PROMPT METHODS
