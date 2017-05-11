@@ -7,6 +7,7 @@
     <string name="vk_app_id">5944334</string>
     <string name="facebook_app_id">1449271205145331</string>
     <string name="google_client_id">1098093132900-dmb49sod7fcbvgj6mtbdoq80rlha1o78.apps.googleusercontent.com</string>
+    <string name="google_maps_api_key">AIzaSyA2PUaAVlXGavjM5mPCcsk0WPD9S8296I4</string>
 
     <!-- Navigator Drawer -->
     <string name="action_settings">Settings</string>
@@ -75,6 +76,56 @@
     <string name="navdrawer_item_competitions">Competitions</string>
     <string name="navdrawer_item_rates">Rates</string>
     <string name="navdrawer_item_logout">Logout</string>
+
+
+    <!-- StartActivity Activity -->
+    <string name="start_activity_title">WHAT DO YOU WANT?</string>
+    <string name="start_activity_button_enter_stat">Enter completed activity</string>
+    <string name="start_activity_button_track_activity">Track activity</string>
+
+
+    <!-- TrackActivity Activity -->
+    <string name="track_activity_text_label_km">KILOMETERS</string>
+    <string name="track_activity_text_label_time">ACTIVITY TIME</string>
+    <string name="track_activity_text_label_tempo">MIN/KM</string>
+
+    <string name="track_activity_toast_not_location">Your location is not defined\n
+        Make sure the access to a location is allowed</string>
+    <string name="track_activity_toast_network_provider">Location data are provided by network provider\n
+        They may not be accurate. We advise you to enable GPS</string>
+    
+
+    <string name="track_activity_text_provide_status_title">GPS</string>
+    <string name="track_activity_text_provider_status_yes">YES</string>
+    <string name="track_activity_text_provider_status_no">NO</string>
+
+    <string name="track_activity_dialog_notprovider_title">Problems with locating</string>
+    <string name="track_activity_dialog_notprovider_text">Unable to determine your location.\nCheck in settings if you have permission to receive your current location.</string>
+    <string name="track_activity_dialog_button_check_settings">SETTINGS</string>
+    <string name="track_activity_dialog_button_cancel">CANCEL</string>
+
+    <string name="track_activity_dialog_start_activity_title">Начинаем активность!</string>
+    <string name="track_activity_dialog_setting_title">Setting sound alerts</string>
+    <string name="track_activity_dialog_setting_text_distance">Distance traveled</string>
+    <string name="track_activity_dialog_setting_text_time">Elapsed time</string>
+    <string name="track_activity_dialog_setting_text_tempo">Average tempo</string>
+    <string name="track_activity_dialog_setting_tint_distance">m</string>
+    <string name="track_activity_dialog_setting_tint_time">min</string>
+    <string name="track_activity_dialog_setting_tint_tempo">min</string>
+    <string name="track_activity_dialog_setting_negative">CANCEL</string>
+    <string name="track_activity_dialog_setting_positive">START!</string>
+
+    <string name="track_activity_dialog_close_title">Are you sure?</string>
+    <string name="track_activity_dialog_close_message">Do you want to cancel tracking?</string>
+    <string name="track_activity_dialog_close_yes">YES</string>
+    <string name="track_activity_dialog_close_no">NO</string>
+
+    <string name="track_activity_dialog_result_distance_title">DISTANCE:</string>
+    <string name="track_activity_dialog_result_tempo_title">TEMPO:</string>
+    <string name="track_activity_dialog_result_time_title">TIME:</string>
+    <string name="track_activity_dialog_result_button_cancel">CANCEL</string>
+    <string name="track_activity_dialog_result_button_record">RECORD</string>
+
 
 
     <!--ERRORS-->

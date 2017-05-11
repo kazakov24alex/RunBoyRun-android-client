@@ -66,6 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity
 
         //Global methods as
         /*
+        akup@mail.ru
+        Akup12
             mImageLoader = new ImageLoader(this);
             mHandler = new Handler();
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -150,7 +152,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.navdrawer_item_start_activity:
-                createBackStack(new Intent(this, Activity1.class));
+                createBackStack(new Intent(this, StartNewActivityActivity.class));
                 break;
 
             case R.id.navdrawer_item_personal_page:

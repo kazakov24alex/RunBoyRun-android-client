@@ -5,10 +5,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navdrawer_item_start_activity"
+            android:enabled="false"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/navdrawer_item_start_activity" />
         <item
             android:id="@+id/navdrawer_item_personal_page"
+            android:enabled="false"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/navdrawer_item_personal_page" />
         <item

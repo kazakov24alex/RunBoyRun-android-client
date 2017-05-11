@@ -5,12 +5,19 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
 
-    <color name="grey_light">#FFCCCCCC</color>
+    <color name="grey_light">#16cc05</color>
     <color name="dark">#4b4b4b</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="vk">#36638e</color>
     <color name="facebook">#3b5998</color>
     <color name="twitter">#55ACEE</color>
     <color name="googleplus">#D34836</color>
+    <color name="GPS_available_color">#16cc05</color>
+    <color name="NETWORK_available_color">#fbf71f</color>
+    <color name="PROVIDER_not_available_color">#fe3838</color>
+    <color name="GREEN_LIGHT">#3dc745</color>
+    <color name="RED_LIGHT">#ff4350</color>
+    <color name="ORANGE_custom_marker">#f46f03</color>
 
 </resources>

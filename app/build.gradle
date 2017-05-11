@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -37,12 +43,14 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.2.1'
     compile 'com.google.android.gms:play-services-auth:10.2.1'
 
+    compile(name:'pathsense-android-sdk-bundle-release-2.3.0.18', ext:'aar')
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.asne:asne-vk:0.3.1'
-    compile 'com.github.asne:asne-odnoklassniki:0.3.1'
     compile 'com.github.asne:asne-facebook:0.3.1'
-    compile 'com.github.asne:asne-linkedin:0.3.1'
-    compile 'com.github.asne:asne-twitter:0.3.1'
+
+    compile 'com.github.lzyzsd:circleprogress:1.2.1'
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 
     compile 'com.android.support:gridlayout-v7:25.3.1'
 }

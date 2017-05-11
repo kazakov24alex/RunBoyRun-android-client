@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context="learn.navdrawbase.Activity1">
+    tools:context="twoAK.runboyrun.activities.StartNewActivityActivity">
 
 
 <android.support.design.widget.CoordinatorLayout
@@ -21,12 +21,23 @@
 
 
 
-    <include layout="@layout/global_app_bar_layout" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/global_app_bar_layout" />
 
 
+        <!-- Content -->
+        <ViewStub
+            android:id="@+id/content_stub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:inflatedId="@+id/message_layout" />
 
-    <!-- Content -->
-    <include layout="@layout/content_1" />
+    </LinearLayout>
 
 
     <android.support.design.widget.FloatingActionButton
