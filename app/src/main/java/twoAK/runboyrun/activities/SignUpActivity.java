@@ -416,7 +416,7 @@ public class SignUpActivity extends AppCompatActivity {
                 editor.putString("token", mToken);
                 editor.commit();
                 Auth.setToken(mToken);
-                startActivity(new Intent(SignUpActivity.this, Activity1.class));
+                startActivity(new Intent(SignUpActivity.this, StartNewActivityActivity.class));
             } else{
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Registration failed", Toast.LENGTH_SHORT);

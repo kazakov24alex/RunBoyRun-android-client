@@ -215,7 +215,7 @@ public class SignInActivity extends AppCompatActivity {
                 editor.putString("token", mToken).commit();
                 editor.commit();
                 Auth.setToken(mToken);
-                startActivity(new Intent(SignInActivity.this, Activity1.class));
+                startActivity(new Intent(SignInActivity.this, StartNewActivityActivity.class));
             } else {
                 Log.i("SignInActivity", "Login is unsuccessful.");
                 // show the error and focus on the wrong field
