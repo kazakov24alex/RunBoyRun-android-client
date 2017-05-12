@@ -79,6 +79,12 @@
 
 
     <!-- StartActivity Activity -->
+    <string name="start_activity_title_select_sport">SELECT A SPORT:</string>
+    <string name="start_activity_text_sport_running">RUNNING</string>
+    <string name="start_activity_text_sport_cycling">CYCLING</string>
+    <string name="start_activity_text_sport_walking">WALKING</string>
+    <string name="start_activity_text_sport_skirun">SKI RUN</string>
+
     <string name="start_activity_title">WHAT DO YOU WANT?</string>
     <string name="start_activity_button_enter_stat">Enter completed activity</string>
     <string name="start_activity_button_track_activity">Track activity</string>

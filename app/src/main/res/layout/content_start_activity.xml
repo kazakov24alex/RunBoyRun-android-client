@@ -19,6 +19,111 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/start_activity_title_select_sport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_activity_title_select_sport"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <twoAK.runboyrun.adapters.SquareImageView
+                    android:id="@+id/start_activity_imagebutton_sport_running"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:padding="3dp"
+                    android:onClick="onSportSelectorClick"/>
+                <TextView
+                    android:id="@+id/start_activity_text_sport_running"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/start_activity_text_sport_running"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:padding="3dp"/>
+            </FrameLayout>
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <twoAK.runboyrun.adapters.SquareImageView
+                    android:id="@+id/start_activity_imagebutton_sport_cycling"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:padding="3dp"
+                    android:onClick="onSportSelectorClick"/>
+                <TextView
+                    android:id="@+id/start_activity_text_sport_cycling"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/start_activity_text_sport_cycling"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:padding="3dp"/>
+            </FrameLayout>
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <twoAK.runboyrun.adapters.SquareImageView
+                    android:id="@+id/start_activity_imagebutton_sport_walking"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp"
+                    android:onClick="onSportSelectorClick"/>
+                <TextView
+                    android:id="@+id/start_activity_text_sport_walking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/start_activity_text_sport_walking"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:padding="3dp"/>
+            </FrameLayout>
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <twoAK.runboyrun.adapters.SquareImageView
+                    android:id="@+id/start_activity_imagebutton_sport_skirun"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:padding="3dp"
+                    android:onClick="onSportSelectorClick"/>
+                <TextView
+                    android:id="@+id/start_activity_text_sport_skirun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/start_activity_text_sport_skirun"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:padding="3dp"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <TextView
             android:id="@+id/start_activity_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -36,10 +36,10 @@
             android:name=".activities.WelcomeActivity"
             android:label="RunBoyRun"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>-->
+            </intent-filter>
         </activity>
 
         <activity
@@ -92,10 +92,7 @@
         <activity android:name=".activities.ConditionActivity"
             android:label="ConditionActivity"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
         </activity>
 
 
