@@ -22,15 +22,17 @@
  * limitations under the License.
  */
 
-package antistatic.spinnerwheel.adapters;
+package twoAK.runboyrun.adapters;
 
 import android.content.Context;
 import android.database.DataSetObserver;
 
+import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
+
 /**
  * Numeric Wheel adapter.
  */
-public class NumericWheelAdapter extends AbstractWheelTextAdapter {
+public class MetersWheelAdapter extends AbstractWheelTextAdapter {
 
     public interface IntParamFunction<R> {
         R apply(int i);
@@ -55,7 +57,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * Constructor
      * @param context the current context
      */
-    public NumericWheelAdapter(Context context) {
+    public MetersWheelAdapter(Context context) {
         this(context, DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE);
     }
 
@@ -65,7 +67,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param minValue the spinnerwheel min value
      * @param maxValue the spinnerwheel max value
      */
-    public NumericWheelAdapter(Context context, int minValue, int maxValue) {
+    public MetersWheelAdapter(Context context, int minValue, int maxValue) {
         this(context, minValue, maxValue, (String) null);
     }
 
@@ -76,18 +78,18 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param maxValue the spinnerwheel max value
      * @param format the format string
      */
-    public NumericWheelAdapter(Context context, int minValue, int maxValue, final String format) {
+    public MetersWheelAdapter(Context context, int minValue, int maxValue, final String format) {
         this(context, minValue, maxValue, new IntParamFunction<String>() {
             @Override public String apply(int i) {
                 if (format == null) {
                     return Integer.toString(i);
                 }
-                return String.format(format, i);
+                return String.format(format, i*50);
             }
         });
     }
 
-    public NumericWheelAdapter(Context context, int minValue, int maxValue, IntParamFunction<String> formatFunction) {
+    public MetersWheelAdapter(Context context, int minValue, int maxValue, IntParamFunction<String> formatFunction) {
         super(context);
 
         this.minValue = minValue;

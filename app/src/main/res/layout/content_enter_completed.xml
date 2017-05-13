@@ -124,23 +124,41 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/enter_completed_activity_text_time"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:orientation="horizontal">
+        android:text="Training time"
+        android:textAlignment="textStart"
+        android:textSize="24sp" />
 
-        <antistatic.spinnerwheel.WheelVerticalView
-            android:id="@+id/hour"
-            android:layout_height="100dp"
-            android:layout_width="50dp"
-            android:layout_weight="1"
-            />
-        <antistatic.spinnerwheel.WheelVerticalView
-            android:id="@+id/minutes"
-            android:layout_height="100dp"
-            android:layout_width="50dp"
-            android:layout_weight="1"
-            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <antistatic.spinnerwheel.WheelVerticalView
+                android:id="@+id/hour"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" />
+
+            <antistatic.spinnerwheel.WheelVerticalView
+                android:id="@+id/minutes"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

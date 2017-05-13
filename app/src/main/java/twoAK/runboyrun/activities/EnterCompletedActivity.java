@@ -5,22 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
 
-import java.util.Calendar;
-
 import antistatic.spinnerwheel.AbstractWheel;
-import antistatic.spinnerwheel.OnWheelChangedListener;
-import antistatic.spinnerwheel.OnWheelClickedListener;
-import antistatic.spinnerwheel.OnWheelScrollListener;
-import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.MetersWheelAdapter;
+import twoAK.runboyrun.adapters.TimeWheelAdapter;
 
 public class EnterCompletedActivity extends BaseActivity {
-    // Time changed flag
-    private boolean timeChanged = false;
 
-    // Time scrolled flag
-    private boolean timeScrolled = false;
+    private AbstractWheel mKilometersWheel;
+    private AbstractWheel mMetersWheel;
 
+    private AbstractWheel mHoursWheel;
+    private AbstractWheel mMinutesWheel;
 
 
     @Override
@@ -33,74 +29,43 @@ public class EnterCompletedActivity extends BaseActivity {
         View inflated = stub.inflate();
 
 
-        final AbstractWheel hourses = (AbstractWheel) findViewById(R.id.hour_horizontal);
-        NumericWheelAdapter hourAdapter = new NumericWheelAdapter(this, 0,1000, "%03d");
-        hourAdapter.setItemResource(R.layout.wheel_text_centered);
-        hourAdapter.setItemTextResource(R.id.text);
-        hourses.setViewAdapter(hourAdapter);
+        mKilometersWheel = (AbstractWheel) findViewById(R.id.hour_horizontal);
+        antistatic.spinnerwheel.adapters.TimeAdapter kilometersAdapter = new antistatic.spinnerwheel.adapters.TimeAdapter(this, 1,100, "%d");
+        kilometersAdapter.setItemResource(R.layout.wheel_text_centered);
+        kilometersAdapter.setItemTextResource(R.id.text);
+        mKilometersWheel.setViewAdapter(kilometersAdapter);
 
-        final AbstractWheel minses = (AbstractWheel) findViewById(R.id.mins);
-        NumericWheelAdapter minAdapter = new NumericWheelAdapter(this, 0, 10, "%03d");
-        minAdapter.setItemResource(R.layout.wheel_text_centered_dark_back);
-        minAdapter.setItemTextResource(R.id.text);
-        minses.setViewAdapter(minAdapter);
-
-
+        mMetersWheel = (AbstractWheel) findViewById(R.id.mins);
+        MetersWheelAdapter metersAdapter = new MetersWheelAdapter(this, 1, 20, "%d");
+        metersAdapter.setItemResource(R.layout.wheel_text_centered_dark_back);
+        metersAdapter.setItemTextResource(R.id.text);
+        mMetersWheel.setViewAdapter(metersAdapter);
 
 
-        final AbstractWheel hours = (AbstractWheel) findViewById(R.id.hour);
-        hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
-        hours.setCyclic(true);
-
-        final AbstractWheel mins = (AbstractWheel) findViewById(R.id.minutes);
-        mins.setViewAdapter(new NumericWheelAdapter(this, 0, 59, "%02d"));
-        mins.setCyclic(true);
 
 
-        // set current time
-        Calendar c = Calendar.getInstance();
-        int curHours = c.get(Calendar.HOUR_OF_DAY);
-        int curMinutes = c.get(Calendar.MINUTE);
+        mHoursWheel = (AbstractWheel) findViewById(R.id.hour);
+        mHoursWheel.setViewAdapter(new TimeWheelAdapter(this, 23, "hours"));
+        mHoursWheel.setVisibleItems(4);
+        mHoursWheel.setCyclic(false);
+        mHoursWheel.setCurrentItem(1);
 
-        hours.setCurrentItem(curHours);
-        mins.setCurrentItem(curMinutes);
 
-        // add listeners
-        addChangingListener(mins, "min");
-        addChangingListener(hours, "hour");
+        mMinutesWheel = (AbstractWheel) findViewById(R.id.minutes);
+        mMinutesWheel.setViewAdapter(new TimeWheelAdapter(this, 60, "min"));
+        mMinutesWheel.setVisibleItems(4);
+        mMinutesWheel.setCyclic(false);
+        mMinutesWheel.setCurrentItem(15);
 
-        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                if (!timeScrolled) {
-                    timeChanged = true;
-                    timeChanged = false;
-                }
-            }
-        };
-        hours.addChangingListener(wheelListener);
-        mins.addChangingListener(wheelListener);
 
-        OnWheelClickedListener click = new OnWheelClickedListener() {
+
+       /* OnWheelClickedListener click = new OnWheelClickedListener() {
             public void onItemClicked(AbstractWheel wheel, int itemIndex) {
                 wheel.setCurrentItem(itemIndex, true);
             }
         };
-        hours.addClickingListener(click);
-        mins.addClickingListener(click);
-
-        OnWheelScrollListener scrollListener = new OnWheelScrollListener() {
-            public void onScrollingStarted(AbstractWheel wheel) {
-                timeScrolled = true;
-            }
-            public void onScrollingFinished(AbstractWheel wheel) {
-                timeScrolled = false;
-                timeChanged = true;
-                timeChanged = false;
-            }
-        };
-
-        hours.addScrollingListener(scrollListener);
-        mins.addScrollingListener(scrollListener);
+        mHoursWheel.addClickingListener(click);
+        mMinutesWheel.addClickingListener(click);*/
 
 
 
@@ -109,18 +74,5 @@ public class EnterCompletedActivity extends BaseActivity {
     }
 
 
-
-    /**
-     * Adds changing listener for spinnerwheel that updates the spinnerwheel label
-     * @param wheel the spinnerwheel
-     * @param label the spinnerwheel label
-     */
-    private void addChangingListener(final AbstractWheel wheel, final String label) {
-        wheel.addChangingListener(new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                //spinnerwheel.setLabel(newValue != 1 ? label + "s" : label);
-            }
-        });
-    }
 
 }
