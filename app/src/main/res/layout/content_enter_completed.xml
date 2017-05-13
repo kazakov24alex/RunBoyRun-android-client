@@ -1,14 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/enter_completed_activity_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ENTER COMPLETED ACTIVITY"
         android:textAlignment="center"
         android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/enter_completed_activity_text_starttime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Time start"
+        android:textAlignment="textStart"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TimePicker
+            android:id="@+id/enter_completed_activity_timepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginBottom="-40dp"
+            android:layout_marginLeft="-50dp"
+            android:layout_marginRight="-50dp"
+            android:layout_marginTop="-40dp"
+            android:layout_weight="1"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:timePickerMode="spinner" />
+
+        <DatePicker
+            android:id="@+id/enter_completed_activity_datepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginBottom="-40dp"
+            android:layout_marginLeft="-50dp"
+            android:layout_marginRight="-50dp"
+            android:layout_marginTop="-40dp"
+            android:layout_weight="1"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:scaleX="0.75"
+            android:scaleY="0.75" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/enter_completed_activity_text_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Traveled distance"
+        android:textAlignment="textStart"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/enter_completed_activity_text_label_km"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:text="KM"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/enter_completed_activity_text_label_meters"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:text="METERS"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <antistatic.spinnerwheel.WheelHorizontalView
+                android:id="@+id/hour_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+                app:selectionDividerWidth="1px"
+                app:visibleItems="5" />
+
+            <antistatic.spinnerwheel.WheelHorizontalView
+                android:id="@+id/mins"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                app:visibleItems="5" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal">
+
+        <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/hour"
+            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_weight="1"
+            />
+        <antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/minutes"
+            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
 </LinearLayout>
