@@ -21,5 +21,7 @@
     <color name="ORANGE_custom_marker">#f46f03</color>
     <color name="IMAGE_BUTTON_SELECT">#f46f03</color>
     <color name="TEMPERATURE_ARROW">#f46f03</color>
+    <color name="ORANGE">#fd8c30</color>
+    <color name="BACKGROUND">#ffffff</color>
 
 </resources>

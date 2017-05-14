@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <TextView
-        android:id="@+id/enter_completed_activity_text_title"
+        android:id="@+id/enter_completed_text_title_starttime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ENTER COMPLETED ACTIVITY"
+        android:background="@color/ORANGE"
+        android:text="@string/enter_completed_text_title_timestart"
         android:textAlignment="center"
-        android:textSize="18sp" />
-
-
-    <TextView
-        android:id="@+id/enter_completed_activity_text_starttime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Time start"
-        android:textAlignment="textStart"
+        android:textColor="@android:color/white"
         android:textSize="24sp" />
 
     <LinearLayout
@@ -30,7 +22,7 @@
         android:orientation="horizontal">
 
         <TimePicker
-            android:id="@+id/enter_completed_activity_timepicker"
+            android:id="@+id/enter_completed_timepicker_starttime"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginBottom="-40dp"
@@ -43,7 +35,7 @@
             android:timePickerMode="spinner" />
 
         <DatePicker
-            android:id="@+id/enter_completed_activity_datepicker"
+            android:id="@+id/enter_completed_datepicker_starttime"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginBottom="-40dp"
@@ -60,11 +52,14 @@
 
 
     <TextView
-        android:id="@+id/enter_completed_activity_text_distance"
+        android:id="@+id/enter_completed_text_title_distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Traveled distance"
-        android:textAlignment="textStart"
+        android:layout_marginTop="10dp"
+        android:background="@color/ORANGE"
+        android:text="@string/enter_completed_text_title_distance"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="24sp" />
 
     <LinearLayout
@@ -79,22 +74,24 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/enter_completed_activity_text_label_km"
+                android:id="@+id/enter_completed_text_label_km"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:gravity="center_vertical"
-                android:text="KM"
+                android:text="@string/enter_completed_text_label_km"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/enter_completed_activity_text_label_meters"
+                android:id="@+id/enter_completed_text_label_meters"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
-                android:text="METERS"
+                android:text="@string/enter_completed_text_label_meters"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -105,7 +102,7 @@
             android:orientation="vertical">
 
             <antistatic.spinnerwheel.WheelHorizontalView
-                android:id="@+id/hour_horizontal"
+                android:id="@+id/enter_completed_wheel_km"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right"
@@ -114,7 +111,7 @@
                 app:visibleItems="5" />
 
             <antistatic.spinnerwheel.WheelHorizontalView
-                android:id="@+id/mins"
+                android:id="@+id/enter_completed_wheel_meters"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right"
@@ -125,13 +122,15 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/enter_completed_activity_text_time"
+        android:id="@+id/enter_completed_text_title_spenttime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Training time"
-        android:textAlignment="textStart"
+        android:layout_marginTop="10dp"
+        android:background="@color/ORANGE"
+        android:text="@string/enter_completed_text_title_spenttime"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="24sp" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -147,18 +146,37 @@
             android:orientation="horizontal">
 
             <antistatic.spinnerwheel.WheelVerticalView
-                android:id="@+id/hour"
+                android:id="@+id/enter_completed_wheel_hours"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_weight="1" />
 
             <antistatic.spinnerwheel.WheelVerticalView
-                android:id="@+id/minutes"
+                android:id="@+id/enter_completed_wheel_minutes"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_weight="1" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/enter_completed_button_record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ORANGE"
+            android:onClick="onRecordButtonClick"
+            android:text="RECORD"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:clickable="true"/>
 
     </LinearLayout>
 

@@ -20,33 +20,35 @@
     android:fitsSystemWindows="true">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/BACKGROUND"
         android:orientation="vertical">
 
         <include layout="@layout/global_app_bar_layout" />
 
 
         <!-- Content -->
-        <ViewStub
-            android:id="@+id/content_stub"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.75"
-            android:inflatedId="@+id/message_layout" />
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <ViewStub
+                android:id="@+id/content_stub"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:inflatedId="@+id/message_layout">
+
+
+            </ViewStub>
+        </LinearLayout>
 
     </LinearLayout>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>
 

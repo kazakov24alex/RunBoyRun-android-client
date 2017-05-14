@@ -133,6 +133,22 @@
     <string name="track_activity_dialog_result_button_record">RECORD</string>
 
 
+    <!-- Enter Completed Activity-->
+    <string name="enter_completed_text_title_timestart">TIME START</string>
+    <string name="enter_completed_text_title_distance">TRAVELED DISTANCE</string>
+    <string name="enter_completed_text_title_spenttime">SPENT TIME</string>
+    <string name="enter_completed_text_label_minutes">min</string>
+    <string name="enter_completed_text_label_hours">hours</string>
+    <string name="enter_completed_text_label_km">KM</string>
+    <string name="enter_completed_text_label_meters">METERS</string>
+    <string name="enter_completed_text_button_record">RECORD</string>
+    <string name="enter_completed_toast_error_past">A week has passed</string>
+    <string name="enter_completed_toast_error_future">You are in the future</string>
+    <string name="enter_completed_toast_error_short_distance">Too short distance</string>
+    <string name="enter_completed_toast_error_short_activity">Too short activity</string>
+
+
+
     <!-- Condition Activity -->
     <string name="condition_title_text_weather">WEATHER</string>
     <string name="condition_title_text_relief">RELIEF</string>
