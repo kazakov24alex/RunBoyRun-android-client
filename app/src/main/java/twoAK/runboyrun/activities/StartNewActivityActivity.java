@@ -117,12 +117,12 @@ public class StartNewActivityActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.start_activity_button_enter_stat:
                 Intent intentCompleted = new Intent(StartNewActivityActivity.this, EnterCompletedActivity.class);
-                intentCompleted.putExtra("SPORT", mSportValue);
+                intentCompleted.putExtra("SPORT_TYPE", mSportValue);
                 startActivity(intentCompleted);
                 break;
             case R.id.start_activity_button_track_activity:
                 Intent intentTrack = new Intent(StartNewActivityActivity.this, TrackActivityActivity.class);
-                intentTrack.putExtra("SPORT", mSportValue);
+                intentTrack.putExtra("SPORT_TYPE", mSportValue);
                 startActivity(intentTrack);
                 break;
             default:

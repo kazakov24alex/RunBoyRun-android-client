@@ -1,12 +1,15 @@
 package twoAK.runboyrun.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lantouzi.wheelview.WheelView;
 
@@ -15,11 +18,14 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.SquareImageView;
+import twoAK.runboyrun.api.ApiClient;
+import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
+import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.objects.route.PointTime;
+import twoAK.runboyrun.request.body.ActivityBody;
+import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 
-/**
- * Created by alex on 05.05.17.
- */
 
 public class ConditionActivity extends AppCompatActivity {
 
@@ -91,6 +97,8 @@ public class ConditionActivity extends AppCompatActivity {
     private TextView mConditionMediumText;
     private TextView mConditionTiredText;
     private TextView mConditionBeatedText;
+
+    private ProgressDialog mProgressDialog;
 
 
 
@@ -206,6 +214,61 @@ public class ConditionActivity extends AppCompatActivity {
     }
 
 
+    public class SendTrainingInfoTask extends AsyncTask<Void, Void, SendTrainingInfoResponse> {
+        private String errMes;  // error message possible
+        private ActivityBody body;
+
+        SendTrainingInfoTask(ActivityBody _body) {
+            errMes = null;
+            body = _body;
+            showProgress(getString(R.string.profile_loading_progress_dialog));
+        }
+
+        @Override
+        protected SendTrainingInfoResponse doInBackground(Void... params) {
+            Log.i("SendingTrainingInfoAct", "Trying to send training info.");
+            try {
+                return ApiClient.instance().sendTrainingInfo(body);
+            } catch (SendTrainingInfoFailedException e) {
+                errMes = getString(R.string.sendtraininginfo_error);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(SendTrainingInfoResponse response) {
+            if (response.getActivityId() != 0) {
+                Toast.makeText(getApplicationContext(), "SUCCESS RECORD", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        /**
+         * The task was canceled.
+         */
+        @Override
+        protected void onCancelled() {
+            // reset the task and hide a progress spinner
+            hideProgressDialog();
+        }
+    }
+
+    protected void showProgress(String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+    }
+
+    /** Hide the progress dialog.*/
+    protected void hideProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
+
     public void onWeatherButtonClick(View view) {
         if(mWeatherFlag != -1) {
             mWeatherButtonsList.get(mWeatherFlag).setBackgroundResource(0);
@@ -297,6 +360,19 @@ public class ConditionActivity extends AppCompatActivity {
         }
 
         view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
+    }
+
+    public void onRecordButtonClick(View view){
+        ActivityBody body = new ActivityBody();
+        Intent intent = getIntent();
+
+        boolean track = intent.getBooleanExtra("TRACK",false);
+        body.setTrack(track);
+
+        String sport_type = intent.getStringExtra("SPORT_TYPE");
+        if(sport_type!=null){
+            body.setSport_type(sport_type);
+        }
     }
 
 }

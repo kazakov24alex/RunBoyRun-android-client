@@ -31,6 +31,8 @@ public class EnterCompletedActivity extends BaseActivity {
     private AbstractWheel mHoursWheel;
     private AbstractWheel mMinutesWheel;
 
+    private String mSportType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class EnterCompletedActivity extends BaseActivity {
         stub.setLayoutResource(R.layout.content_enter_completed);
         View inflated = stub.inflate();
 
-
+        mSportType = getIntent().getStringExtra("SPORT_TYPE");
         mTimePicker = (TimePicker) findViewById(R.id.enter_completed_timepicker_starttime);
         mDatePicker = (DatePicker) findViewById(R.id.enter_completed_datepicker_starttime);
 
@@ -120,6 +122,8 @@ public class EnterCompletedActivity extends BaseActivity {
 
         // send data to condition activity
         Intent intent = new Intent(EnterCompletedActivity.this, ConditionActivity.class);
+        intent.putExtra("TRACK", false);
+        intent.putExtra("SPORT_TYPE", mSportType);
         intent.putExtra("DISTANCE", distance);
         intent.putExtra("START_TIME", setTime);
         intent.putExtra("SPENT_TIME", spentTime);

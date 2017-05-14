@@ -1,8 +1,6 @@
 package twoAK.runboyrun.api;
 
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
+import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
@@ -26,8 +25,10 @@ import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
+import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
@@ -184,6 +185,20 @@ import twoAK.runboyrun.responses.objects.CountryObject;
             }
         }catch (IOException e){
             throw new GetProfileInfoFailedException(e);
+        }
+    }
+
+    public SendTrainingInfoResponse sendTrainingInfo(ActivityBody activityBody) throws SendTrainingInfoFailedException {
+        Call<SendTrainingInfoResponse> req = service.sendProfileInfo(Auth.getHeaderField(), activityBody);
+        try {
+            Response<SendTrainingInfoResponse> response = req.execute();
+            if(response.body().isSuccess()){
+                return response.body();
+            } else{
+                throw new SendTrainingInfoFailedException("Failed sending training info");
+            }
+        }catch (IOException e){
+            throw new SendTrainingInfoFailedException(e);
         }
     }
 }
