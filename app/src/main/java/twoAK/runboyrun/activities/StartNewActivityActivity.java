@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +109,21 @@ public class StartNewActivityActivity extends BaseActivity {
     }
 
     public void onButtonClick(View view) {
+        if(mSportFlag == 0) {
+            Toast.makeText(this, getString(R.string.start_activity_toast_select_sport), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.start_activity_button_enter_stat:
-                startActivity(new Intent(StartNewActivityActivity.this, EnterCompletedActivity.class));
+                Intent intentCompleted = new Intent(StartNewActivityActivity.this, EnterCompletedActivity.class);
+                intentCompleted.putExtra("SPORT", mSportValue);
+                startActivity(intentCompleted);
                 break;
             case R.id.start_activity_button_track_activity:
-                startActivity(new Intent(StartNewActivityActivity.this, TrackActivityActivity.class));
+                Intent intentTrack = new Intent(StartNewActivityActivity.this, TrackActivityActivity.class);
+                intentTrack.putExtra("SPORT", mSportValue);
+                startActivity(intentTrack);
                 break;
             default:
                 break;
@@ -149,6 +159,6 @@ public class StartNewActivityActivity extends BaseActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
+        view.setBackgroundResource(R.color.ORANGE);
     }
 }
