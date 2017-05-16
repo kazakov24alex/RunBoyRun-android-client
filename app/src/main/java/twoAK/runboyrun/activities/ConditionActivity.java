@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.lantouzi.wheelview.WheelView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import twoAK.runboyrun.R;
@@ -373,6 +374,44 @@ public class ConditionActivity extends AppCompatActivity {
         if(sport_type!=null){
             body.setSport_type(sport_type);
         }
+
+        String datetime_start = intent.getStringExtra("START_TIME");
+        if(datetime_start!=null){
+            body.setDatetime_start(datetime_start);
+        }
+
+        body.setTemperature(mTemperatureValue);
+
+        body.setWeather(mWeatherValue);
+
+        body.setRelief(mReliefValue);
+
+        body.setCondition(mConditionValue);
+
+        String spent_time = intent.getStringExtra("SPENT_TIME");
+        if(spent_time!=null){
+            body.setDuration(spent_time);
+        }
+
+        int distance = intent.getIntExtra("DISTANCE",-1);
+        if(distance!=-1){
+            body.setDistance(distance);
+        }
+
+        double avg_speed =  intent.getDoubleExtra("AVG_SPEED",-1);
+        if(avg_speed!=-1){
+            body.setAverage_speed(avg_speed);
+        }
+
+        double tempo =  intent.getDoubleExtra("TEMPO",-1);
+        if(tempo!=-1){
+            body.setTempo(tempo);
+        }
+
+        body.setDescription("XYZ");
+
+        SendTrainingInfoTask mSendTrainingInfoTask = new SendTrainingInfoTask(body);
+        mSendTrainingInfoTask.execute((Void) null);
     }
 
 }

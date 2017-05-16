@@ -3,6 +3,7 @@ package twoAK.runboyrun.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.DatePicker;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import twoAK.runboyrun.R;
@@ -82,7 +84,7 @@ public class EnterCompletedActivity extends BaseActivity {
 
     public void onRecordButtonClick(View view) {
         // check distance
-        int distance = (mKilometersWheel.getCurrentItem()+50)*1000 + (mMetersWheel.getCurrentItem()+1)*50;
+        int distance = (mKilometersWheel.getCurrentItem()+1)*1000 + (mMetersWheel.getCurrentItem()+1)*50;
         if(distance < 1000) {
             Toast.makeText(this, getString(R.string.enter_completed_toast_error_short_distance), Toast.LENGTH_SHORT).show();
             return;
@@ -96,15 +98,15 @@ public class EnterCompletedActivity extends BaseActivity {
         }
 
         // check start time
-        Calendar calendar = new GregorianCalendar(
+        Calendar starttime_calendar = new GregorianCalendar(
                 mDatePicker.getYear(),
                 mDatePicker.getMonth(),
                 mDatePicker.getDayOfMonth(),
                 mTimePicker.getCurrentHour(),
                 mTimePicker.getCurrentMinute());
-        long setTime = calendar.getTimeInMillis();
+        long setTime = starttime_calendar.getTimeInMillis();
 
-        calendar = new GregorianCalendar();
+        Calendar calendar = new GregorianCalendar();
         long curTime = calendar.getTimeInMillis();
 
         long weekInMiliSec = 1000*60*60*24*7;
@@ -125,8 +127,15 @@ public class EnterCompletedActivity extends BaseActivity {
         intent.putExtra("TRACK", false);
         intent.putExtra("SPORT_TYPE", mSportType);
         intent.putExtra("DISTANCE", distance);
-        intent.putExtra("START_TIME", setTime);
-        intent.putExtra("SPENT_TIME", spentTime);
+        intent.putExtra("START_TIME", starttime_calendar.getTime().toString());
+        String spent_time = mHoursWheel.getCurrentItem()+":"+mMinutesWheel.getCurrentItem()+":00";
+        intent.putExtra("SPENT_TIME", spent_time);
+        //TODO
+        double avg_speed = (distance/(mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem()))*(60/1000);
+        double tempo = (mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem())/distance*1000;
+        intent.putExtra("AVG_SPEED", avg_speed);
+        intent.putExtra("TEMPO", tempo);
+        System.out.println("!!!!!"+tempo);
         startActivity(intent);
 
     }

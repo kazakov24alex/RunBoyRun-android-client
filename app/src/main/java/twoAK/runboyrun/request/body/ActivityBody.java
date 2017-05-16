@@ -2,18 +2,17 @@ package twoAK.runboyrun.request.body;
 
 
 import java.sql.Time;
-import java.util.Calendar;
 
 public class ActivityBody {
 
     boolean track;
     String sport_type;
-    Calendar datetime_start;
+    String datetime_start;
     int temperature;
     String weather;
     String relief;
     String condition;
-    Time duration;
+    String duration;
     int distance;
     double average_speed;
     double tempo;
@@ -36,11 +35,11 @@ public class ActivityBody {
         this.sport_type = sport_type;
     }
 
-    public Calendar getDatetime_start() {
+    public String getDatetime_start() {
         return datetime_start;
     }
 
-    public void setDatetime_start(Calendar datetime_start) {
+    public void setDatetime_start(String datetime_start) {
         this.datetime_start = datetime_start;
     }
 
@@ -76,11 +75,11 @@ public class ActivityBody {
         this.condition = condition;
     }
 
-    public Time getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Time duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
