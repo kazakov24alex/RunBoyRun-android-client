@@ -135,7 +135,7 @@ public class EnterCompletedActivity extends BaseActivity {
         double tempo = (mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem())/distance*1000;
         intent.putExtra("AVG_SPEED", avg_speed);
         intent.putExtra("TEMPO", tempo);
-        System.out.println("!!!!!"+tempo);
+       // System.out.println("!!!!!"+tempo);
         startActivity(intent);
 
     }

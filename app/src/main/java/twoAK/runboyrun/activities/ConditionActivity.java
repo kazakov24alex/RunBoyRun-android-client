@@ -371,6 +371,7 @@ public class ConditionActivity extends AppCompatActivity {
         body.setTrack(track);
 
         String sport_type = intent.getStringExtra("SPORT_TYPE");
+        System.out.println("!!!!!"+sport_type);
         if(sport_type!=null){
             body.setSport_type(sport_type);
         }

@@ -1,7 +1,11 @@
 package twoAK.runboyrun.request.body;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityBody {
 
@@ -17,6 +21,17 @@ public class ActivityBody {
     double average_speed;
     double tempo;
     String description;
+    int timestep = 0;
+    List<List<Double>> route;
+
+    public ActivityBody() {
+        route = new ArrayList<List<Double>>();
+        List <Double> point = new ArrayList<Double>();
+        point.add(33.3332);
+        point.add(55.6667);
+        route.add(point);
+        route.add(point);
+    }
 
 
     public boolean isTrack() {
@@ -115,7 +130,4 @@ public class ActivityBody {
         this.description = description;
     }
 
-    public ActivityBody(){
-
-    }
 }
