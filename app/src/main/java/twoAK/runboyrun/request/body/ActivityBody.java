@@ -21,16 +21,12 @@ public class ActivityBody {
     double average_speed;
     double tempo;
     String description;
-    int timestep = 0;
     List<List<Double>> route;
+    List<List<Double>> timeline;
 
     public ActivityBody() {
-        route = new ArrayList<List<Double>>();
-        List <Double> point = new ArrayList<Double>();
-        point.add(33.3332);
-        point.add(55.6667);
-        route.add(point);
-        route.add(point);
+        route = null;
+        timeline = null;
     }
 
 
