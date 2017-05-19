@@ -32,13 +32,13 @@ public class StatisticsPanelFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_statistics_panel, container, false);
 
         mTimeImage = (SquareImageView) rootView.findViewById(R.id.statistics_panel_image_time);
-        mTimeImage.setImageResource(R.drawable.com_facebook_top_button);
+        mTimeImage.setImageResource(R.drawable.result_activity_panel_time);
         mDistanceImage = (SquareImageView) rootView.findViewById(R.id.statistics_panel_image_distance);
-        mDistanceImage.setImageResource(R.drawable.com_facebook_top_button);
+        mDistanceImage.setImageResource(R.drawable.result_activity_panel_distance);
         mAvrSpeedImage = (SquareImageView) rootView.findViewById(R.id.statistics_panel_image_avrspeed);
-        mAvrSpeedImage.setImageResource(R.drawable.com_facebook_top_button);
+        mAvrSpeedImage.setImageResource(R.drawable.result_activity_panel_speed);
         mTempoImage = (SquareImageView) rootView.findViewById(R.id.statistics_panel_image_tempo);
-        mTempoImage.setImageResource(R.drawable.com_facebook_top_button);
+        mTempoImage.setImageResource(R.drawable.result_activity_panel_tempo);
 
         mTimeValue = (TextView) rootView.findViewById(R.id.statistics_panel_text_time_value);
         mDistanceValue = (TextView) rootView.findViewById(R.id.statistics_panel_text_distance_value);

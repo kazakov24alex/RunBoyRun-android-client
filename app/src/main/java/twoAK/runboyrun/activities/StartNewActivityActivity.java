@@ -3,10 +3,12 @@ package twoAK.runboyrun.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,12 @@ public class StartNewActivityActivity extends BaseActivity {
 
     private int mSportFlag;
     private String mSportValue;
-    private List<SquareImageView> mSportButtonsList;
+    private List<LinearLayout> mSportButtonsList;
+
+    private LinearLayout mSportRunningLayout;
+    private LinearLayout mSportCyclingLayout;
+    private LinearLayout mSportWalkingLayout;
+    private LinearLayout mSportSkirunLayout;
 
     private SquareImageView mSportRunningButton;
     private SquareImageView mSportCyclingButton;
@@ -56,21 +63,21 @@ public class StartNewActivityActivity extends BaseActivity {
 
         mSportFlag = 0;
         mSportValue = "";
-        mSportButtonsList = new ArrayList<SquareImageView>();
+        mSportButtonsList = new ArrayList<LinearLayout>();
 
         // Initialization images of button panel
         mSportRunningButton = (SquareImageView) findViewById(R.id.start_activity_imagebutton_sport_running);
-        mSportRunningButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        mSportButtonsList.add(mSportRunningButton);
+        mSportRunningButton.setImageResource(R.drawable.sport_type_running);
+
         mSportCyclingButton = (SquareImageView) findViewById(R.id.start_activity_imagebutton_sport_cycling);
-        mSportCyclingButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        mSportButtonsList.add(mSportCyclingButton);
+        mSportCyclingButton.setImageResource(R.drawable.sport_type_cycling);
+
         mSportWalkingButton = (SquareImageView) findViewById(R.id.start_activity_imagebutton_sport_walking);
-        mSportWalkingButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        mSportButtonsList.add(mSportWalkingButton);
+        mSportWalkingButton.setImageResource(R.drawable.sport_type_walking);
+
         mSportSkirunButton = (SquareImageView) findViewById(R.id.start_activity_imagebutton_sport_skirun);
-        mSportSkirunButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
-        mSportButtonsList.add(mSportSkirunButton);
+        mSportSkirunButton.setImageResource(R.drawable.sport_type_skirun);
+
 
         // initialization text of button panel and setting custom font
         Typeface squareFont = Typeface.createFromAsset(getAssets(), "fonts/square.ttf");
@@ -84,6 +91,16 @@ public class StartNewActivityActivity extends BaseActivity {
         mSportSkirunText = (TextView) findViewById(R.id.start_activity_text_sport_skirun);
         mSportSkirunText.setTypeface(squareFont);
 
+        // initialization layouts
+
+        mSportRunningLayout = (LinearLayout) findViewById(R.id.start_activity_layout_sport_running);
+        mSportButtonsList.add(mSportRunningLayout);
+        mSportCyclingLayout = (LinearLayout) findViewById(R.id.start_activity_layout_sport_cycling);
+        mSportButtonsList.add(mSportCyclingLayout);
+        mSportWalkingLayout = (LinearLayout) findViewById(R.id.start_activity_layout_sport_walking);
+        mSportButtonsList.add(mSportWalkingLayout);
+        mSportSkirunLayout = (LinearLayout) findViewById(R.id.start_activity_layout_sport_skirun);
+        mSportButtonsList.add(mSportSkirunLayout);
     }
 
     @Override
@@ -137,19 +154,19 @@ public class StartNewActivityActivity extends BaseActivity {
         }
 
         switch(view.getId()) {
-            case R.id.start_activity_imagebutton_sport_running:
+            case R.id.start_activity_layout_sport_running:
                 mSportFlag = 0;
                 mSportValue = ENUM_SPORT_RUNNING;
                 break;
-            case R.id.start_activity_imagebutton_sport_cycling:
+            case R.id.start_activity_layout_sport_cycling:
                 mSportFlag = 1;
                 mSportValue = ENUM_SPORT_CYCLING;
                 break;
-            case R.id.start_activity_imagebutton_sport_walking:
+            case R.id.start_activity_layout_sport_walking:
                 mSportFlag = 2;
                 mSportValue = ENUM_SPORT_WALKING;
                 break;
-            case R.id.start_activity_imagebutton_sport_skirun:
+            case R.id.start_activity_layout_sport_skirun:
                 mSportFlag = 3;
                 mSportValue = ENUM_SPORT_SKIRUN;
                 break;

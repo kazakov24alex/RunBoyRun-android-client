@@ -10,10 +10,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.adapters.SquareImageView;
 
 
 public class ConditionPanelFragment extends Fragment {
+
+    static final String APP_TAG = "RUN-BOY-RUN";
+    static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
+
+
+    static final String ENUM_WEATHER_SUNNY  = "SUNNY";
+    static final String ENUM_WEATHER_CLOUDY = "CLOUDY";
+    static final String ENUM_WEATHER_RAINY  = "RAINY";
+    static final String ENUM_WEATHER_SNOWY  = "SNOWY";
+
+    static final String ENUM_RELIEF_STADIUM = "STADIUM";
+    static final String ENUM_RELIEF_PARK    = "PARK";
+    static final String ENUM_RELIEF_CROSS   = "CROSS";
+    static final String ENUM_RELIEF_HILLS   = "HILLS";
+
+    static final String ENUM_CONDITIOM_GOOD     = "GOOD";
+    static final String ENUM_CONDITIOM_MEDIUM   = "MEDIUM";
+    static final String ENUM_CONDITIOM_TIRED    = "TIRED";
+    static final String ENUM_CONDITIOM_BEATED   = "BEATED";
+
 
     private SquareImageView mConditionWeatherImage;
     private SquareImageView mConditionTemperatureImage;
@@ -52,6 +73,61 @@ public class ConditionPanelFragment extends Fragment {
         mConditionConditionText.setTypeface(squareFont);
 
         return rootView;
+    }
+
+
+    public void setWeather(String value){
+        switch (value){
+            case ENUM_WEATHER_SUNNY:
+                mConditionWeatherImage.setImageResource(R.drawable.weather_sunny);
+                break;
+            case ENUM_WEATHER_CLOUDY:
+                mConditionWeatherImage.setImageResource(R.drawable.weather_cloudy);
+                break;
+            case ENUM_WEATHER_RAINY:
+                mConditionWeatherImage.setImageResource(R.drawable.weather_rainy);
+                break;
+            case ENUM_WEATHER_SNOWY:
+                mConditionWeatherImage.setImageResource(R.drawable.weather_snowy);
+                break;
+            default: break;
+        }
+    }
+
+    public void setRelief(String value){
+        switch (value){
+            case ENUM_RELIEF_STADIUM:
+                mConditionReliefImage.setImageResource(R.drawable.relief_stadium);
+                break;
+            case ENUM_RELIEF_CROSS:
+                mConditionReliefImage.setImageResource(R.drawable.relief_cross_country);
+                break;
+            case ENUM_RELIEF_HILLS:
+                mConditionReliefImage.setImageResource(R.drawable.relief_hills);
+                break;
+            case ENUM_RELIEF_PARK:
+                mConditionReliefImage.setImageResource(R.drawable.relief_park);
+                break;
+            default: break;
+        }
+    }
+
+    public void setCondition(String value){
+        switch (value){
+            case ENUM_CONDITIOM_GOOD:
+                mConditionConditionImage.setImageResource(R.drawable.condition_good);
+                break;
+            case ENUM_CONDITIOM_MEDIUM:
+                mConditionConditionImage.setImageResource(R.drawable.condition_medium);
+                break;
+            case ENUM_CONDITIOM_TIRED:
+                mConditionConditionImage.setImageResource(R.drawable.condition_tired);
+                break;
+            case ENUM_CONDITIOM_BEATED:
+                mConditionConditionImage.setImageResource(R.drawable.condition_beated);
+                break;
+            default: break;
+        }
     }
 
 

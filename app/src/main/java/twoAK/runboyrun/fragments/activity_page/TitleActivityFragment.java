@@ -66,6 +66,22 @@ public class TitleActivityFragment extends Fragment {
             default:
                 break;
         }
+
+        switch (sport){
+            case ENUM_SPORT_RUNNING:
+                mSportImage.setImageResource(R.drawable.sport_type_running);
+                break;
+            case ENUM_SPORT_CYCLING:
+                mSportImage.setImageResource(R.drawable.sport_type_cycling);
+                break;
+            case ENUM_SPORT_WALKING:
+                mSportImage.setImageResource(R.drawable.sport_type_walking);
+                break;
+            case ENUM_SPORT_SKIRUN:
+                mSportImage.setImageResource(R.drawable.sport_type_skirun);
+                break;
+            default: break;
+        }
     }
 
     public void setDateTimeStartValue(String date_string) {
@@ -79,6 +95,10 @@ public class TitleActivityFragment extends Fragment {
             //TODO: handle
             Log.i(APP_TAG, ACTIVITY_TAG + e);
         }
+
+    }
+
+    public void setSportType(String value){
 
     }
 

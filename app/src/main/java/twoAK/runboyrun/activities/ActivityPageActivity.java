@@ -135,6 +135,10 @@ public class ActivityPageActivity extends BaseActivity {
             mTitleActivityFragment.setSportValue(activityData.getSport_type());
             mTitleActivityFragment.setDateTimeStartValue(activityData.getDatetime_start());
 
+            mConditionPanelFragment.setWeather(activityData.getWeather());
+            mConditionPanelFragment.setRelief(activityData.getRelief());
+            mConditionPanelFragment.setCondition(activityData.getCondition());
+
             mStatisticsPanelFragment.setTimeValue(activityData.getDuration());
             mStatisticsPanelFragment.setDistanceValue(activityData.getDistance());
             mStatisticsPanelFragment.setAvrSpeedValue(activityData.getAverage_speed());

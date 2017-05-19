@@ -128,42 +128,42 @@ public class ConditionActivity extends AppCompatActivity {
 
         // Initialization images of button panel
         mWeatherSunnyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_sunny);
-        mWeatherSunnyButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mWeatherSunnyButton.setImageResource(R.drawable.weather_sunny);
         mWeatherButtonsList.add(mWeatherSunnyButton);
         mWeatherCloudyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_cloudy);
-        mWeatherCloudyButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mWeatherCloudyButton.setImageResource(R.drawable.weather_cloudy);
         mWeatherButtonsList.add(mWeatherCloudyButton);
         mWeatherRainyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_rainy);
-        mWeatherRainyButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mWeatherRainyButton.setImageResource(R.drawable.weather_rainy);
         mWeatherButtonsList.add(mWeatherRainyButton);
         mWeatherSnowyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_snowy);
-        mWeatherSnowyButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mWeatherSnowyButton.setImageResource(R.drawable.weather_snowy);
         mWeatherButtonsList.add(mWeatherSnowyButton);
 
         mReliefStadiumButton = (SquareImageView) findViewById(R.id.condition_squareimage_relief_stadium);
-        mReliefStadiumButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mReliefStadiumButton.setImageResource(R.drawable.relief_stadium);
         mReliefButtonsList.add(mReliefStadiumButton);
         mReliefParkButton = (SquareImageView) findViewById(R.id.condition_squareimage_relief_park);
-        mReliefParkButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mReliefParkButton.setImageResource(R.drawable.relief_park);
         mReliefButtonsList.add(mReliefParkButton);
         mReliefCrossButton = (SquareImageView) findViewById(R.id.condition_squareimage_relief_cross);
-        mReliefCrossButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mReliefCrossButton.setImageResource(R.drawable.relief_cross_country);
         mReliefButtonsList.add(mReliefCrossButton);
         mReliefHillsButton = (SquareImageView) findViewById(R.id.condition_squareimage_relief_hills);
-        mReliefHillsButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mReliefHillsButton.setImageResource(R.drawable.relief_hills);
         mReliefButtonsList.add(mReliefHillsButton);
 
         mConditionGoodButton = (SquareImageView) findViewById(R.id.condition_squareimage_condition_good);
-        mConditionGoodButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mConditionGoodButton.setImageResource(R.drawable.condition_good);
         mConditionButtonsList.add(mConditionGoodButton);
         mConditionMediumButton = (SquareImageView) findViewById(R.id.condition_squareimage_condition_medium);
-        mConditionMediumButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mConditionMediumButton.setImageResource(R.drawable.condition_medium);
         mConditionButtonsList.add(mConditionMediumButton);
         mConditionTiredButton = (SquareImageView) findViewById(R.id.condition_squareimage_condition_tired);
-        mConditionTiredButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mConditionTiredButton.setImageResource(R.drawable.condition_tired);
         mConditionButtonsList.add(mConditionTiredButton);
         mConditionBeatedButton = (SquareImageView) findViewById(R.id.condition_squareimage_condition_beated);
-        mConditionBeatedButton.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
+        mConditionBeatedButton.setImageResource(R.drawable.condition_beated);
         mConditionButtonsList.add(mConditionBeatedButton);
 
         // initialization text of button panel and setting custom font
