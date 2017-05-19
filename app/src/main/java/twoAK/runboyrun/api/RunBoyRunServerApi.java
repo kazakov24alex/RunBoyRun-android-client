@@ -10,6 +10,7 @@ import retrofit2.http.Path;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
+import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
@@ -50,6 +51,9 @@ public interface RunBoyRunServerApi {
 
     @GET("api/profile_info")
     Call<GetProfileInfoResponse> getProfileInfo(@Header("Authorization") String token);
+
+    @GET("api/activity/{activity_id}")
+    Call<GetActivityDataResponse> getActivityData(@Header("Authorization") String token, @Path("activity_id") int activity_id);
 
     @POST("api/activity")
     Call<SendTrainingInfoResponse> sendProfileInfo(@Header("Authorization") String token, @Body ActivityBody activityResponse);

@@ -93,8 +93,12 @@
         <activity android:name=".activities.ConditionActivity"
             android:label="ConditionActivity"
             android:theme="@style/AppTheme.NoActionBar" >
-
         </activity>
+
+        <activity
+            android:name=".activities.ActivityPageActivity"
+            android:label="Activity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
 
         <meta-data

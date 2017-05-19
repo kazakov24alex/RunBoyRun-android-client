@@ -22,6 +22,9 @@
     <color name="IMAGE_BUTTON_SELECT">#f46f03</color>
     <color name="TEMPERATURE_ARROW">#f46f03</color>
     <color name="ORANGE">#fd8c30</color>
-    <color name="BACKGROUND">#ffffff</color>
-
+    <color name="BACKGROUND">#e8edef</color>
+    <color name="SHAPE_BORDER">#dee0e3</color>
+    <color name="SHAPE_BACKGROUND">#fffeff</color>
+    <color name="TEXT_GREY">#b0b1b5</color>
+    <color name="TEXT_SELECTED">#5186c2</color>
 </resources>

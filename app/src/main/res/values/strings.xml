@@ -171,6 +171,41 @@
     <string name="condition_imagetext_condition_beated">BEATED</string>
 
 
+    <!-- Title activity fragment -->
+    <string name="title_activity_text_sport">sport type</string>
+    <string name="title_activity_text_title_running">RUNNING</string>
+    <string name="title_activity_text_title_cycling">CYCLING</string>
+    <string name="title_activity_text_title_walking">WALKING</string>
+    <string name="title_activity_text_title_skirun">SKI RUN</string>
+
+
+    <!-- Condition panel fragment -->
+    <string name="condition_panel_text_weather">weather</string>
+    <string name="condition_panel_text_temperature">tempo</string>
+    <string name="condition_panel_text_relief">relief</string>
+    <string name="condition_panel_text_condition">condition</string>
+
+    <!-- Statistics panel fragment -->
+    <string name="statistics_panel_text_time">Time:</string>
+    <string name="statistics_panel_text_distance">Distance:</string>
+    <string name="statistics_panel_text_avrspeed">Avr. speed:</string>
+    <string name="statistics_panel_text_tempo">Tempo:</string>
+    <string name="statistics_panel_text_distance_label">km</string>
+    <string name="statistics_panel_text_avrspeed_label">km/h</string>
+    <string name="statistics_panel_text_tempo_label">min/km</string>
+
+    <!-- Description panel fragment -->
+    <string name="description_panel_text_title">How it was</string>
+
+    <!-- Last comments panel -->
+    <string name="last_comments_panel_text_title">Last comments</string>
+
+    <!-- Activity page activity -->
+    <string name="activity_page_dialog_loading_activity_data">Loading activity data...</string>
+    <string name="activity_page_error_loading_activity_request_failed">Request failed</string>
+    <string name="activity_page_error_loading_activity_insuccessful">Insuccessful response</string>
+
+
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_name">This name is invalid</string>

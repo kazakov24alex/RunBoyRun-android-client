@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/activity_page_fragment_title_activity"
+                android:name="twoAK.runboyrun.fragments.activity_page.TitleActivityFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+            <fragment
+                android:id="@+id/activity_page_fragment_condition_panel"
+                android:name="twoAK.runboyrun.fragments.activity_page.ConditionPanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+            <fragment
+                android:id="@+id/activity_page_fragment_statistics_panel"
+                android:name="twoAK.runboyrun.fragments.activity_page.StatisticsPanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+            <fragment
+                android:id="@+id/activity_page_fragment_description_panel"
+                android:name="twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+            <fragment
+                android:id="@+id/activity_page_fragment_like_panel"
+                android:name="twoAK.runboyrun.fragments.activity_page.LikePanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+            <fragment
+                android:id="@+id/activity_page_fragment_last_comments_panel"
+                android:name="twoAK.runboyrun.fragments.activity_page.LastCommentsPanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

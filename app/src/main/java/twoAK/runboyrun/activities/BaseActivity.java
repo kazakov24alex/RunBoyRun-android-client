@@ -158,14 +158,18 @@ public abstract class BaseActivity extends AppCompatActivity
             case R.id.navdrawer_item_personal_page:
                 createBackStack(new Intent(this, ProfileActivity.class));
                 break;
+
+            case R.id.navdrawer_item_activities:
+                createBackStack(new Intent(this, ActivityPageActivity.class));
+                break;
+
             case R.id.navdrawer_item_logout:
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", "");
                 editor.commit();
                 startActivity(new Intent(this, WelcomeActivity.class));
-
-
+                break;
         }
 
         closeNavDrawer();

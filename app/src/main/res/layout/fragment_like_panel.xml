@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_custom"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/like_panel_like_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:longClickable="true"
+                android:orientation="horizontal"
+                android:onClick="onLikeClick">
+
+                <TextView
+                    android:id="@+id/like_panel_text_like_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/TEXT_GREY"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/like_panel_text_like_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/TEXT_GREY"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/like_panel_list_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:longClickable="true"
+                android:orientation="horizontal"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
+                android:onClick="onListClick">
+
+                <TextView
+                    android:id="@+id/like_panel_text_list_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/TEXT_GREY"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/like_panel_dislike_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:longClickable="true"
+                android:orientation="horizontal"
+                android:onClick="onDislikeClick">
+
+                <TextView
+                    android:id="@+id/like_panel_text_dislike_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/TEXT_GREY"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/like_panel_text_dislike_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/TEXT_GREY"
+                    android:textSize="22sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

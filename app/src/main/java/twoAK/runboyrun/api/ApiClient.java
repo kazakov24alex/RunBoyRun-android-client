@@ -24,6 +24,7 @@ import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -36,7 +37,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
 /** A class that performs requests on the server and receives responses from it.
  * This class is a SINGLTONE!
  * */
- public class ApiClient implements IApiClient {
+public class ApiClient implements IApiClient {
 
     private static ApiClient inst = null;   // Singleton pattern implementation
 
@@ -180,7 +181,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
             Response<GetProfileInfoResponse> response = req.execute();
             if(response.body().isSuccess()){
                 return response.body();
-            } else{
+            } else {
                 throw new GetProfileInfoFailedException("Failed Getting Profile Data");
             }
         }catch (IOException e){
@@ -188,6 +189,24 @@ import twoAK.runboyrun.responses.objects.CountryObject;
         }
     }
 
+    @Override
+    public GetActivityDataResponse getActivityData(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetActivityDataResponse> req = service.getActivityData(Auth.getHeaderField(), activity_id);
+
+        try {
+            Response<GetActivityDataResponse> response = req.execute();
+            if (response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to fetch activity data from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+    @Override
     public SendTrainingInfoResponse sendTrainingInfo(ActivityBody activityBody) throws SendTrainingInfoFailedException {
         Call<SendTrainingInfoResponse> req = service.sendProfileInfo(Auth.getHeaderField(), activityBody);
         try {
@@ -201,4 +220,7 @@ import twoAK.runboyrun.responses.objects.CountryObject;
             throw new SendTrainingInfoFailedException(e);
         }
     }
+
+
+
 }

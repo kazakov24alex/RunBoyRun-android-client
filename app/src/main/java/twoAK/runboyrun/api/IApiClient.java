@@ -11,6 +11,7 @@ import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
+import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -46,4 +47,6 @@ public interface IApiClient {
     public SendTrainingInfoResponse sendTrainingInfo(ActivityBody activityBody)
         throws SendTrainingInfoFailedException;
 
+    public GetActivityDataResponse getActivityData(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException;
 }
