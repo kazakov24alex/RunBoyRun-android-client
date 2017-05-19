@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/background_custom"
         android:layout_weight="1"
+        android:background="@drawable/background_custom"
+        android:orientation="horizontal"
         android:padding="3dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,23 +31,23 @@
                 android:id="@+id/condition_panel_image_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:padding="1dp"/>
+                android:padding="1dp"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/background_custom"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@drawable/background_custom"
+        android:orientation="horizontal"
         android:padding="3dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
@@ -59,12 +60,18 @@
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
-            <twoAK.runboyrun.adapters.SquareImageView
-                android:id="@+id/condition_panel_image_temperature"
+            <TextView
+                android:id="@+id/condition_panel_text_temperature_value"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:padding="1dp"/>
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="8sp"
+                android:padding="5dp"
+                android:text="°C"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="28sp" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -72,9 +79,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/background_custom"
         android:layout_weight="1"
+        android:background="@drawable/background_custom"
+        android:orientation="horizontal"
         android:padding="3dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -96,7 +103,7 @@
                 android:id="@+id/condition_panel_image_relief"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="1dp"/>
+                android:padding="1dp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -104,10 +111,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_weight="1"
         android:background="@drawable/background_custom"
-        android:padding="3dp"
-        android:layout_weight="1">
+        android:orientation="horizontal"
+        android:padding="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"

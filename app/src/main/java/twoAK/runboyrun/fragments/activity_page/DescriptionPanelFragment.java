@@ -14,6 +14,8 @@ public class DescriptionPanelFragment extends Fragment {
 
     private TextView mDescriptionValue;
 
+    private String mDescription;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -21,12 +23,13 @@ public class DescriptionPanelFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_description_panel, container, false);
 
         mDescriptionValue = (TextView) rootView.findViewById(R.id.description_panel_text_value);
+        mDescriptionValue.setText(mDescription);
 
         return rootView;
     }
 
     public void setDescriptionValue(String description) {
-        mDescriptionValue.setText(description);
+        mDescription = description;
     }
 
 }

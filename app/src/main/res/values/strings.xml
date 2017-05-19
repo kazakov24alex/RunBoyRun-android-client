@@ -181,7 +181,7 @@
 
     <!-- Condition panel fragment -->
     <string name="condition_panel_text_weather">weather</string>
-    <string name="condition_panel_text_temperature">tempo</string>
+    <string name="condition_panel_text_temperature">temp</string>
     <string name="condition_panel_text_relief">relief</string>
     <string name="condition_panel_text_condition">condition</string>
 

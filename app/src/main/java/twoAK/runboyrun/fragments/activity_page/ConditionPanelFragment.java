@@ -45,6 +45,8 @@ public class ConditionPanelFragment extends Fragment {
     private TextView mConditionReliefText;
     private TextView mConditionConditionText;
 
+    private TextView mTemperatureValue;
+
 
 
     @Override
@@ -54,8 +56,6 @@ public class ConditionPanelFragment extends Fragment {
 
         mConditionWeatherImage = (SquareImageView) rootView.findViewById(R.id.condition_panel_image_weather);
         mConditionWeatherImage.setImageResource(R.drawable.com_facebook_top_button);
-        mConditionTemperatureImage = (SquareImageView) rootView.findViewById(R.id.condition_panel_image_temperature);
-        mConditionTemperatureImage.setImageResource(R.drawable.com_facebook_top_button);
         mConditionReliefImage = (SquareImageView) rootView.findViewById(R.id.condition_panel_image_relief);
         mConditionReliefImage.setImageResource(R.drawable.com_facebook_top_button);
         mConditionConditionImage = (SquareImageView) rootView.findViewById(R.id.condition_panel_image_condition);
@@ -71,6 +71,9 @@ public class ConditionPanelFragment extends Fragment {
         mConditionReliefText.setTypeface(squareFont);
         mConditionConditionText = (TextView) rootView.findViewById(R.id.condition_panel_text_condition);
         mConditionConditionText.setTypeface(squareFont);
+
+        mTemperatureValue = (TextView) rootView.findViewById(R.id.condition_panel_text_temperature_value);
+        mTemperatureValue.setTypeface(squareFont);
 
         return rootView;
     }
@@ -128,6 +131,10 @@ public class ConditionPanelFragment extends Fragment {
                 break;
             default: break;
         }
+    }
+
+    public void setTemp(int value){
+        mTemperatureValue.setText(value+"\n°C");
     }
 
 

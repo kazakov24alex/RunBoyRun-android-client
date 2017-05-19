@@ -42,11 +42,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="3dp" />
 
-            <fragment
-                android:id="@+id/activity_page_fragment_description_panel"
-                android:name="twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment"
+            <!--<fragment-->
+                <!--android:id="@+id/activity_page_fragment_description_panel"-->
+                <!--android:name="twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/activity_page_container_fragment_description_panel"/>
 
             <Space
                 android:layout_width="match_parent"

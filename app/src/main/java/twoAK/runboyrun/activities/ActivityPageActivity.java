@@ -1,5 +1,8 @@
 package twoAK.runboyrun.activities;
 
+
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
+import twoAK.runboyrun.fragments.activity_page.CommentPreviewFragment;
 import twoAK.runboyrun.fragments.activity_page.ConditionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.LastCommentsPanelFragment;
@@ -58,8 +62,8 @@ public class ActivityPageActivity extends BaseActivity {
                 .findFragmentById(R.id.activity_page_fragment_condition_panel);
         mStatisticsPanelFragment = (StatisticsPanelFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.activity_page_fragment_statistics_panel);
-        mDescriptionPanelFragment = (DescriptionPanelFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_page_fragment_description_panel);
+//        mDescriptionPanelFragment = (DescriptionPanelFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.activity_page_fragment_description_panel);
 
 
 
@@ -126,6 +130,8 @@ public class ActivityPageActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(final GetActivityDataResponse activityData) {
+            hideProgressDialog();
+
             if(activityData == null) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
@@ -138,15 +144,18 @@ public class ActivityPageActivity extends BaseActivity {
             mConditionPanelFragment.setWeather(activityData.getWeather());
             mConditionPanelFragment.setRelief(activityData.getRelief());
             mConditionPanelFragment.setCondition(activityData.getCondition());
+            mConditionPanelFragment.setTemp(activityData.getTemperature());
 
             mStatisticsPanelFragment.setTimeValue(activityData.getDuration());
             mStatisticsPanelFragment.setDistanceValue(activityData.getDistance());
             mStatisticsPanelFragment.setAvrSpeedValue(activityData.getAverage_speed());
             mStatisticsPanelFragment.setTempoValue(activityData.getTempo());
 
-            mDescriptionPanelFragment.setDescriptionValue(activityData.getDescription());
+            //mDescriptionPanelFragment.setDescriptionValue(activityData.getDescription());
+            if(activityData.getDescription()!=null){
+                addCommentReview(activityData.getDescription());
+            }
 
-            hideProgressDialog();
         }
 
         /** The task was canceled. */
@@ -155,6 +164,19 @@ public class ActivityPageActivity extends BaseActivity {
             // reset the task and hide a progress spinner
             hideProgressDialog();
         }
+    }
+
+    public void addCommentReview(String description) {
+        // получаем экземпляр FragmentTransaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // добавляем фрагмент
+        DescriptionPanelFragment mDescriptionPanelFragment = new DescriptionPanelFragment();
+        mDescriptionPanelFragment.setDescriptionValue(description);
+
+        fragmentTransaction.add(R.id.activity_page_container_fragment_description_panel, mDescriptionPanelFragment);
+        fragmentTransaction.commit();
     }
 
 
