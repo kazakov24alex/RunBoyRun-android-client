@@ -16,6 +16,9 @@ public class LikePanelFragment extends Fragment {
 
     private boolean mLikeState;
     private boolean mDislikeState;
+    private Boolean mMyValue;
+    private int mLikeNum;
+    private int mDislikeNum;
 
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
@@ -48,48 +51,133 @@ public class LikePanelFragment extends Fragment {
         mLikeValueText = (TextView) rootView.findViewById(R.id.like_panel_text_like_value);
         mDislikeValueText = (TextView) rootView.findViewById(R.id.like_panel_text_dislike_value);
 
+        setLikeSelected(false);
+        setDislikeSelected(false);
+
         return rootView;
     }
 
 
-    public void setLikeValue(String value) {
-        mLikeValueText.setText(value);
+    public void setLikeNum(int num) {
+        mLikeNum = num;
+
+        if(num != 0) {
+            mLikeValueText.setText(Integer.toString(num));
+        } else {
+            mLikeValueText.setText("");
+        }
     }
 
-    public void setDislikeValue(String value) {
-        mDislikeValueText.setText(value);
+    public void setDislikeNum(int num) {
+        mDislikeNum = num;
+
+        if (num != 0) {
+            mDislikeValueText.setText(Integer.toString(num));
+        } else {
+            mDislikeValueText.setText("");
+        }
+    }
+
+    public void setMyValue(Boolean value) {
+        mMyValue = value;
+        setLikeSelected(false);
+        setDislikeSelected(false);
+        if(value != null) {
+            if(value == true) {
+                setLikeSelected(true);
+            } else {
+                setDislikeSelected(true);
+            }
+        }
     }
 
     public void setLikeSelected(boolean selected) {
         if(selected) {
-            mLikeIconText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
-            mLikeValueText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
-            mLikeState = false;
-        } else {
             mLikeIconText.setTextColor(getResources().getColor(R.color.TEXT_SELECTED));
             mLikeValueText.setTextColor(getResources().getColor(R.color.TEXT_SELECTED));
             mLikeState = true;
+        } else {
+            mLikeIconText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
+            mLikeValueText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
+            mLikeState = false;
         }
     }
 
     public void setDislikeSelected(boolean selected) {
         if(selected) {
-            mDislikeIconText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
-            mDislikeValueText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
-            mDislikeState = false;
-        } else {
             mDislikeIconText.setTextColor(getResources().getColor(R.color.TEXT_SELECTED));
             mDislikeValueText.setTextColor(getResources().getColor(R.color.TEXT_SELECTED));
             mDislikeState = true;
+        } else {
+            mDislikeIconText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
+            mDislikeValueText.setTextColor(getResources().getColor(R.color.TEXT_GREY));
+            mDislikeState = false;
         }
     }
 
-    public boolean getLikeState() {
-        return mLikeState;
+
+
+
+
+    public Boolean getmMyValue() {
+        return mMyValue;
     }
 
-    public boolean getDislikeState() {
-        return mDislikeState;
+    public int getmLikeNum() {
+        return mLikeNum;
+    }
+
+    public int getmDislikeNum() {
+        return mDislikeNum;
+    }
+
+
+    public void onLikeClick() {
+        if(mMyValue != null) {
+            if(mMyValue == false) {
+                mDislikeNum--;
+                setDislikeNum(mDislikeNum);
+
+                mLikeNum++;
+                setLikeNum(mLikeNum);
+
+                setMyValue(true);
+            } else {
+                mLikeNum--;
+                setLikeNum(mLikeNum);
+
+                setMyValue(null);
+            }
+        } else {
+            mLikeNum++;
+            setLikeNum(mLikeNum);
+
+            setMyValue(true);
+        }
+    }
+
+    public void onDislikeClick() {
+        if(mMyValue != null) {
+            if(mMyValue == true) {
+                mLikeNum--;
+                setLikeNum(mLikeNum);
+
+                mDislikeNum++;
+                setDislikeNum(mDislikeNum);
+
+                setMyValue(false);
+            } else {
+                mDislikeNum--;
+                setDislikeNum(mDislikeNum);
+
+                setMyValue(null);
+            }
+        } else {
+            mDislikeNum++;
+            setDislikeNum(mDislikeNum);
+
+            setMyValue(false);
+        }
     }
 
 }

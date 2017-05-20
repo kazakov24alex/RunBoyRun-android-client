@@ -1,10 +1,6 @@
 package twoAK.runboyrun.request.body;
 
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityBody {
@@ -21,8 +17,13 @@ public class ActivityBody {
     double average_speed;
     double tempo;
     String description;
+
     List<List<Double>> route;
     List<List<Double>> timeline;
+
+
+
+
 
     public ActivityBody() {
         route = null;

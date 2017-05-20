@@ -20,6 +20,7 @@ import twoAK.runboyrun.exceptions.api.SignupFailedException;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
+import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
@@ -218,6 +219,22 @@ public class ApiClient implements IApiClient {
             }
         }catch (IOException e){
             throw new SendTrainingInfoFailedException(e);
+        }
+    }
+
+    @Override
+    public boolean sendValue(ValueBody valueBody)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<BaseResponse> req = service.sendValue(Auth.getHeaderField(), valueBody);
+        try {
+            Response<BaseResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return true;
+            } else {
+                throw new InsuccessfulResponseException("Failed to send value to server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
         }
     }
 

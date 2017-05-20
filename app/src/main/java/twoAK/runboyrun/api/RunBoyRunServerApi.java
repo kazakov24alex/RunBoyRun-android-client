@@ -7,15 +7,16 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
-import twoAK.runboyrun.responses.GetActivityDataResponse;
-import twoAK.runboyrun.request.body.ActivityBody;
+import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
+import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -57,4 +58,7 @@ public interface RunBoyRunServerApi {
 
     @POST("api/activity")
     Call<SendTrainingInfoResponse> sendProfileInfo(@Header("Authorization") String token, @Body ActivityBody activityResponse);
+
+    @POST("api/value")
+    Call<BaseResponse> sendValue(@Header("Authorization") String token, @Body ValueBody valueBody);
 }

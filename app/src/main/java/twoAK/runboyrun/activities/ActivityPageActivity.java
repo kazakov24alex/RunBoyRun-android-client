@@ -1,11 +1,11 @@
 package twoAK.runboyrun.activities;
 
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -15,13 +15,13 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
-import twoAK.runboyrun.fragments.activity_page.CommentPreviewFragment;
 import twoAK.runboyrun.fragments.activity_page.ConditionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.LastCommentsPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.LikePanelFragment;
 import twoAK.runboyrun.fragments.activity_page.StatisticsPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.TitleActivityFragment;
+import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 
 
@@ -31,6 +31,7 @@ public class ActivityPageActivity extends BaseActivity {
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
     private ActivityPageActivity.GetActivityDataTask mGetActivityDataTask;
+    private SendValueTask mSendValueTask;
     private ProgressDialog mProgressDialog; // view of a progress spinner
 
     private TitleActivityFragment       mTitleActivityFragment;
@@ -39,6 +40,8 @@ public class ActivityPageActivity extends BaseActivity {
     private DescriptionPanelFragment    mDescriptionPanelFragment;
     private LikePanelFragment           mLikePanelFragment;
     private LastCommentsPanelFragment   mLastCommentsPanelFragment;
+
+    private GetActivityDataResponse mActivityData;
 
 
 
@@ -69,9 +72,6 @@ public class ActivityPageActivity extends BaseActivity {
 
         mLikePanelFragment = (LikePanelFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.activity_page_fragment_like_panel);
-        mLikePanelFragment.setLikeValue("142");
-        mLikePanelFragment.setLikeSelected(true);
-        mLikePanelFragment.setDislikeValue("28");
 
 
         mLastCommentsPanelFragment = (LastCommentsPanelFragment) getSupportFragmentManager()
@@ -81,15 +81,17 @@ public class ActivityPageActivity extends BaseActivity {
         mLastCommentsPanelFragment.addCommentReview("Andrei Arshavin", "guys, get me jogging...");
 
 
-        mGetActivityDataTask = new GetActivityDataTask(2);
+        mGetActivityDataTask = new GetActivityDataTask(3);
         mGetActivityDataTask.execute((Void) null);
     }
 
 
     public void onLikeClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onLikeClick");
+        mLikePanelFragment.onLikeClick();
 
-        mLikePanelFragment.setLikeSelected(mLikePanelFragment.getLikeState());
+        mSendValueTask = new SendValueTask(mActivityData.getId(), true);
+        mSendValueTask.execute((Void) null);
     }
 
     public void onListClick(View view) {
@@ -98,8 +100,10 @@ public class ActivityPageActivity extends BaseActivity {
 
     public void onDislikeClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onDislikeClick");
+        mLikePanelFragment.onDislikeClick();
 
-        mLikePanelFragment.setDislikeSelected(mLikePanelFragment.getDislikeState());
+        mSendValueTask = new SendValueTask(mActivityData.getId(), false);
+        mSendValueTask.execute((Void) null);
     }
 
 
@@ -138,6 +142,8 @@ public class ActivityPageActivity extends BaseActivity {
                 return;
             }
 
+            mActivityData = activityData;
+
             mTitleActivityFragment.setSportValue(activityData.getSport_type());
             mTitleActivityFragment.setDateTimeStartValue(activityData.getDatetime_start());
 
@@ -151,10 +157,14 @@ public class ActivityPageActivity extends BaseActivity {
             mStatisticsPanelFragment.setAvrSpeedValue(activityData.getAverage_speed());
             mStatisticsPanelFragment.setTempoValue(activityData.getTempo());
 
-            //mDescriptionPanelFragment.setDescriptionValue(activityData.getDescription());
             if(activityData.getDescription()!=null){
-                addCommentReview(activityData.getDescription());
+                addCommentReviewPanel(activityData.getDescription());
             }
+
+            mLikePanelFragment.setLikeNum(activityData.getLike_num());
+            mLikePanelFragment.setDislikeNum(activityData.getDislike_num());
+            mLikePanelFragment.setMyValue(activityData.getMy_value());
+
 
         }
 
@@ -166,13 +176,62 @@ public class ActivityPageActivity extends BaseActivity {
         }
     }
 
-    public void addCommentReview(String description) {
+
+    public class SendValueTask extends AsyncTask<Void, Void, Boolean> {
+        private String errMes;  // error message possible
+        private ValueBody valueBody;
+
+        SendValueTask(int activity_id, boolean value) {
+            errMes = null;
+            valueBody = new ValueBody();
+            valueBody.setActivity_id(activity_id);
+            valueBody.setValue(value);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to send value");
+            try {
+                return ApiClient.instance().sendValue(valueBody);
+            } catch(RequestFailedException e) {
+                errMes = getString(R.string.activity_page_error_loading_activity_request_failed);
+            } catch(InsuccessfulResponseException e) {
+                errMes = getString(R.string.activity_page_error_loading_activity_insuccessful);
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean result) {
+            if(result == false) {
+                Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
+
+                mLikePanelFragment.setLikeNum(mActivityData.getLike_num());
+                mLikePanelFragment.setDislikeNum(mActivityData.getDislike_num());
+                mLikePanelFragment.setMyValue(mActivityData.getMy_value());
+
+                return;
+            } else {
+                Log.i(APP_TAG, ACTIVITY_TAG + "value was sent");
+            }
+
+        }
+
+        /** The task was canceled. */
+        @Override
+        protected void onCancelled() { }
+    }
+
+
+
+    public void addCommentReviewPanel(String description) {
         // получаем экземпляр FragmentTransaction
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         // добавляем фрагмент
-        DescriptionPanelFragment mDescriptionPanelFragment = new DescriptionPanelFragment();
+        mDescriptionPanelFragment = new DescriptionPanelFragment();
         mDescriptionPanelFragment.setDescriptionValue(description);
 
         fragmentTransaction.add(R.id.activity_page_container_fragment_description_panel, mDescriptionPanelFragment);

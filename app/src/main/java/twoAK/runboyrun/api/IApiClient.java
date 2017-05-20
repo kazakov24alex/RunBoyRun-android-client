@@ -1,7 +1,5 @@
 package twoAK.runboyrun.api;
 
-import android.app.Activity;
-
 import java.util.List;
 
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
@@ -11,8 +9,9 @@ import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
-import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.request.body.ActivityBody;
+import twoAK.runboyrun.request.body.ValueBody;
+import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
@@ -49,4 +48,8 @@ public interface IApiClient {
 
     public GetActivityDataResponse getActivityData(int activity_id)
             throws RequestFailedException, InsuccessfulResponseException;
+
+    public boolean sendValue(ValueBody valueBody)
+            throws RequestFailedException, InsuccessfulResponseException;
+
 }
