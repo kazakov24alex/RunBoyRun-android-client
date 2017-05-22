@@ -9,6 +9,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.request.body.CheckBody;
+import twoAK.runboyrun.request.body.CommentBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
 import twoAK.runboyrun.request.body.ValueBody;
@@ -17,6 +18,7 @@ import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
+import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -54,11 +56,25 @@ public interface RunBoyRunServerApi {
     Call<GetProfileInfoResponse> getProfileInfo(@Header("Authorization") String token);
 
     @GET("api/activity/{activity_id}")
-    Call<GetActivityDataResponse> getActivityData(@Header("Authorization") String token, @Path("activity_id") int activity_id);
+    Call<GetActivityDataResponse> getActivityData(@Header("Authorization") String token,
+                                                  @Path("activity_id") int activity_id);
 
     @POST("api/activity")
-    Call<SendTrainingInfoResponse> sendProfileInfo(@Header("Authorization") String token, @Body ActivityBody activityResponse);
+    Call<SendTrainingInfoResponse> sendProfileInfo(@Header("Authorization") String token,
+                                                   @Body ActivityBody activityResponse);
 
     @POST("api/value")
-    Call<BaseResponse> sendValue(@Header("Authorization") String token, @Body ValueBody valueBody);
+    Call<BaseResponse> sendValue(@Header("Authorization") String token,
+                                 @Body ValueBody valueBody);
+
+    @GET("api/comment/{activity_id}/{comments_num}")
+    Call<GetCommentsResponse> getComments(@Header("Authorization") String token,
+                                          @Path("activity_id") int activity_id,
+                                          @Path("comments_num") int comments_num);
+
+    @POST("api/comment")
+    Call<BaseResponse> sendComment(@Header("Authorization") String token,
+                                   @Body CommentBody commentBody);
+
+
 }

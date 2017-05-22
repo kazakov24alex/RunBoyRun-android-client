@@ -449,59 +449,59 @@ public class TrackActivityActivity extends AppCompatActivity
         });
 
 
-        final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.track_activity_dialog_setting_title))
-                .setView(settingDialogContent)
-                .setPositiveButton(getString(R.string.track_activity_dialog_setting_positive),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
+            final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.track_activity_dialog_setting_title))
+                    .setView(settingDialogContent)
+                    .setPositiveButton(getString(R.string.track_activity_dialog_setting_positive),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if(!mDistanceAlertEditText.getText().toString().equals("")) {
-                                    mAlertDistanceInterval = Integer.parseInt(mDistanceAlertEditText.getText().toString());
-                                }
-                                if(!mTimeAlertEditText.getText().toString().equals("")) {
-                                    mAlertTimeInterval = Integer.parseInt(mTimeAlertEditText.getText().toString());
-                                }
-                                if(!mTempoAlertEditText.getText().toString().equals("")) {
-                                    mAlertTempoInterval = Integer.parseInt(mTempoAlertEditText.getText().toString());
-                                }
-
-                                View startDialogContent = getLayoutInflater().inflate(R.layout.dialog_start_activity, null);
-                                final DonutProgress progressBar = (DonutProgress) startDialogContent.findViewById(R.id.donut_progress);
-                                final AlertDialog startActivityDialog = new AlertDialog.Builder(ctx)
-                                        .setIcon(android.R.drawable.btn_star_big_on)
-                                        .setTitle(getString(R.string.track_activity_dialog_start_activity_title))
-                                        .setView(startDialogContent)
-                                        .setCancelable(false)
-                                        .create();
-                                startActivityDialog.show();
-
-                                new CountDownTimer(5000, 30) {
-                                    @Override
-                                    public void onTick(long millisUntilFinished) {
-                                        progressBar.setText(""+(millisUntilFinished/1000+1));
-                                        progressBar.setProgress((int)millisUntilFinished/50);
+                                    if(!mDistanceAlertEditText.getText().toString().equals("")) {
+                                        mAlertDistanceInterval = Integer.parseInt(mDistanceAlertEditText.getText().toString());
+                                    }
+                                    if(!mTimeAlertEditText.getText().toString().equals("")) {
+                                        mAlertTimeInterval = Integer.parseInt(mTimeAlertEditText.getText().toString());
+                                    }
+                                    if(!mTempoAlertEditText.getText().toString().equals("")) {
+                                        mAlertTempoInterval = Integer.parseInt(mTempoAlertEditText.getText().toString());
                                     }
 
-                                    @Override
-                                    public void onFinish() {
-                                        startActivityDialog.dismiss();
+                                    View startDialogContent = getLayoutInflater().inflate(R.layout.dialog_start_activity, null);
+                                    final DonutProgress progressBar = (DonutProgress) startDialogContent.findViewById(R.id.donut_progress);
+                                    final AlertDialog startActivityDialog = new AlertDialog.Builder(ctx)
+                                            .setIcon(android.R.drawable.btn_star_big_on)
+                                            .setTitle(getString(R.string.track_activity_dialog_start_activity_title))
+                                            .setView(startDialogContent)
+                                            .setCancelable(false)
+                                            .create();
+                                    startActivityDialog.show();
 
-                                        startActivity();
-                                    }
-                                }.start();
+                                    new CountDownTimer(5000, 30) {
+                                        @Override
+                                        public void onTick(long millisUntilFinished) {
+                                            progressBar.setText(""+(millisUntilFinished/1000+1));
+                                            progressBar.setProgress((int)millisUntilFinished/50);
+                                        }
+
+                                        @Override
+                                        public void onFinish() {
+                                            startActivityDialog.dismiss();
+
+                                            startActivity();
+                                        }
+                                    }.start();
+                                }
                             }
-                        }
-                )
-                .setNegativeButton(getString(R.string.track_activity_dialog_setting_negative),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
+                    )
+                    .setNegativeButton(getString(R.string.track_activity_dialog_setting_negative),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.dismiss();
+                                }
                             }
-                        }
-                )
-                .create();
-        settingActivityDialog.show();
+                    )
+                    .create();
+            settingActivityDialog.show();
     }
 
     private void startActivity() {

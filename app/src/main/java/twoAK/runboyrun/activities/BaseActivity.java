@@ -160,7 +160,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_activities:
-                createBackStack(new Intent(this, ActivityPageActivity.class));
+                Intent intent = new Intent(this, ActivityPageActivity.class);
+                intent.putExtra("activity_id", 3);
+                createBackStack(intent);
                 break;
 
             case R.id.navdrawer_item_logout:

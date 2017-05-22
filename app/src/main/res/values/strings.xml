@@ -199,11 +199,19 @@
 
     <!-- Last comments panel -->
     <string name="last_comments_panel_text_title">Last comments</string>
+    <string name="last_comments_panel_button_title">WRITE FIRSTCOMMENT</string>
+
 
     <!-- Activity page activity -->
     <string name="activity_page_dialog_loading_activity_data">Loading activity data...</string>
     <string name="activity_page_error_loading_activity_request_failed">Request failed</string>
     <string name="activity_page_error_loading_activity_insuccessful">Insuccessful response</string>
+    <string name="activity_page_dialog_comment_title_write_comment">First comment:</string>
+    <string name="activity_page_dialog_comment_button_positive">SEND!</string>
+    <string name="activity_page_dialog_comment_button_negative">CANCEL</string>
+    <string name="activity_page_dialog_comment_sending_progress_text">Sending comment...</string>
+    <string name="activity_page_dialog_comment_edittext_hint">Comment</string>
+
 
 
     <!--ERRORS-->

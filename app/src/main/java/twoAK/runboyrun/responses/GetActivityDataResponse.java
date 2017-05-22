@@ -29,8 +29,6 @@ public class GetActivityDataResponse extends BaseResponse {
 
 
 
-
-
     public int getId() {
         return id;
     }

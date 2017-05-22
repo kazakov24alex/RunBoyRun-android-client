@@ -17,7 +17,9 @@ import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
+import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.request.body.CheckBody;
+import twoAK.runboyrun.request.body.CommentBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
 import twoAK.runboyrun.request.body.ValueBody;
@@ -26,11 +28,11 @@ import twoAK.runboyrun.responses.CheckResponse;
 import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
+import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
-import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
@@ -50,16 +52,20 @@ public class ApiClient implements IApiClient {
     private RunBoyRunServerApi service; // service of server
 
 
-    /** Singleton pattern implementation */
+    /**
+     * Singleton pattern implementation
+     */
     public static ApiClient instance() {
-        if(inst == null) {
+        if (inst == null) {
             inst = new ApiClient();
         }
         return inst;
     }
 
 
-    /** Constructor - initialization of http client and service. */
+    /**
+     * Constructor - initialization of http client and service.
+     */
     private ApiClient() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(ApiClient.BASE_URL)
@@ -73,10 +79,10 @@ public class ApiClient implements IApiClient {
 
     @Override
     public boolean checkToken(String token) throws RequestFailedException, InsuccessfulResponseException {
-        Call<BaseResponse> req = service.checkToken("JWT "+token);
+        Call<BaseResponse> req = service.checkToken("JWT " + token);
         try {
             Response<BaseResponse> response = req.execute();
-            if(response.code() == 401) {
+            if (response.code() == 401) {
                 return false;
             } else if (response.code() == 200) {
                 return true;
@@ -89,31 +95,32 @@ public class ApiClient implements IApiClient {
     }
 
 
-    /** The method implements LOGIN request to the server and receives from it the TokenResponce.
+    /**
+     * The method implements LOGIN request to the server and receives from it the TokenResponce.
+     *
      * @param oauth         type of authorization
      * @param identificator identificator of user
      * @param password      password of user
-     * @exception LoginFailedException data isn't correct or request is not passed
      * @return token for user
-     * */
+     * @throws LoginFailedException data isn't correct or request is not passed
+     */
     @Override
     public String login(String oauth, String identificator, String password) throws LoginFailedException {
         Call<TokenResponse> req = service.signin(new LoginBody(oauth, identificator, password));
         try {
             Response<TokenResponse> response = req.execute();
-            if(response.body().isSuccess())
+            if (response.body().isSuccess())
                 return response.body().getToken();
             else
                 throw new LoginFailedException("Bad identificator or password");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new LoginFailedException(e);
         }
     }
 
     @Override
-    public String signup(String oauth, String identificator,String password,String name,String surname,
-                         String country, String city, String birthday, String sex) throws SignupFailedException{
+    public String signup(String oauth, String identificator, String password, String name, String surname,
+                         String country, String city, String birthday, String sex) throws SignupFailedException {
         Call<SignUpResponse> req = service.signup(
                 new SignUpBody(oauth, identificator, password, name, surname, country, city, birthday, sex));
         try {
@@ -123,8 +130,7 @@ public class ApiClient implements IApiClient {
             else {
                 throw new SignupFailedException(response.body().getError());
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new SignupFailedException(e);
         }
     }
@@ -135,12 +141,11 @@ public class ApiClient implements IApiClient {
         try {
             Response<CheckResponse> response = req.execute();
 
-            if(response.body().isSuccess())
+            if (response.body().isSuccess())
                 return response.body().getBusy();
             else
                 throw new CheckFailedException("Identificator not unique");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new CheckFailedException(e);
         }
     }
@@ -150,12 +155,12 @@ public class ApiClient implements IApiClient {
         Call<CountriesResponse> req = service.countries();
         try {
             Response<CountriesResponse> response = req.execute();
-            if(response.body().isSuccess()){
+            if (response.body().isSuccess()) {
                 return response.body().getCountries();
             } else {
                 throw new InsuccessfulResponseException("Failed to fetch countries from server.");
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RequestFailedException(e);
         }
     }
@@ -165,12 +170,12 @@ public class ApiClient implements IApiClient {
         Call<CitiesResponse> req = service.cities(countryCode);
         try {
             Response<CitiesResponse> response = req.execute();
-            if(response.body().isSuccess()) {
+            if (response.body().isSuccess()) {
                 return response.body().getCities();
             } else {
                 throw new InsuccessfulResponseException("Failed to fetch cities from server.");
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RequestFailedException(e);
         }
     }
@@ -180,12 +185,12 @@ public class ApiClient implements IApiClient {
         Call<GetProfileInfoResponse> req = service.getProfileInfo(Auth.getHeaderField());
         try {
             Response<GetProfileInfoResponse> response = req.execute();
-            if(response.body().isSuccess()){
+            if (response.body().isSuccess()) {
                 return response.body();
             } else {
                 throw new GetProfileInfoFailedException("Failed Getting Profile Data");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new GetProfileInfoFailedException(e);
         }
     }
@@ -194,7 +199,6 @@ public class ApiClient implements IApiClient {
     public GetActivityDataResponse getActivityData(int activity_id)
             throws RequestFailedException, InsuccessfulResponseException {
         Call<GetActivityDataResponse> req = service.getActivityData(Auth.getHeaderField(), activity_id);
-
         try {
             Response<GetActivityDataResponse> response = req.execute();
             if (response.body().isSuccess()) {
@@ -212,12 +216,12 @@ public class ApiClient implements IApiClient {
         Call<SendTrainingInfoResponse> req = service.sendProfileInfo(Auth.getHeaderField(), activityBody);
         try {
             Response<SendTrainingInfoResponse> response = req.execute();
-            if(response.body().isSuccess()){
+            if (response.body().isSuccess()) {
                 return response.body();
-            } else{
+            } else {
                 throw new SendTrainingInfoFailedException("Failed sending training info");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new SendTrainingInfoFailedException(e);
         }
     }
@@ -228,7 +232,7 @@ public class ApiClient implements IApiClient {
         Call<BaseResponse> req = service.sendValue(Auth.getHeaderField(), valueBody);
         try {
             Response<BaseResponse> response = req.execute();
-            if(response.body().isSuccess()) {
+            if (response.body().isSuccess()) {
                 return true;
             } else {
                 throw new InsuccessfulResponseException("Failed to send value to server.");
@@ -238,6 +242,41 @@ public class ApiClient implements IApiClient {
         }
     }
 
+
+    @Override
+    public GetCommentsResponse getComments(int activity_id, int comments_num)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetCommentsResponse> req = service.getComments(Auth.getHeaderField(), activity_id, comments_num);
+        try {
+            Response<GetCommentsResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to getting comments from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+
+    }
+
+
+    @Override
+    public boolean sendComment(CommentBody commentBody)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<BaseResponse> req = service.sendComment(Auth.getHeaderField(), commentBody);
+        try {
+            Response<BaseResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return true;
+            } else {
+                throw new InsuccessfulResponseException("Failed to send comment to server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+
+    }
 
 
 }

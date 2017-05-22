@@ -4,13 +4,25 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- Getting data info -->
+    <ProgressBar
+        android:id="@+id/last_comments_progress_circle"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/last_comments_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/background_custom"
         android:orientation="vertical"
-        android:padding="3dp">
+        android:padding="3dp"
+        android:onClick="onLastCommentFragmentClick">
 
         <TextView
             android:id="@+id/last_comments_text_title"
@@ -23,10 +35,31 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <Button
+                android:id="@+id/last_comments_button_write_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/TEXT_SELECTED"
+                android:onClick="onWriteCommentButtonClick"
+                android:text="@string/last_comments_panel_button_title"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/last_comments_container_fragments"
             android:paddingLeft="20dp"
-            android:orientation="vertical"/>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
     </LinearLayout>
 

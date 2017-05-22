@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Getting data info -->
+    <ProgressBar
+        android:id="@+id/activity_page_progress_circle"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/activity_page_sclroll_view">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,12 +53,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="3dp" />
 
-            <!--<fragment-->
-                <!--android:id="@+id/activity_page_fragment_description_panel"-->
-                <!--android:name="twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,4 +84,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</FrameLayout>
