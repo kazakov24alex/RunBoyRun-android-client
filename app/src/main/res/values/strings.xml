@@ -213,6 +213,11 @@
     <string name="activity_page_dialog_comment_edittext_hint">Comment</string>
 
 
+    <!-- Value activity -->
+    <string name="value_activity_error_loading_values_request_failed">request failed</string>
+    <string name="value_activity_error_loading_values_insuccessful">insuccessful</string>
+
+
 
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>

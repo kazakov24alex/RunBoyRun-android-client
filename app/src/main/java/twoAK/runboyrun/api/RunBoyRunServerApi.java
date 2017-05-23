@@ -20,6 +20,7 @@ import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
@@ -62,6 +63,10 @@ public interface RunBoyRunServerApi {
     @POST("api/activity")
     Call<SendTrainingInfoResponse> sendProfileInfo(@Header("Authorization") String token,
                                                    @Body ActivityBody activityResponse);
+
+    @GET("api/value/{activity_id}")
+    Call<GetValuesResponse> getValues(@Header("Authorization") String token,
+                                      @Path("activity_id") int activity_id);
 
     @POST("api/value")
     Call<BaseResponse> sendValue(@Header("Authorization") String token,

@@ -30,6 +30,7 @@ import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
@@ -224,6 +225,23 @@ public class ApiClient implements IApiClient {
         } catch (IOException e) {
             throw new SendTrainingInfoFailedException(e);
         }
+    }
+
+    @Override
+    public GetValuesResponse getValues(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetValuesResponse> req = service.getValues(Auth.getHeaderField(), activity_id);
+        try {
+            Response<GetValuesResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to get values from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+
     }
 
     @Override

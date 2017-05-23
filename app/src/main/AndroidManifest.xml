@@ -41,6 +41,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
 
         <activity
@@ -97,6 +98,10 @@
 
         <activity
             android:name=".activities.ActivityPageActivity"
+            android:label="Activity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ValueActivity"
             android:label="Activity"
             android:theme="@style/AppTheme.NoActionBar"/>
 

@@ -15,6 +15,7 @@ import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
@@ -43,12 +44,15 @@ public interface IApiClient {
             throws SignupFailedException;
 
     public GetProfileInfoResponse getProfileInfo()
-        throws GetProfileInfoFailedException;
+            throws GetProfileInfoFailedException;
 
     public SendTrainingInfoResponse sendTrainingInfo(ActivityBody activityBody)
-        throws SendTrainingInfoFailedException;
+            throws SendTrainingInfoFailedException;
 
     public GetActivityDataResponse getActivityData(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException;
+
+    public GetValuesResponse getValues(int activity_id)
             throws RequestFailedException, InsuccessfulResponseException;
 
     public boolean sendValue(ValueBody valueBody)
@@ -58,6 +62,6 @@ public interface IApiClient {
             throws RequestFailedException, InsuccessfulResponseException;
 
     public boolean sendComment(CommentBody commentBody)
-        throws RequestFailedException, InsuccessfulResponseException;
+            throws RequestFailedException, InsuccessfulResponseException;
 
 }

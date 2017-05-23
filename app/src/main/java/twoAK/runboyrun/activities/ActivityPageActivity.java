@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -130,7 +131,9 @@ public class ActivityPageActivity extends BaseActivity {
     }
 
     public void onListClick(View view) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "onListClick");
+        Intent intent = new Intent(ActivityPageActivity.this, ValueActivity.class);
+        intent.putExtra("ACTIVITY_ID", mActivityID);
+        startActivity(intent);
     }
 
     public void onDislikeClick(View view) {
@@ -186,7 +189,7 @@ public class ActivityPageActivity extends BaseActivity {
     }
 
 
-    public class GetActivityDataTask extends AsyncTask<Void, Void, GetActivityDataResponse> {
+    private class GetActivityDataTask extends AsyncTask<Void, Void, GetActivityDataResponse> {
         private String errMes;  // error message possible
         private int activity_id;
 
@@ -214,7 +217,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onPostExecute(final GetActivityDataResponse activityData) {
             if(activityData == null) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
-                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -233,7 +236,7 @@ public class ActivityPageActivity extends BaseActivity {
             mStatisticsPanelFragment.setAvrSpeedValue(activityData.getAverage_speed());
             mStatisticsPanelFragment.setTempoValue(activityData.getTempo());
 
-            if(activityData.getDescription()!=null){
+            if(activityData.getDescription() != null){
                 addCommentReviewPanel(activityData.getDescription());
             }
 
@@ -253,8 +256,7 @@ public class ActivityPageActivity extends BaseActivity {
         }
     }
 
-
-    public class SendValueTask extends AsyncTask<Void, Void, Boolean> {
+    private class SendValueTask extends AsyncTask<Void, Void, Boolean> {
         private String errMes;  // error message possible
         private ValueBody valueBody;
 
@@ -282,7 +284,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onPostExecute(final Boolean result) {
             if(result == false) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
-                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
 
                 mLikePanelFragment.setLikeNum(mActivityData.getLike_num());
                 mLikePanelFragment.setDislikeNum(mActivityData.getDislike_num());
@@ -300,8 +302,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onCancelled() { }
     }
 
-
-    public class GetCommentsTask extends AsyncTask<Void, Void, GetCommentsResponse> {
+    private class GetCommentsTask extends AsyncTask<Void, Void, GetCommentsResponse> {
         private String errMes;  // error message possible
         private int activity_id;
         private int comments_num;
@@ -331,7 +332,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onPostExecute(final GetCommentsResponse commentsResponse) {
             if(commentsResponse == null) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "GETTING COMMENTS ERROR: " + errMes);
-                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 if(commentsResponse.getComments() != null) {
@@ -355,7 +356,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onCancelled() { }
     }
 
-    public class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
+    private class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
         private String errMes;  // error message possible
         private CommentBody commentBody;
 
@@ -385,7 +386,7 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onPostExecute(final Boolean success) {
             if(success == false) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "SENDING COMMENT ERROR: " + errMes);
-                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 hideProgressDialog();
