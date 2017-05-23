@@ -3,7 +3,6 @@ package twoAK.runboyrun.api;
 import java.util.List;
 
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
-import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -14,7 +13,7 @@ import twoAK.runboyrun.request.body.CommentBody;
 import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
-import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
@@ -43,8 +42,11 @@ public interface IApiClient {
                            String surname, String country, String city, String birthday, String sex)
             throws SignupFailedException;
 
-    public GetProfileInfoResponse getProfileInfo()
-            throws GetProfileInfoFailedException;
+    public GetProfileResponse getYourProfile()
+            throws RequestFailedException, InsuccessfulResponseException;
+
+    public GetProfileResponse getProfile(int athlete_id)
+            throws RequestFailedException, InsuccessfulResponseException;
 
     public SendTrainingInfoResponse sendTrainingInfo(ActivityBody activityBody)
             throws SendTrainingInfoFailedException;

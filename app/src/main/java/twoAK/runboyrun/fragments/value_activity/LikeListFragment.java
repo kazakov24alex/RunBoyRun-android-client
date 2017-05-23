@@ -1,5 +1,6 @@
 package twoAK.runboyrun.fragments.value_activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
+import twoAK.runboyrun.activities.ProfileActivity;
 import twoAK.runboyrun.adapters.LikeListAdapter;
 import twoAK.runboyrun.responses.objects.ValueObject;
 
@@ -34,13 +35,16 @@ public class LikeListFragment extends Fragment{
 
         mListView = (ListView) mRootView.findViewById(R.id.like_list_listview);
 
+        // set adapten on ListView
         LikeListAdapter adapter = new LikeListAdapter(getActivity(), mValuesList);
         mListView.setAdapter(adapter);
 
+        // on item click listener
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-
-                Toast.makeText(getActivity(), mValuesList.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("ATHLETE_ID", mValuesList.get(position).getAthlete_id());
+                startActivity(intent);
             }
         });
 

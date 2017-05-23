@@ -14,17 +14,14 @@ import android.widget.Toast;
 import com.lantouzi.wheelview.WheelView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.api.ApiClient;
-import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.objects.route.PointTime;
 import twoAK.runboyrun.request.body.ActivityBody;
-import twoAK.runboyrun.responses.GetProfileInfoResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 
 

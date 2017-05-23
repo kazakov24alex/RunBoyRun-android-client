@@ -51,7 +51,7 @@ public class CountriesSpinnerAdapter extends BaseAdapter {
         // используем созданные, но не используемые view
         View view = convertView;
         if (view == null) {
-            view = lInflater.inflate(R.layout.countries_list_item, parent, false);
+            view = lInflater.inflate(R.layout.item_countries_list, parent, false);
         }
 
         CountryObject country = getItem(position);

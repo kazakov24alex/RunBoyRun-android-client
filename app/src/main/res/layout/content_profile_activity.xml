@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity2_personal_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Profile loading progress -->
+    <ProgressBar
+        android:id="@+id/profile_loading_progress_dialog"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/background_custom">
+            <fragment
+                android:id="@+id/profile_activity_fragment_profile_panel"
+                android:name="twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="3dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <fragment
+                android:id="@+id/profile_activity_fragment_buttons_panel"
+                android:name="twoAK.runboyrun.fragments.profile_activity.ButtonPanelFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="3dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

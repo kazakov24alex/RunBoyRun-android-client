@@ -148,6 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Intent intent;
         int id = item.getItemId();
 
         switch (id) {
@@ -156,12 +157,14 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_personal_page:
-                createBackStack(new Intent(this, ProfileActivity.class));
+                intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("ATHLETE_ID", -1);
+                createBackStack(intent);
                 break;
 
             case R.id.navdrawer_item_activities:
-                Intent intent = new Intent(this, ActivityPageActivity.class);
-                intent.putExtra("activity_id", 3);
+                intent = new Intent(this, ActivityPageActivity.class);
+                intent.putExtra("ACTIVITY_ID", 3);
                 createBackStack(intent);
                 break;
 

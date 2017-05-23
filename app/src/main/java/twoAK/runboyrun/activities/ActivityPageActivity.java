@@ -80,7 +80,7 @@ public class ActivityPageActivity extends BaseActivity {
         View inflated = stub.inflate();
 
         try {
-            mActivityID = getIntent().getExtras().getInt("activity_id", -1);
+            mActivityID = getIntent().getExtras().getInt("ACTIVITY_ID", -1);
         } catch (NullPointerException e) {
             Log.i(APP_TAG, ACTIVITY_TAG + "NOT GIVEN ACTIVITY_ID");
             finish();
@@ -202,7 +202,7 @@ public class ActivityPageActivity extends BaseActivity {
 
         @Override
         protected GetActivityDataResponse doInBackground(Void... params) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get activity data");
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get profile data");
             try {
                 return ApiClient.instance().getActivityData(activity_id);
             } catch(RequestFailedException e) {
@@ -220,6 +220,8 @@ public class ActivityPageActivity extends BaseActivity {
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            Log.i(APP_TAG, ACTIVITY_TAG + "activity data was loaded");
 
             mActivityData = activityData;
 

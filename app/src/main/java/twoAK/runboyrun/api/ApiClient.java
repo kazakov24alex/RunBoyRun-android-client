@@ -11,7 +11,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import twoAK.runboyrun.auth.Auth;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
-import twoAK.runboyrun.exceptions.api.GetProfileInfoFailedException;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -29,7 +28,7 @@ import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
-import twoAK.runboyrun.responses.GetProfileInfoResponse;
+import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -182,17 +181,34 @@ public class ApiClient implements IApiClient {
     }
 
     @Override
-    public GetProfileInfoResponse getProfileInfo() throws GetProfileInfoFailedException {
-        Call<GetProfileInfoResponse> req = service.getProfileInfo(Auth.getHeaderField());
+    public GetProfileResponse getYourProfile()
+            throws RequestFailedException, InsuccessfulResponseException  {
+        Call<GetProfileResponse> req = service.getYourProfile(Auth.getHeaderField());
         try {
-            Response<GetProfileInfoResponse> response = req.execute();
+            Response<GetProfileResponse> response = req.execute();
             if (response.body().isSuccess()) {
                 return response.body();
             } else {
-                throw new GetProfileInfoFailedException("Failed Getting Profile Data");
+                throw new InsuccessfulResponseException("Failed getting your profile from server");
             }
         } catch (IOException e) {
-            throw new GetProfileInfoFailedException(e);
+            throw new RequestFailedException(e);
+        }
+    }
+
+    @Override
+    public GetProfileResponse getProfile(int athlete_id)
+            throws RequestFailedException, InsuccessfulResponseException  {
+        Call<GetProfileResponse> req = service.getProfile(Auth.getHeaderField(), athlete_id);
+        try {
+            Response<GetProfileResponse> response = req.execute();
+            if (response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed getting profile from server");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
         }
     }
 

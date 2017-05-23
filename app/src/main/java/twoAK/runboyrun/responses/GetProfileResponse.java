@@ -1,7 +1,7 @@
 package twoAK.runboyrun.responses;
 
 
-public class GetProfileInfoResponse extends BaseResponse {
+public class GetProfileResponse extends BaseResponse {
     private String name;
     private String surname;
     private String birthday;

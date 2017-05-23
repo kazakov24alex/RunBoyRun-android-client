@@ -63,6 +63,9 @@
     <!--GetProfileInfo activity-->
     <string name="getprofileinfo_error">incorrect data</string>
     <string name="profile_loading_progress_dialog">Loading data, please wait</string>
+    <string name="profile_activity_error_loading_profile_request_failed">Request failed</string>
+    <string name="profile_activity_error_loading_profile_insuccessful">Insuccessful</string>
+
 
 
     <!-- Navigation Drawer -->
