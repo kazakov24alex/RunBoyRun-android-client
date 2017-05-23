@@ -219,7 +219,8 @@
     <!-- Value activity -->
     <string name="value_activity_error_loading_values_request_failed">request failed</string>
     <string name="value_activity_error_loading_values_insuccessful">insuccessful</string>
-
+    <string name="value_activity_page_like_title">Like</string>
+    <string name="value_activity_page_dislike_title">Dislike</string>
 
 
     <!--ERRORS-->
