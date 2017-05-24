@@ -27,4 +27,5 @@
     <color name="SHAPE_BACKGROUND">#fffeff</color>
     <color name="TEXT_GREY">#b0b1b5</color>
     <color name="TEXT_SELECTED">#5186c2</color>
+    <color name="DIVIDER_RECYCLER">#D9D9D9</color>
 </resources>

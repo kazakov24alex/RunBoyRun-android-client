@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import twoAK.runboyrun.R;
@@ -53,83 +56,48 @@ public class CommentRecycleAdapter extends RecyclerView.Adapter<CommentRecycleAd
         public void setCommentObject(CommentObject commentObject) {
             this.commentObject = commentObject;
 
+            fillContent();
+        }
+
+        public void fillContent() {
             ((SquareImageView) mView.findViewById(R.id.item_comment_list_image_avatar))
                     .setImageResource(R.drawable.com_facebook_top_button);
 
             ((TextView) mView.findViewById(R.id.item_comment_list_text_author))
                     .setText(commentObject.getName() + " " + commentObject.getSurname());
 
+            ((TextView) mView.findViewById(R.id.item_comment_list_text_order))
+                    .setText(mLayoutInflater.getContext().getString(R.string.comment_activity_order_label) + commentObject.getOrder());
+
             ((TextView) mView.findViewById(R.id.item_comment_list_text_message))
                     .setText(commentObject.getText());
 
-            ((TextView) mView.findViewById(R.id.item_comment_list_text_datetime))
-                    .setText(commentObject.getDate_time());
+            try {
+                Date curDate = new Date();
+                Date comDate = (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")).parse(commentObject.getDate_time().replaceAll("Z$", "+0000"));
 
-            ((TextView) mView.findViewById(R.id.item_comment_list_text_order))
-                    .setText("#" + commentObject.getOrder());
+                String curDateString = (new SimpleDateFormat("dd MMMM yyyy")).format(curDate);
+                String comDateString = (new SimpleDateFormat("dd MMMM yyyy")).format(comDate);
+
+                if(curDate.getYear() == comDate.getYear()) {
+                    ((TextView) mView.findViewById(R.id.item_comment_list_text_datetime))
+                            .setText((new SimpleDateFormat("dd MMM yyyy  kk:mm")).format(comDate));
+                } else {
+                    if (curDateString.equals(comDateString)) {
+                        ((TextView) mView.findViewById(R.id.item_comment_list_text_datetime))
+                                .setText((new SimpleDateFormat("kk:mm")).format(comDate));
+                    } else {
+                        ((TextView) mView.findViewById(R.id.item_comment_list_text_datetime))
+                                .setText((new SimpleDateFormat("dd MMMM kk:mm")).format(comDate));
+                    }
+                }
+            } catch (ParseException e) {
+                //TODO: handle
+            }
+
         }
 
     }
 
-
-/*
-    static final String APP_TAG = "RUN-BOY-RUN";
-    static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
-
-    private Context ctx;
-    private LayoutInflater lInflater;
-    private List<CommentObject> commentsList;
-
-    public CommentRecycleAdapter(Context context, List<CommentObject> commentsList) {
-        this.commentsList = commentsList;
-        ctx = context;
-        lInflater = (LayoutInflater) ctx
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return commentsList.size();
-    }
-
-    @Override
-    public CommentObject getItem(int position) {
-        return commentsList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.item_comment_list, parent, false);
-        }
-
-        CommentObject comment = getItem(position);
-
-        // initialization of views
-        ((SquareImageView) view.findViewById(R.id.item_comment_list_image_avatar))
-                .setImageResource(R.drawable.com_facebook_top_button);
-
-        ((TextView) view.findViewById(R.id.item_comment_list_text_author))
-                .setText(comment.getName()+" "+comment.getSurname());
-
-        ((TextView) view.findViewById(R.id.item_comment_list_text_message))
-                .setText(comment.getText());
-
-        ((TextView) view.findViewById(R.id.item_comment_list_text_datetime))
-                .setText(comment.getDate_time());
-
-        ((TextView) view.findViewById(R.id.item_comment_list_text_order))
-                .setText("#"+comment.getOrder());
-
-        return view;
-    }
-*/
 
 }

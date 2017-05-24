@@ -27,13 +27,28 @@
             android:orientation="vertical"
             android:paddingLeft="15dp">
 
-            <TextView
-                android:id="@+id/item_comment_list_text_author"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Usain Bolt"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/item_comment_list_text_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Usain Bolt"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/item_comment_list_text_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="#324"
+                    android:textAlignment="textEnd"
+                    android:textStyle="italic" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/item_comment_list_text_message"
@@ -48,15 +63,9 @@
                 android:layout_height="wrap_content"
                 android:text="January 18, 2017 at 22:49"
                 android:textAlignment="textEnd"
+                android:textSize="12sp"
                 android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/item_comment_list_text_order"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="#324"
-                android:textAlignment="textEnd"
-                android:textStyle="italic" />
         </LinearLayout>
     </LinearLayout>
 

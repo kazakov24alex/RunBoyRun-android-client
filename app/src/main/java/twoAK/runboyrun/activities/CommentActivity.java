@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CommentRecycleAdapter;
+import twoAK.runboyrun.adapters.CustomDividerItemDecoration;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -59,6 +60,7 @@ public class CommentActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comment_activity_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
 
 
         mGetCommentsPageTask = new GetCommentsPageTask(mActivityID, COMMENTS_PER_PAGE, 1);

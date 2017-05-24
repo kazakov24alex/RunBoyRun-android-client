@@ -106,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right"
-                app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+                app:selectionDivider="@drawable/divider_dark_horizontal_wheel"
                 app:selectionDividerWidth="1px"
                 app:visibleItems="5" />
 

@@ -225,6 +225,7 @@
     <!-- Comment activity-->
     <string name="comment_activity_error_loading_activity_request_failed">Request failed</string>
     <string name="comment_activity_error_loading_activity_insuccessful">Insuccessful response</string>
+    <string name="comment_activity_order_label">#</string>
 
 
     <!--ERRORS-->
