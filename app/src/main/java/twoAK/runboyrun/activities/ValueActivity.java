@@ -33,6 +33,7 @@ public class ValueActivity extends BaseActivity {
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
     private LikeListFragment mLikeListFragment;
+    private LikeListFragment mDislikeListFragment;
 
     private int mActivityID;
 
@@ -87,8 +88,8 @@ public class ValueActivity extends BaseActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(mLikeListFragment, "Like");
-        adapter.addFragment(new LikePanelFragment(), "Dislike");
+        adapter.addFragment(mLikeListFragment, getString(R.string.value_activity_page_like_title));
+        adapter.addFragment(mDislikeListFragment, getString(R.string.value_activity_page_dislike_title));
         viewPager.setAdapter(adapter);
     }
 
@@ -138,6 +139,9 @@ public class ValueActivity extends BaseActivity {
 
                 mLikeListFragment = new LikeListFragment();
                 mLikeListFragment.setValues(mLikeList);
+
+                mDislikeListFragment = new LikeListFragment();
+                mDislikeListFragment.setValues(mDislikeList);
 
                 if(mViewPager != null) {
                     setupViewPager(mViewPager);
