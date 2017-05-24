@@ -221,6 +221,10 @@
     <string name="value_activity_error_loading_values_insuccessful">insuccessful</string>
 
 
+    <!-- Comment activity-->
+    <string name="comment_activity_error_loading_activity_request_failed">Request failed</string>
+    <string name="comment_activity_error_loading_activity_insuccessful">Insuccessful response</string>
+
 
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>

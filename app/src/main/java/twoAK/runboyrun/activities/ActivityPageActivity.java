@@ -185,7 +185,9 @@ public class ActivityPageActivity extends BaseActivity {
     }
 
     public void onLastCommentFragmentClick(View view) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "onLastCommentFragmentClick");
+        Intent intent = new Intent(ActivityPageActivity.this, CommentActivity.class);
+        intent.putExtra("ACTIVITY_ID", mActivityID);
+        startActivity(intent);
     }
 
 

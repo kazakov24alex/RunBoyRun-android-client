@@ -291,7 +291,23 @@ public class ApiClient implements IApiClient {
         } catch (IOException e) {
             throw new RequestFailedException(e);
         }
+    }
 
+
+    @Override
+    public GetCommentsResponse getCommentsPage(int activity_id, int comments_num, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetCommentsResponse> req = service.getCommentsPage(Auth.getHeaderField(), activity_id, comments_num, page_num);
+        try {
+            Response<GetCommentsResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to getting comments page from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
     }
 
 
@@ -309,7 +325,6 @@ public class ApiClient implements IApiClient {
         } catch (IOException e) {
             throw new RequestFailedException(e);
         }
-
     }
 
 

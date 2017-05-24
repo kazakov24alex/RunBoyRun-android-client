@@ -81,6 +81,13 @@ public interface RunBoyRunServerApi {
                                           @Path("activity_id") int activity_id,
                                           @Path("comments_num") int comments_num);
 
+    @GET("api/comment/{activity_id}/{comments_num}/{page_num}")
+    Call<GetCommentsResponse> getCommentsPage(@Header("Authorization")  String token,
+                                              @Path("activity_id")      int activity_id,
+                                              @Path("comments_num")     int comments_num,
+                                              @Path("page_num")         int page_num);
+
+
     @POST("api/comment")
     Call<BaseResponse> sendComment(@Header("Authorization") String token,
                                    @Body CommentBody commentBody);

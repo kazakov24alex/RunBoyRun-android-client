@@ -8,6 +8,7 @@ public class CommentObject {
     private int     athlete_id;
     private String  name;
     private String  surname;
+    private int     order;
 
 
     public String getDate_time() {
@@ -50,5 +51,12 @@ public class CommentObject {
         this.surname = surname;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
 }

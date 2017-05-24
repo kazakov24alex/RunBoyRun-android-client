@@ -63,6 +63,9 @@ public interface IApiClient {
     public GetCommentsResponse getComments(int activity_id, int comments_num)
             throws RequestFailedException, InsuccessfulResponseException;
 
+    public GetCommentsResponse getCommentsPage(int activity_id, int comments_num, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException;
+
     public boolean sendComment(CommentBody commentBody)
             throws RequestFailedException, InsuccessfulResponseException;
 
