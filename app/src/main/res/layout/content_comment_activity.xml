@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_custom"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/sadda"
+    <antistatic.spinnerwheel.WheelHorizontalView
+        android:id="@+id/comment_activity_wheel_meters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="COMMENT ACTIVITY"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:gravity="right"
+        app:visibleItems="5" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comment_activity_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/empty_view"
