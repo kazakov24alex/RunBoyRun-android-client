@@ -1,8 +1,6 @@
 package twoAK.runboyrun.request.body;
 
-/**
- * Created by alex on 22.05.17.
- */
+
 
 public class CommentBody {
     int activity_id;
