@@ -118,9 +118,7 @@ public class CommentActivity extends BaseActivity {
                 int totalVisibleItems = mLinearLayoutManager.findLastVisibleItemPosition() - mLinearLayoutManager.findFirstVisibleItemPosition() - 1;
 
                 if( (lastPage > currentPage) || ( (currentPage*COMMENTS_PER_PAGE + totalVisibleItems) > mAllCommentsNum) )  {
-                    Log.i(APP_TAG, ACTIVITY_TAG + "NO");
                     mRecyclerView.scrollToPosition(mPagesWheel.getCurrentItem()*COMMENTS_PER_PAGE);
-
                 } else {
                     mRecyclerView.scrollToPosition(mPagesWheel.getCurrentItem()*COMMENTS_PER_PAGE + totalVisibleItems);
                 }
@@ -169,12 +167,9 @@ public class CommentActivity extends BaseActivity {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                Log.i(APP_TAG, ACTIVITY_TAG + "SCROLL 1");
                 if(!isPageScroll) {
-
                     int currentPage = (mLinearLayoutManager.findLastVisibleItemPosition() + 1) / COMMENTS_PER_PAGE;
                     mPagesWheel.setCurrentItem(currentPage);
-                    Log.i(APP_TAG, ACTIVITY_TAG + "SCROLL 2 PAGE= "+currentPage);
                 }
             }
         });
