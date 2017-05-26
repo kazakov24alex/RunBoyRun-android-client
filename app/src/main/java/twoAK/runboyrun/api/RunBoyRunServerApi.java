@@ -19,6 +19,7 @@ import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
+import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -92,5 +93,9 @@ public interface RunBoyRunServerApi {
     Call<BaseResponse> sendComment(@Header("Authorization") String token,
                                    @Body CommentBody commentBody);
 
-
+    @GET("api/activity/{athlete_id}/{newsNum}/{pageNum}")
+    Call<GetNewsResponse> getNewsPage(@Header("Authorization") String token,
+                                      @Path("athlete_id")      int athlete_id,
+                                      @Path("newsNum")         int newsNum,
+                                      @Path("pageNum")         int pageNum);
 }

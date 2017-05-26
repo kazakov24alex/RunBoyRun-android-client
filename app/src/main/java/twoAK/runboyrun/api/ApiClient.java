@@ -28,6 +28,7 @@ import twoAK.runboyrun.responses.CitiesResponse;
 import twoAK.runboyrun.responses.CountriesResponse;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
+import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -321,6 +322,22 @@ public class ApiClient implements IApiClient {
                 return true;
             } else {
                 throw new InsuccessfulResponseException("Failed to send comment to server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+    @Override
+    public GetNewsResponse getNewsPage(int athlete_id, int news_num, int page_num)
+        throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetNewsResponse> req = service.getNewsPage(Auth.getHeaderField(), athlete_id, news_num, page_num);
+        try {
+            Response<GetNewsResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to getting news page from server.");
             }
         } catch (IOException e) {
             throw new RequestFailedException(e);

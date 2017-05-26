@@ -55,6 +55,12 @@
             android:layout_width="match_parent"
             android:layout_height="3dp" />
 
+        <fragment
+            android:id="@+id/profile_activity_fragment_news_feed"
+            android:name="twoAK.runboyrun.fragments.profile_activity.NewsFeedFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </RelativeLayout>

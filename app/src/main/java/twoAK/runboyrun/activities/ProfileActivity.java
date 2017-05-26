@@ -13,6 +13,7 @@ import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.fragments.profile_activity.ButtonPanelFragment;
+import twoAK.runboyrun.fragments.profile_activity.NewsFeedFragment;
 import twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment;
 import twoAK.runboyrun.responses.GetProfileResponse;
 
@@ -25,6 +26,7 @@ public class ProfileActivity extends BaseActivity {
 
     private ProfilePanelFragment mProfilePanelFragment;
     private ButtonPanelFragment  mButtonPanelFragment;
+    private NewsFeedFragment     mNewsFeedFragment;
 
     private GetProfileInfoTask mGetProfileTask;
 
@@ -56,6 +58,9 @@ public class ProfileActivity extends BaseActivity {
         mButtonPanelFragment = (ButtonPanelFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.profile_activity_fragment_buttons_panel);
 
+        mNewsFeedFragment = (NewsFeedFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.profile_activity_fragment_news_feed);
+        mNewsFeedFragment.setAthleteId(1);
 
         mGetProfileTask = new GetProfileInfoTask(mAthleteID);
         mGetProfileTask.execute((Void) null);
