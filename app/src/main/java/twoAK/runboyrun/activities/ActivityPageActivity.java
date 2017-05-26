@@ -168,7 +168,7 @@ public class ActivityPageActivity extends BaseActivity {
         commentWriteDialog.show();
 
 
-        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
+        //Overriding the mHandler immediately after show is probably a better approach than OnShowListener as described below
         commentWriteDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
         {
             @Override

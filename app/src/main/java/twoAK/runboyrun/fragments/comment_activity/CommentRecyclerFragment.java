@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,11 +23,9 @@ import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelScrollListener;
 import antistatic.spinnerwheel.adapters.TimeAdapter;
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.activities.CommentActivity;
 import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.adapters.CustomDividerItemDecoration;
-import twoAK.runboyrun.adapters.DataAdapter;
-import twoAK.runboyrun.adapters.SquareImageView;
+import twoAK.runboyrun.adapters.CommentRecyclerAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -55,12 +52,13 @@ public class CommentRecyclerFragment extends Fragment {
 
     private AbstractWheel mPagesWheel;
 
+    protected Handler handler;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private DataAdapter mCommentRecycleAdapter;
+    private CommentRecyclerAdapter mCommentRecycleAdapter;
 
     private List<CommentObject> mCommentsList;
-    protected Handler handler;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,8 +68,6 @@ public class CommentRecyclerFragment extends Fragment {
         mAllCommentsNum = -1;
         mLastLoadedPage = 0;
 
-        handler = new Handler();
-
 
         // Meters horizontal wheel
         mPagesWheel = (AbstractWheel) rootView.findViewById(R.id.comment_activity_wheel_meters);
@@ -80,9 +76,6 @@ public class CommentRecyclerFragment extends Fragment {
         metersAdapter.setItemTextResource(R.id.text);
         mPagesWheel.setViewAdapter(metersAdapter);
         mPagesWheel.setCurrentItem(2);
-
-
-
 
         OnWheelScrollListener scrollListener = new OnWheelScrollListener() {
             public void onScrollingStarted(AbstractWheel wheel) {
@@ -106,7 +99,7 @@ public class CommentRecyclerFragment extends Fragment {
         mPagesWheel.addScrollingListener(scrollListener);
 
 
-
+        handler = new Handler();
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.comment_activity_recycler_view);
 
         mLinearLayoutManager = new MyCustomLayoutManager(getActivity());
@@ -115,7 +108,7 @@ public class CommentRecyclerFragment extends Fragment {
 
 
         mCommentsList = new ArrayList<CommentObject>();
-        mCommentRecycleAdapter = new DataAdapter(mCommentsList, mRecyclerView);
+        mCommentRecycleAdapter = new CommentRecyclerAdapter(mCommentsList, mRecyclerView);
         mCommentRecycleAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {

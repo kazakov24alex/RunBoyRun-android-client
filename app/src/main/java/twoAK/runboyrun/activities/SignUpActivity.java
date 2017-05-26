@@ -204,7 +204,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    /** BIRTHDAY button handler */
+    /** BIRTHDAY button mHandler */
     public void onBithdayButtonClick(View view)
     {
         // date picker dialog initialization
@@ -223,7 +223,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    /** REGISTER button handler */
+    /** REGISTER button mHandler */
     public void onRegisterClick()
     {
         // collection of all data specified in the registration form
@@ -291,7 +291,7 @@ public class SignUpActivity extends AppCompatActivity {
             mCountrySpinner.setAdapter(countryAdapter);
 
 
-            // handler of country spinner select
+            // mHandler of country spinner select
             mCountrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent,
                                            View itemSelected, int selectedItemPosition, long selectedId) {

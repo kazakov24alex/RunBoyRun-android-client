@@ -2,40 +2,20 @@ package twoAK.runboyrun.activities;
 
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.BoolRes;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import antistatic.spinnerwheel.AbstractWheel;
-import antistatic.spinnerwheel.OnWheelScrollListener;
-import antistatic.spinnerwheel.adapters.TimeAdapter;
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.adapters.CustomDividerItemDecoration;
-import twoAK.runboyrun.adapters.DataAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.fragments.comment_activity.CommentRecyclerFragment;
-import twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment;
-import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.request.body.CommentBody;
-import twoAK.runboyrun.responses.GetCommentsResponse;
-import twoAK.runboyrun.responses.objects.CommentObject;
 
 public class CommentActivity extends BaseActivity {
 

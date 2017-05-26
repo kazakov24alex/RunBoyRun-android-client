@@ -1,66 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity2_personal_page"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
-    <!-- Profile loading progress -->
+    <!-- Getting data info -->
     <ProgressBar
-        android:id="@+id/profile_loading_progress_dialog"
-        style="?android:attr/progressBarStyleLarge"
+        android:id="@+id/profile_activity_loading_progress"
+        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/profile_activity_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="1dp">
+        android:layout_height="match_parent" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="2dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/background_custom">
-            <fragment
-                android:id="@+id/profile_activity_fragment_profile_panel"
-                android:name="twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="3dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <fragment
-                android:id="@+id/profile_activity_fragment_buttons_panel"
-                android:name="twoAK.runboyrun.fragments.profile_activity.ButtonPanelFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="3dp" />
-
-        <fragment
-            android:id="@+id/profile_activity_fragment_news_feed"
-            android:name="twoAK.runboyrun.fragments.profile_activity.NewsFeedFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

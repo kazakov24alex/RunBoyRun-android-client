@@ -20,8 +20,7 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:orientation="vertical"
-                android:onClick="onFriendsClick">
+                android:orientation="vertical">
                 <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/profile_buttons_fragment_squareimage_friends"
                     android:layout_width="match_parent"
@@ -53,8 +52,7 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:orientation="vertical"
-                android:onClick="onStatsClick">
+                android:orientation="vertical">
                 <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/profile_buttons_fragment_squareimage_stats"
                     android:layout_width="match_parent"
@@ -86,8 +84,7 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:orientation="vertical"
-                android:onClick="onRecordsClick">
+                android:orientation="vertical">
                 <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/profile_buttons_fragment_squareimage_records"
                     android:layout_width="match_parent"
@@ -118,8 +115,7 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:orientation="vertical"
-                android:onClick="onVictoriesClick">
+                android:orientation="vertical">
 
                 <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/profile_buttons_fragment_squareimage_victories"

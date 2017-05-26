@@ -158,7 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
             case R.id.navdrawer_item_personal_page:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("ATHLETE_ID", -1);
+                intent.putExtra("ATHLETE_ID", 1);
                 createBackStack(intent);
                 break;
 

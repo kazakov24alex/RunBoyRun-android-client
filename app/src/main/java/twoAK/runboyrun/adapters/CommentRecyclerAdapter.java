@@ -17,7 +17,7 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.responses.objects.CommentObject;
 
-public class DataAdapter extends RecyclerView.Adapter {
+public class CommentRecyclerAdapter extends RecyclerView.Adapter {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -32,7 +32,7 @@ public class DataAdapter extends RecyclerView.Adapter {
 
 
 
-    public DataAdapter(List<CommentObject> comments, RecyclerView recyclerView) {
+    public CommentRecyclerAdapter(List<CommentObject> comments, RecyclerView recyclerView) {
         commentList = comments;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
