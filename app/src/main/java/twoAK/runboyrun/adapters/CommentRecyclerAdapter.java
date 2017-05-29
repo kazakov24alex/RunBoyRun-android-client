@@ -23,8 +23,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter {
 
     private List<CommentObject> commentList;
 
-    // The minimum amount of items to have below your current scroll position
-    // before loading more.
+    // The minimum amount of items to have below your current scroll position before loading more.
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;

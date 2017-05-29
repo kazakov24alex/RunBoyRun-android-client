@@ -7,8 +7,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -19,10 +22,11 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.CustomDividerItemDecoration;
-import twoAK.runboyrun.adapters.PersonalPageRecyclerAdapter;
+import twoAK.runboyrun.adapters.NewsRecyclerAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
+import twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
@@ -35,22 +39,29 @@ public class ProfileActivity extends BaseActivity {
 
     static final int NEWS_PER_PAGE = 3;
 
-    private GetProfileInfoTask  mGetProfileTask;
-    private GetNewsPageTask     mGetNewsPageTask;
+    private GetProfileTask  mGetProfileTask;
+    private GetNewsPageTask mGetNewsPageTask;
 
-    private RecyclerView mRecyclerView;
+    private View mFormView;
     private View mProgressView;
-
-    private int mAthleteID;
-    private int mAllNewsNum;
-    private int mLastLoadedPage;
+    private RecyclerView mRecyclerView;
+    private ProfilePanelFragment mProfilePanelFragment;
+    private Toolbar mToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     protected Handler mHandler;
-
     private LinearLayoutManager mLinearLayoutManager;
-    private PersonalPageRecyclerAdapter mPersonalPageRecyclerAdapter;
+    private NewsRecyclerAdapter mPersonalPageRecyclerAdapter;
 
+
+    private int mAthleteID;
+    private String mToolbarTitle;
+    private int mAllNewsNum;
+    private int mLastLoadedPage;
     private List<NewsObject> mNewsList;
+
+
+
 
 
     @Override
@@ -60,6 +71,7 @@ public class ProfileActivity extends BaseActivity {
 
         // Set nav drawer selected to first item in list
         mNavigationView.getMenu().getItem(1).setChecked(true);
+        getActionBarToolbar().setVisibility(View.GONE);
 
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
@@ -73,59 +85,55 @@ public class ProfileActivity extends BaseActivity {
             finish();
         }
 
+
         mAllNewsNum = -1;
 
-        mProgressView = findViewById(R.id.profile_activity_loading_progress);
-        mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
+        mProgressView   = findViewById(R.id.profile_activity_loading_progress);
+        mFormView       = findViewById(R.id.profile_activity_coordinator_layout);
+        mProfilePanelFragment = (ProfilePanelFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.profile_activity_fragment_profile);
 
+        initToolbar();
+        initRecycler();
 
-        mGetProfileTask = new GetProfileInfoTask(mAthleteID);
+        mGetProfileTask = new GetProfileTask(mAthleteID);
         mGetProfileTask.execute((Void) null);
     }
 
+    private void initToolbar() {
 
-    private void recyclerSetting(GetProfileResponse profileResponse) {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbarTitle = " ";
 
-        mHandler = new Handler();
-        mLinearLayoutManager = new LinearLayoutManager(this);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.profile_activity_collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(" ");
 
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.profile_activity_app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
 
-        mNewsList = new ArrayList<NewsObject>();
-        mPersonalPageRecyclerAdapter = new PersonalPageRecyclerAdapter(mNewsList, profileResponse, mRecyclerView);
-        mPersonalPageRecyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore() {
-                if(mNewsList.size() < mAllNewsNum) {
-                    //add null , so the adapter will check view_type and show progress bar at bottom
-                    /*mNewsList.add(null);
-                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(mToolbarTitle);
 
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // remove progress item
-                            mNewsList.remove(mNewsList.size() - 1);
-                            mPersonalPageRecyclerAdapter.notifyItemRemoved(mNewsList.size());
-                            //add items one by one
-                            *//*mGetCommentsPageTask = new CommentRecyclerFragment.GetCommentsPageTask(mActivityID, COMMENTS_PER_PAGE, ++mLastLoadedPage);
-                            mGetCommentsPageTask.execute((Void) null);
-*//*
-                        }
-                    }, 3000);*/
+                    isShow = true;
+                } else if(isShow) {
+                    collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                    isShow = false;
                 }
             }
         });
-        mRecyclerView.setAdapter(mPersonalPageRecyclerAdapter);
-
-        // installation "header of activity page" on top of recycler view
-        mNewsList.add(null);
-        mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
 
     }
 
-/*    public void onFriendsClick(View view) {
+
+    /*public void onFriendsClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onFriendsClick");
     }
 
@@ -143,11 +151,66 @@ public class ProfileActivity extends BaseActivity {
 
 
 
-    public class GetProfileInfoTask extends AsyncTask<Void, Void, GetProfileResponse> {
+    private void initRecycler() {
+
+        mHandler = new Handler();
+        mLinearLayoutManager = new LinearLayoutManager(this);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
+
+        mNewsList = new ArrayList<NewsObject>();
+        mPersonalPageRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView);
+        mPersonalPageRecyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                Log.i(APP_TAG, ACTIVITY_TAG + "onLoadMore");
+                if(mNewsList.size() < mAllNewsNum) {
+
+
+
+                    //add null , so the adapter will check view_type and show progress bar at bottom
+                    mNewsList.add(null);
+                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
+
+
+                    //   remove progress item
+                    mNewsList.remove(mNewsList.size() - 1);
+                    mPersonalPageRecyclerAdapter.notifyItemRemoved(mNewsList.size());
+
+                    //add items one by one  // ++mLastLoadedPage
+                    mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, 1);
+                    mGetNewsPageTask.execute((Void)null);
+
+
+                    mHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+
+                                            }
+                                        }, 3000);
+
+                                    }
+                                }
+                            });
+                    mRecyclerView.setAdapter(mPersonalPageRecyclerAdapter);
+
+                    // installation "header of activity page" on top of recycler view
+                    mNewsList.add(null);
+                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
+
+    }
+
+
+
+
+    public class GetProfileTask extends AsyncTask<Void, Void, GetProfileResponse> {
         private String errMes;  // error message possible
         private int athlete_id;
 
-        GetProfileInfoTask(int athlete_id) {
+        GetProfileTask(int athlete_id) {
             errMes = null;
             this.athlete_id = athlete_id;
 
@@ -180,10 +243,12 @@ public class ProfileActivity extends BaseActivity {
                 return;
             }
 
+            showProgressCircle(false);
             Log.i(APP_TAG, ACTIVITY_TAG + "profile data was loaded");
+            Toast.makeText(getApplicationContext(), "profile data was loaded", Toast.LENGTH_SHORT).show();
 
-            // setting of recycler view (adaper, scroll listener, etc.
-            recyclerSetting(profileResponse);
+            mProfilePanelFragment.setProfileData(profileResponse);
+            mToolbarTitle = profileResponse.getName() + " " + profileResponse.getSurname();
 
             mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, 1);
             mGetNewsPageTask.execute((Void)null);
@@ -203,6 +268,10 @@ public class ProfileActivity extends BaseActivity {
             this.athlete_id = athlete_id;
             this.news_num = news_num;
             this.page_num = page_num;
+
+            //add null , so the adapter will check view_type and show progress bar at bottom
+            mNewsList.add(null);
+            mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size());
         }
 
         @Override
@@ -231,22 +300,37 @@ public class ProfileActivity extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "" + newsResponse.getNews().size(), Toast.LENGTH_SHORT).show();
 
                     if (mAllNewsNum == -1) {
-                        mAllNewsNum = newsResponse.getNews().get(0).getOrder();
+                        //mAllNewsNum = newsResponse.getNews().get(0).getOrder();
+                        mAllNewsNum = 365;
+
                         int pagesNum = mAllNewsNum / NEWS_PER_PAGE + 1;
                     }
 
-
+                    //   remove progress item
                     mNewsList.remove(mNewsList.size() - 1);
                     mPersonalPageRecyclerAdapter.notifyItemRemoved(mNewsList.size());
 
-                    for (int i = 0; i < newsResponse.getNews().size(); i++) {
-                        mNewsList.add(newsResponse.getNews().get(i));
+                    NewsObject news = new NewsObject();
+                    news.setSurname("lala");
+                    news.setAthlete_id(2);
+                    news.setDatetime_start("lala");
+                    news.setDescription("lala");
+                    news.setDislike_num(2);
+                    news.setDistance(23.2);
+                    news.setId(2);
+                    news.setMy_value(true);
+                    news.setName("lala");
+                    news.setOrder(4);
+                    news.setSport_type("RUNNING");
+
+                    for (int i = 0; i < 1; i++) {
+                        mNewsList.add(news);
                     }
+                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE=" + mNewsList.size());
 
-                    mNewsList = newsResponse.getNews();
+                    //mNewsList = newsResponse.getNews();
 
-                    Log.i(APP_TAG, ACTIVITY_TAG + mNewsList.size());
-                    mPersonalPageRecyclerAdapter.notifyItemInserted(3);
+                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size());
                     //mPersonalPageRecyclerAdapter.setLoaded();
 
 
@@ -261,9 +345,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    /**
-     * Shows the progress UI and hides the UI form.
-     */
+    /** Shows the progress UI and hides the UI form. */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgressCircle(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -272,12 +354,12 @@ public class ProfileActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRecyclerView.animate().setDuration(shortAnimTime).alpha(
+            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -293,7 +375,7 @@ public class ProfileActivity extends BaseActivity {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

@@ -53,7 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-
         getActionBarToolbar();
 
         setupNavDrawer();
@@ -166,6 +165,9 @@ public abstract class BaseActivity extends AppCompatActivity
                 intent = new Intent(this, ActivityPageActivity.class);
                 intent.putExtra("ACTIVITY_ID", 2);
                 createBackStack(intent);
+                break;
+
+            case R.id.navdrawer_item_statistics:
                 break;
 
             case R.id.navdrawer_item_logout:

@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,29 +14,21 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
-import twoAK.runboyrun.fragments.profile_activity.ButtonPanelFragment;
 import twoAK.runboyrun.fragments.profile_activity.NewsCardFragment;
-import twoAK.runboyrun.fragments.profile_activity.ProfilePanelFragment;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
-import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.objects.NewsObject;
 
 
-public class PersonalPageRecyclerAdapter extends RecyclerView.Adapter {
+public class NewsRecyclerAdapter extends RecyclerView.Adapter {
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "[" + ConditionActivity.class.getName() + "]: ";
 
-    private final int VIEW_PROFILE      = 0;
-    private final int VIEW_PROGRESS_BAR = 1;
-    private final int VIEW_NEWS         = 2;
-
-    private boolean isProfileLoaded;
-
+    private final int VIEW_PROGRESS_BAR = 0;
+    private final int VIEW_NEWS         = 1;
 
     private List<NewsObject> mNewsList;
-    private GetProfileResponse mProfile;
-    // The minimum amount of items to have below your current scroll position
-    // before loading more.
+
+    // The minimum amount of items to have below your current scroll position before loading more.
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
@@ -45,11 +36,8 @@ public class PersonalPageRecyclerAdapter extends RecyclerView.Adapter {
 
 
 
-    public PersonalPageRecyclerAdapter(List<NewsObject> news, GetProfileResponse profileResponse, RecyclerView recyclerView) {
-        isProfileLoaded = false;
-
+    public NewsRecyclerAdapter(List<NewsObject> news, RecyclerView recyclerView) {
         mNewsList = news;
-        mProfile = profileResponse;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
@@ -81,62 +69,33 @@ public class PersonalPageRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "GET ITEM TYPE");
-        if (mNewsList.get(position) == null) {
-            if(!isProfileLoaded) {
-                isProfileLoaded = true;
-                return VIEW_PROFILE;
-            } else {
-                return VIEW_PROGRESS_BAR;
-            }
-        } else {
-            return VIEW_NEWS;
-        }
+        return mNewsList.get(position) != null ? VIEW_NEWS : VIEW_PROGRESS_BAR;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        RecyclerView.ViewHolder viewHolder;
-        View view;
+        RecyclerView.ViewHolder vh;
+        if (viewType == VIEW_NEWS) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_newsfeed_list, parent, false);
 
-        Log.i(APP_TAG, ACTIVITY_TAG + "OPAPA!");
+            vh = new NewsHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.progressbar_item, parent, false);
 
-        switch (viewType) {
-            case VIEW_PROFILE:
-                Log.i(APP_TAG, ACTIVITY_TAG + "PROFILE VIEW LOADED");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile_panel, parent, false);
-                viewHolder = new ProfilePageHeaderHolder(view);
-                return viewHolder;
-
-            case VIEW_NEWS:
-                Log.i(APP_TAG, ACTIVITY_TAG + "NEWS VIEW LOADED");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newsfeed_list, parent, false);
-                viewHolder = new NewsHolder(view);
-                return viewHolder;
-
-            case VIEW_PROGRESS_BAR:
-                Log.i(APP_TAG, ACTIVITY_TAG + "PROGRESS VIEW LOADED");
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
-                viewHolder = new ProgressViewHolder(view);
-                return viewHolder;
+            vh = new ProgressViewHolder(v);
         }
-
-        return null;
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ProfilePageHeaderHolder) {
-            ((ProfilePageHeaderHolder) holder).setProfile(mProfile);
-        }
-
         if (holder instanceof NewsHolder) {
             NewsObject news = (NewsObject) mNewsList.get(position);
             ((NewsHolder) holder).setNewsObject(news);
-        }
-
-        if (holder instanceof ProgressViewHolder) {
+        } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
     }
@@ -173,7 +132,6 @@ public class PersonalPageRecyclerAdapter extends RecyclerView.Adapter {
 
         public void setNewsObject(NewsObject newsObject) {
             this.newsObject = newsObject;
-
             mNewsCardFragment.setContent(newsObject);
         }
 
@@ -189,24 +147,5 @@ public class PersonalPageRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-
-    public static class ProfilePageHeaderHolder extends RecyclerView.ViewHolder {
-        FragmentManager fm;
-        public ProfilePanelFragment profilePanelFragment;
-        public ButtonPanelFragment buttonPanelFragment;
-
-        public ProfilePageHeaderHolder(View view) {
-            super(view);
-
-            fm = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
-
-            profilePanelFragment = (ProfilePanelFragment) fm.findFragmentById(R.id.activity_page_recycleritem_profile_panel_fragment);
-            buttonPanelFragment = (ButtonPanelFragment) fm.findFragmentById(R.id.iactivity_page_recycleritem_buttons_panel_fragment);
-        }
-
-        public void setProfile(GetProfileResponse profile) {
-            profilePanelFragment.setProfileData(profile);
-        }
-    }
 
 }

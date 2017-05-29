@@ -73,13 +73,13 @@
             android:label="Activity1"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
+        <!--<activity
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_2"
             android:parentActivityName=".activities.StartNewActivityActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="twoAK.runboyrun.activities.StartNewActivityActivity"/>
-        </activity>
+        </activity>-->
 
         <activity android:name=".activities.TrackActivityActivity"
             android:label="TrackActivity"
@@ -106,6 +106,9 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.CommentActivity"
             android:label="Comments"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.ProfileActivity"
+            android:label="CollapsingToolbar"
             android:theme="@style/AppTheme.NoActionBar"/>
 
 
