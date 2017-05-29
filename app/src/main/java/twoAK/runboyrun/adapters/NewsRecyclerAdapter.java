@@ -2,9 +2,9 @@
 package twoAK.runboyrun.adapters;
 
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,11 +77,13 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
 
         RecyclerView.ViewHolder vh;
         if (viewType == VIEW_NEWS) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_NEWS");
             View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_newsfeed_list, parent, false);
+                    R.layout.item_comment_list, parent, false);
 
             vh = new NewsHolder(v);
         } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_PROGRESS");
             View v = LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.progressbar_item, parent, false);
 
@@ -125,14 +127,14 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
             super(view);
             mView = view;
 
-            fm = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
-            mNewsCardFragment = (NewsCardFragment) fm.findFragmentById(R.id.item_news_feed_cardview);
+            /*fm = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
+            mNewsCardFragment = (NewsCardFragment) fm.findFragmentById(R.id.item_news_feed_cardview);*/
 
         }
 
         public void setNewsObject(NewsObject newsObject) {
             this.newsObject = newsObject;
-            mNewsCardFragment.setContent(newsObject);
+            //mNewsCardFragment.setContent(newsObject);
         }
 
     }

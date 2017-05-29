@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ProfileActivity extends BaseActivity {
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
-    static final int NEWS_PER_PAGE = 3;
+    static final int NEWS_PER_PAGE = 2;
 
     private GetProfileTask  mGetProfileTask;
     private GetNewsPageTask mGetNewsPageTask;
@@ -51,7 +52,7 @@ public class ProfileActivity extends BaseActivity {
 
     protected Handler mHandler;
     private LinearLayoutManager mLinearLayoutManager;
-    private NewsRecyclerAdapter mPersonalPageRecyclerAdapter;
+    private NewsRecyclerAdapter mNewsRecyclerAdapter;
 
 
     private int mAthleteID;
@@ -61,7 +62,8 @@ public class ProfileActivity extends BaseActivity {
     private List<NewsObject> mNewsList;
 
 
-
+    private ListView listView;
+    private int preLast;
 
 
     @Override
@@ -87,6 +89,7 @@ public class ProfileActivity extends BaseActivity {
 
 
         mAllNewsNum = -1;
+        mLastLoadedPage = 0;
 
         mProgressView   = findViewById(R.id.profile_activity_loading_progress);
         mFormView       = findViewById(R.id.profile_activity_coordinator_layout);
@@ -133,9 +136,10 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    /*public void onFriendsClick(View view) {
+    public void onFriendsClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onFriendsClick");
     }
+
 
     public void onStatsClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onStatsClick");
@@ -147,7 +151,7 @@ public class ProfileActivity extends BaseActivity {
 
     public void onVictoriesClick(View view) {
         Log.i(APP_TAG, ACTIVITY_TAG + "onVictioriesClick");
-    }*/
+    }
 
 
 
@@ -161,49 +165,36 @@ public class ProfileActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
 
         mNewsList = new ArrayList<NewsObject>();
-        mPersonalPageRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView);
-        mPersonalPageRecyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mNewsRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView);
+        mNewsRecyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 Log.i(APP_TAG, ACTIVITY_TAG + "onLoadMore");
-                if(mNewsList.size() < mAllNewsNum) {
-
-
-
+                if (mNewsList.size() < mAllNewsNum) {
                     //add null , so the adapter will check view_type and show progress bar at bottom
                     mNewsList.add(null);
-                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
-
-
-                    //   remove progress item
-                    mNewsList.remove(mNewsList.size() - 1);
-                    mPersonalPageRecyclerAdapter.notifyItemRemoved(mNewsList.size());
-
-                    //add items one by one  // ++mLastLoadedPage
-                    mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, 1);
-                    mGetNewsPageTask.execute((Void)null);
+                    mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
 
 
                     mHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
+                        @Override
+                        public void run() {
+                            //   remove progress item
+                            mNewsList.remove(mNewsList.size() - 1);
+                            mNewsRecyclerAdapter.notifyItemRemoved(mNewsList.size());
+                            //add items one by one
+                            mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, ++mLastLoadedPage);
+                            mGetNewsPageTask.execute((Void) null);
 
-
-                                            }
-                                        }, 3000);
-
-                                    }
-                                }
-                            });
-                    mRecyclerView.setAdapter(mPersonalPageRecyclerAdapter);
-
-                    // installation "header of activity page" on top of recycler view
-                    mNewsList.add(null);
-                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
+                            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+                        }
+                    }, 3000);
+                }
+            }
+        });
+        mRecyclerView.setAdapter(mNewsRecyclerAdapter);
 
     }
-
-
 
 
     public class GetProfileTask extends AsyncTask<Void, Void, GetProfileResponse> {
@@ -243,7 +234,6 @@ public class ProfileActivity extends BaseActivity {
                 return;
             }
 
-            showProgressCircle(false);
             Log.i(APP_TAG, ACTIVITY_TAG + "profile data was loaded");
             Toast.makeText(getApplicationContext(), "profile data was loaded", Toast.LENGTH_SHORT).show();
 
@@ -271,7 +261,7 @@ public class ProfileActivity extends BaseActivity {
 
             //add null , so the adapter will check view_type and show progress bar at bottom
             mNewsList.add(null);
-            mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size());
+            mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size());
         }
 
         @Override
@@ -292,7 +282,6 @@ public class ProfileActivity extends BaseActivity {
             if (newsResponse == null)   {
                 Log.i(APP_TAG, ACTIVITY_TAG + "getting news error: " + errMes);
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
-                finish();
 
             } else {
                 if (newsResponse.getNews() != null) {
@@ -301,40 +290,27 @@ public class ProfileActivity extends BaseActivity {
 
                     if (mAllNewsNum == -1) {
                         //mAllNewsNum = newsResponse.getNews().get(0).getOrder();
-                        mAllNewsNum = 365;
-
+                        mAllNewsNum = newsResponse.getNews().get(0).getOrder();
                         int pagesNum = mAllNewsNum / NEWS_PER_PAGE + 1;
+                        Log.i(APP_TAG, ACTIVITY_TAG + "PAGES_NUM="+pagesNum);
                     }
 
                     //   remove progress item
                     mNewsList.remove(mNewsList.size() - 1);
-                    mPersonalPageRecyclerAdapter.notifyItemRemoved(mNewsList.size());
-
-                    NewsObject news = new NewsObject();
-                    news.setSurname("lala");
-                    news.setAthlete_id(2);
-                    news.setDatetime_start("lala");
-                    news.setDescription("lala");
-                    news.setDislike_num(2);
-                    news.setDistance(23.2);
-                    news.setId(2);
-                    news.setMy_value(true);
-                    news.setName("lala");
-                    news.setOrder(4);
-                    news.setSport_type("RUNNING");
-
-                    for (int i = 0; i < 1; i++) {
-                        mNewsList.add(news);
+                    mNewsRecyclerAdapter.notifyItemRemoved(mNewsList.size());
+                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE BEFORE=" + mNewsList.size());
+                    for (int i = 0; i < newsResponse.getNews().size(); i++) {
+                        mNewsList.add(newsResponse.getNews().get(i));
                     }
-                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE=" + mNewsList.size());
-
-                    //mNewsList = newsResponse.getNews();
-
-                    mPersonalPageRecyclerAdapter.notifyItemInserted(mNewsList.size());
-                    //mPersonalPageRecyclerAdapter.setLoaded();
+                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE AFTER=" + mNewsList.size());
+                    mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size());
+                    mNewsRecyclerAdapter.setLoaded();
 
 
                 } else {
+                    mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size());
+                    mNewsRecyclerAdapter.setLoaded();
+
                     Log.i(APP_TAG, ACTIVITY_TAG + "news are absent");
                     Toast.makeText(getApplicationContext(), "news are absent", Toast.LENGTH_SHORT).show();
                 }
@@ -343,6 +319,18 @@ public class ProfileActivity extends BaseActivity {
             showProgressCircle(false);
         }
     }
+
+    /*public void addCard() {
+        // получаем экземпляр FragmentTransaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // добавляем фрагмент
+        NewsCardFragment mNewsCardFragment = new NewsCardFragment();
+
+        fragmentTransaction.add(R.id.profile_activity_scroll_view, mNewsCardFragment);
+        fragmentTransaction.commit();
+    }*/
 
 
     /** Shows the progress UI and hides the UI form. */
