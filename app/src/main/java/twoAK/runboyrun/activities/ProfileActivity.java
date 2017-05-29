@@ -106,7 +106,7 @@ public class ProfileActivity extends BaseActivity {
     private void initToolbar() {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        //setSupportActionBar(mToolbar);
         mToolbarTitle = " ";
 
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.profile_activity_collapsing_toolbar);
@@ -165,7 +165,7 @@ public class ProfileActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
 
         mNewsList = new ArrayList<NewsObject>();
-        mNewsRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView);
+        mNewsRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView, this);
         mNewsRecyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -292,17 +292,16 @@ public class ProfileActivity extends BaseActivity {
                         //mAllNewsNum = newsResponse.getNews().get(0).getOrder();
                         mAllNewsNum = newsResponse.getNews().get(0).getOrder();
                         int pagesNum = mAllNewsNum / NEWS_PER_PAGE + 1;
-                        Log.i(APP_TAG, ACTIVITY_TAG + "PAGES_NUM="+pagesNum);
                     }
 
                     //   remove progress item
                     mNewsList.remove(mNewsList.size() - 1);
                     mNewsRecyclerAdapter.notifyItemRemoved(mNewsList.size());
-                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE BEFORE=" + mNewsList.size());
+
                     for (int i = 0; i < newsResponse.getNews().size(); i++) {
                         mNewsList.add(newsResponse.getNews().get(i));
                     }
-                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE AFTER=" + mNewsList.size());
+
                     mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size());
                     mNewsRecyclerAdapter.setLoaded();
 

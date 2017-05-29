@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_newsfeed_list_container"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <fragment
-        android:id="@+id/item_news_feed_cardview"
-        android:name="twoAK.runboyrun.fragments.profile_activity.NewsCardFragment"
+
+    <Button
+        android:id="@+id/button2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </LinearLayout>

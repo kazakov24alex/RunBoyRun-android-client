@@ -1,7 +1,9 @@
 
 package twoAK.runboyrun.adapters;
 
+import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,8 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
+import twoAK.runboyrun.activities.ProfileActivity;
+import twoAK.runboyrun.fragments.activity_page.CommentPreviewFragment;
 import twoAK.runboyrun.fragments.profile_activity.NewsCardFragment;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.responses.objects.NewsObject;
@@ -26,6 +30,10 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
     private final int VIEW_PROGRESS_BAR = 0;
     private final int VIEW_NEWS         = 1;
 
+    private int ownID = 1;
+
+    private Context mContext;
+
     private List<NewsObject> mNewsList;
 
     // The minimum amount of items to have below your current scroll position before loading more.
@@ -35,9 +43,9 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
     private OnLoadMoreListener onLoadMoreListener;
 
 
-
-    public NewsRecyclerAdapter(List<NewsObject> news, RecyclerView recyclerView) {
+    public NewsRecyclerAdapter(List<NewsObject> news, RecyclerView recyclerView, Context context) {
         mNewsList = news;
+        mContext = context;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
@@ -77,16 +85,12 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
 
         RecyclerView.ViewHolder vh;
         if (viewType == VIEW_NEWS) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_NEWS");
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_comment_list, parent, false);
-
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newsfeed_list, parent, false);
             vh = new NewsHolder(v);
+            v.setId(v.getId()+(ownID++));
+            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_ID = "+v.getId());
         } else {
-            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_PROGRESS");
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.progressbar_item, parent, false);
-
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
             vh = new ProgressViewHolder(v);
         }
         return vh;
@@ -124,7 +128,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
         private View mView;
 
         public NewsHolder(View view) {
-            super(view);
+                super(view);
             mView = view;
 
             /*fm = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
@@ -135,6 +139,17 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
         public void setNewsObject(NewsObject newsObject) {
             this.newsObject = newsObject;
             //mNewsCardFragment.setContent(newsObject);
+
+            // получаем экземпляр FragmentTransaction
+            FragmentManager fm = ((ProfileActivity) mView.getContext()).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+            // добавляем фрагмент
+            CommentPreviewFragment mCommentPreviewFragment = new CommentPreviewFragment();
+            mCommentPreviewFragment.setContent("Alex Kazakov", "URRRAAAA!!!");
+
+            fragmentTransaction.add(mView.getId(), mCommentPreviewFragment);
+            fragmentTransaction.commit();
         }
 
     }
