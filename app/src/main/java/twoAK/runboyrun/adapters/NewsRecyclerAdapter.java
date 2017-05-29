@@ -17,7 +17,6 @@ import java.util.List;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.activities.ProfileActivity;
-import twoAK.runboyrun.fragments.activity_page.CommentPreviewFragment;
 import twoAK.runboyrun.fragments.profile_activity.NewsCardFragment;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.responses.objects.NewsObject;
@@ -128,28 +127,21 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
         private View mView;
 
         public NewsHolder(View view) {
-                super(view);
+            super(view);
             mView = view;
-
-            /*fm = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
-            mNewsCardFragment = (NewsCardFragment) fm.findFragmentById(R.id.item_news_feed_cardview);*/
-
         }
 
         public void setNewsObject(NewsObject newsObject) {
             this.newsObject = newsObject;
-            //mNewsCardFragment.setContent(newsObject);
 
-            // получаем экземпляр FragmentTransaction
             FragmentManager fm = ((ProfileActivity) mView.getContext()).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-            // добавляем фрагмент
-            CommentPreviewFragment mCommentPreviewFragment = new CommentPreviewFragment();
-            mCommentPreviewFragment.setContent("Alex Kazakov", "URRRAAAA!!!");
-
-            fragmentTransaction.add(mView.getId(), mCommentPreviewFragment);
+            NewsCardFragment mNewsCardFragment = new NewsCardFragment();
+            fragmentTransaction.add(mView.getId(), mNewsCardFragment);
             fragmentTransaction.commit();
+
+            mNewsCardFragment.setContent(newsObject);
         }
 
     }

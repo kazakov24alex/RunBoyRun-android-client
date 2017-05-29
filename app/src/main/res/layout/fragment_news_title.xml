@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/news_title_fragment_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="1dp"
+        android:paddingLeft="1dp"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <twoAK.runboyrun.adapters.SquareImageView
+            android:id="@+id/news_title_fragment_image_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="22"
+            android:padding="2dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/news_title_fragment_text_name_surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="12"
+            android:paddingLeft="10dp"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="18"
+            android:orientation="vertical"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/news_title_fragment_text_time_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/news_title_fragment_text_date_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

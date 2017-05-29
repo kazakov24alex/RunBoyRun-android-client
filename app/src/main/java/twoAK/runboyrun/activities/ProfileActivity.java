@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.adapters.CustomDividerItemDecoration;
 import twoAK.runboyrun.adapters.NewsRecyclerAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
@@ -162,7 +161,6 @@ public class ProfileActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.profile_activity_recycler_view);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.addItemDecoration(new CustomDividerItemDecoration(this));
 
         mNewsList = new ArrayList<NewsObject>();
         mNewsRecyclerAdapter = new NewsRecyclerAdapter(mNewsList, mRecyclerView, this);
