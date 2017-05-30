@@ -7,7 +7,7 @@
 
     <color name="grey_light">#16cc05</color>
     <color name="dark">#4b4b4b</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white">#ffffff</color>
 
     <color name="vk">#36638e</color>
     <color name="facebook">#3b5998</color>
@@ -28,4 +28,18 @@
     <color name="TEXT_GREY">#b0b1b5</color>
     <color name="TEXT_SELECTED">#5186c2</color>
     <color name="DIVIDER_RECYCLER">#D9D9D9</color>
+
+
+    <color name="red">#F00</color>
+    <color name="green">#0F0</color>
+    <color name="blue">#00F</color>
+    <color name="yellow">#FF0</color>
+
+    <integer-array name="color_array">
+        <item>@color/red</item>
+        <item>@color/green</item>
+        <item>@color/blue</item>
+        <item>@color/yellow</item>
+    </integer-array>
+
 </resources>

@@ -1,4 +1,3 @@
-
 package twoAK.runboyrun.adapters;
 
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -25,10 +23,8 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "[" + ConditionActivity.class.getName() + "]: ";
 
-    private final int VIEW_PROGRESS_BAR = 0;
-    private final int VIEW_NEWS         = 1;
+    private final int VIEW_NEWS = 0;
 
-    private int ownID = 1;
 
     private Context mContext;
 
@@ -49,7 +45,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
 
-            recyclerView
+           /* recyclerView
                     .addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrolled(RecyclerView recyclerView,
@@ -70,38 +66,30 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
                                 loading = true;
                             }
                         }
-                    });
+                    });*/
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mNewsList.get(position) != null ? VIEW_NEWS : VIEW_PROGRESS_BAR;
+        return VIEW_NEWS;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         RecyclerView.ViewHolder vh;
-        if (viewType == VIEW_NEWS) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newsfeed_list, parent, false);
-            v.setId(View.generateViewId()*2);
-            vh = new NewsHolder(v, parent);
-        } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
-            vh = new ProgressViewHolder(v);
-        }
+
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newsfeed_list, parent, false);
+        v.setId(View.generateViewId()*2);
+        vh = new NewsHolder(v, parent);
+
         return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof NewsHolder) {
-            NewsObject news = (NewsObject) mNewsList.get(position);
-            ((NewsHolder) holder).setNewsObject(news);
-        } else {
-            ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
-        }
+        NewsObject news = (NewsObject) mNewsList.get(position);
+        ((NewsHolder) holder).setNewsObject(news);
     }
 
     public void setLoaded() {
@@ -144,16 +132,6 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
             mNewsCardFragment.setContent(newsObject);
         }
 
-    }
-
-
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
-
-        public ProgressViewHolder(View v) {
-            super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.item_progress_bar);
-        }
     }
 
 
