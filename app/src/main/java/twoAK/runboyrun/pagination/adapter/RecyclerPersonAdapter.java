@@ -1,36 +1,40 @@
 package twoAK.runboyrun.pagination.adapter;
 
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.pagination.data.Person;
+import twoAK.runboyrun.fragments.profile_activity.NewsCardFragment;
+import twoAK.runboyrun.responses.objects.NewsObject;
 
-public class RecyclerPersonAdapter extends RecyclerView.Adapter<RecyclerPersonAdapter.PersonVH> implements RecyclerOnItemClickListener {
+public class RecyclerPersonAdapter extends RecyclerView.Adapter<RecyclerPersonAdapter.NewsHolder> implements RecyclerOnItemClickListener {
 
-    private final List<Person> data;
+    private final List<NewsObject> data;
+    private FragmentManager mFragmentManager;
 
-    public RecyclerPersonAdapter(List<Person> data) {
+    public RecyclerPersonAdapter(List<NewsObject> data, FragmentManager fm) {
         this.data = data;
+        this.mFragmentManager = fm;
     }
 
     @Override
-    public PersonVH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.person_list_item, parent, false);
-        return new PersonVH(view, this);
+        view.setId(View.generateViewId());
+        return new NewsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PersonVH holder, final int position) {
-        Person person = data.get(position);
-        holder.tvFullName.setText(String.format("%s %s, %d", person.getFirstName(), person.getLastName(), person.getAge()));
+    public void onBindViewHolder(NewsHolder holder, final int position) {
+        NewsObject news = data.get(position);
+        holder.setNewsObject(news, mFragmentManager);
     }
 
     @Override
@@ -45,27 +49,35 @@ public class RecyclerPersonAdapter extends RecyclerView.Adapter<RecyclerPersonAd
         notifyItemRemoved(position);
     }
 
-    public void add(List<Person> items) {
+    public void add(List<NewsObject> items) {
         int previousDataSize = this.data.size();
         this.data.addAll(items);
         notifyItemRangeInserted(previousDataSize, items.size());
     }
 
-    public static class PersonVH extends RecyclerView.ViewHolder {
-        TextView tvFullName;
+    public static class NewsHolder extends RecyclerView.ViewHolder {
+        private FragmentManager fm;
+        private NewsCardFragment mNewsCardFragment;
 
-        public PersonVH(View view, final RecyclerOnItemClickListener recyclerOnItemClickListener) {
+        private NewsObject newsObject;
+        private View mView;
+        private ViewGroup mParent;
+
+        public NewsHolder(View view) {
             super(view);
-            this.tvFullName = (TextView) view.findViewById(R.id.tv_full_name);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (recyclerOnItemClickListener != null) {
-                        recyclerOnItemClickListener.onItemClicked(v, getAdapterPosition());
-                    }
-                }
-            });
+            mView = view;
         }
+
+        public void setNewsObject(NewsObject newsObject, FragmentManager fm) {
+            this.newsObject = newsObject;
+
+            NewsCardFragment mNewsCardFragment = new NewsCardFragment();
+
+            fm.beginTransaction().add(mView.getId(), mNewsCardFragment).commit();
+
+            mNewsCardFragment.setContent(newsObject);
+        }
+
     }
 
 }

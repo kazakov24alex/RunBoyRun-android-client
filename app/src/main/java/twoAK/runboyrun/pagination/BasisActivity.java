@@ -96,7 +96,7 @@ public abstract class BasisActivity extends BaseActivity {
         return recyclerViewContainer;
     }
 
-    protected abstract void setupPagination();
+    protected abstract void setupPagination(List<NewsObject> newsList);
 
     private void initToolbar() {
 
