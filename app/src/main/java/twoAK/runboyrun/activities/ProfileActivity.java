@@ -169,24 +169,25 @@ public class ProfileActivity extends BaseActivity {
             public void onLoadMore() {
                 Log.i(APP_TAG, ACTIVITY_TAG + "onLoadMore");
                 if (mNewsList.size() < mAllNewsNum) {
-                    //add null , so the adapter will check view_type and show progress bar at bottom
+                    /*//add null , so the adapter will check view_type and show progress bar at bottom
                     mNewsList.add(null);
-                    mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);
+                    mNewsRecyclerAdapter.notifyItemInserted(mNewsList.size() - 1);*/
 
+                    //add items one by one
+                    mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, ++mLastLoadedPage);
+                    mGetNewsPageTask.execute((Void) null);
 
-                    mHandler.postDelayed(new Runnable() {
+                   /* mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             //   remove progress item
                             mNewsList.remove(mNewsList.size() - 1);
                             mNewsRecyclerAdapter.notifyItemRemoved(mNewsList.size());
-                            //add items one by one
-                            mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, ++mLastLoadedPage);
-                            mGetNewsPageTask.execute((Void) null);
+
 
                             //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
                         }
-                    }, 3000);
+                    }, 3000);*/
                 }
             }
         });

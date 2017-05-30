@@ -3,7 +3,6 @@ package twoAK.runboyrun.adapters;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +35,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
     private List<NewsObject> mNewsList;
 
     // The minimum amount of items to have below your current scroll position before loading more.
-    private int visibleThreshold = 5;
+    private int visibleThreshold = 0;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
@@ -62,9 +61,10 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
                                     .findLastVisibleItemPosition();
                             if (!loading
                                     && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                                Log.i(APP_TAG, ACTIVITY_TAG + "THE END!");
                                 // End has been reached
                                 // Do something
-                                if (onLoadMoreListener != null) {
+                                if (onLoadMoreListener != null && mNewsList.size() != 0) {
                                     onLoadMoreListener.onLoadMore();
                                 }
                                 loading = true;
@@ -85,9 +85,8 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder vh;
         if (viewType == VIEW_NEWS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newsfeed_list, parent, false);
-            vh = new NewsHolder(v);
-            v.setId(v.getId()+(ownID++));
-            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_ID = "+v.getId());
+            v.setId(View.generateViewId()*2);
+            vh = new NewsHolder(v, parent);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
             vh = new ProgressViewHolder(v);
@@ -125,21 +124,22 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter {
 
         private NewsObject newsObject;
         private View mView;
+        private ViewGroup mParent;
 
-        public NewsHolder(View view) {
+        public NewsHolder(View view, ViewGroup parent) {
             super(view);
             mView = view;
+            this.mParent = parent;
         }
 
         public void setNewsObject(NewsObject newsObject) {
             this.newsObject = newsObject;
 
-            FragmentManager fm = ((ProfileActivity) mView.getContext()).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
             NewsCardFragment mNewsCardFragment = new NewsCardFragment();
-            fragmentTransaction.add(mView.getId(), mNewsCardFragment);
-            fragmentTransaction.commit();
+
+            Log.i(APP_TAG, ACTIVITY_TAG + "VIEW_ID=" + mView.getId());
+            ((ProfileActivity) mView.getContext()).getSupportFragmentManager().beginTransaction()
+                    .add(mView.getId(), mNewsCardFragment).commit();
 
             mNewsCardFragment.setContent(newsObject);
         }

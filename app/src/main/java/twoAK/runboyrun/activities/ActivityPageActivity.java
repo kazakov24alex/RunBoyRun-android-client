@@ -30,7 +30,6 @@ import twoAK.runboyrun.fragments.activity_page.LikePanelFragment;
 import twoAK.runboyrun.fragments.activity_page.StatisticsPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.TitleActivityFragment;
 import twoAK.runboyrun.request.body.CommentBody;
-import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.objects.CommentObject;
@@ -46,7 +45,6 @@ public class ActivityPageActivity extends BaseActivity {
     private int mActivityID;
 
     private GetActivityDataTask mGetActivityDataTask;
-    private SendValueTask       mSendValueTask;
     private GetCommentsTask     mGetCommentsTask;
     private SendCommentTask     mSendCommentTask;
 
@@ -121,28 +119,6 @@ public class ActivityPageActivity extends BaseActivity {
         mGetCommentsTask.execute((Void) null);
     }
 
-
-    public void onLikeClick(View view) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "onLikeClick");
-        mLikePanelFragment.onLikeClick();
-
-        mSendValueTask = new SendValueTask(mActivityData.getId(), true);
-        mSendValueTask.execute((Void) null);
-    }
-
-    public void onListClick(View view) {
-        Intent intent = new Intent(ActivityPageActivity.this, ValueActivity.class);
-        intent.putExtra("ACTIVITY_ID", mActivityID);
-        startActivity(intent);
-    }
-
-    public void onDislikeClick(View view) {
-        Log.i(APP_TAG, ACTIVITY_TAG + "onDislikeClick");
-        mLikePanelFragment.onDislikeClick();
-
-        mSendValueTask = new SendValueTask(mActivityData.getId(), false);
-        mSendValueTask.execute((Void) null);
-    }
 
     public void onWriteCommentButtonClick(View view) {
         View settingDialogContent = getLayoutInflater().inflate(R.layout.dialog_comment_write, null);
@@ -244,6 +220,7 @@ public class ActivityPageActivity extends BaseActivity {
                 addCommentReviewPanel(activityData.getDescription());
             }
 
+            mLikePanelFragment.setActivityID(activityData.getId());
             mLikePanelFragment.setLikeNum(activityData.getLike_num());
             mLikePanelFragment.setDislikeNum(activityData.getDislike_num());
             mLikePanelFragment.setMyValue(activityData.getMy_value());
@@ -258,52 +235,6 @@ public class ActivityPageActivity extends BaseActivity {
         protected void onCancelled() {
             showProgressCircle(false);
         }
-    }
-
-    private class SendValueTask extends AsyncTask<Void, Void, Boolean> {
-        private String errMes;  // error message possible
-        private ValueBody valueBody;
-
-        SendValueTask(int activity_id, boolean value) {
-            errMes = null;
-            valueBody = new ValueBody();
-            valueBody.setActivity_id(activity_id);
-            valueBody.setValue(value);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to send value");
-            try {
-                return ApiClient.instance().sendValue(valueBody);
-            } catch(RequestFailedException e) {
-                errMes = getString(R.string.activity_page_error_loading_activity_request_failed);
-            } catch(InsuccessfulResponseException e) {
-                errMes = getString(R.string.activity_page_error_loading_activity_insuccessful);
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean result) {
-            if(result == false) {
-                Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
-                Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_SHORT).show();
-
-                mLikePanelFragment.setLikeNum(mActivityData.getLike_num());
-                mLikePanelFragment.setDislikeNum(mActivityData.getDislike_num());
-                mLikePanelFragment.setMyValue(mActivityData.getMy_value());
-
-                return;
-            } else {
-                Log.i(APP_TAG, ACTIVITY_TAG + "value was sent");
-            }
-
-        }
-
-        /** The task was canceled. */
-        @Override
-        protected void onCancelled() { }
     }
 
     private class GetCommentsTask extends AsyncTask<Void, Void, GetCommentsResponse> {

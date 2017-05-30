@@ -60,6 +60,12 @@ public class NewsCardFragment extends Fragment {
         mTitleNewsFragment = (TitleNewsFragment) fm.findFragmentById(R.id.newscard_cardview_title_fragment);
         mTitleNewsFragment.setContent(mNews.getAthlete_id(), mNews.getName(), mNews.getSurname(), mNews.getDatetime_start());
 
+        mLikePanelFragment = (LikePanelFragment) fm.findFragmentById(R.id.newscard_fragment_value_panel);
+        mLikePanelFragment.setActivityID(mNews.getId());
+        mLikePanelFragment.setLikeNum(mNews.getLike_num());
+        mLikePanelFragment.setDislikeNum(mNews.getDislike_num());
+        mLikePanelFragment.setMyValue(mNews.getMy_value());
+
         mTimeImage = (SquareImageView) rootView.findViewById(R.id.newscard_squareimage_time);
         mTimeImage.setImageResource(R.drawable.result_activity_panel_time);
         mDistanceImage = (SquareImageView) rootView.findViewById(R.id.newscard_squareimage_distance);

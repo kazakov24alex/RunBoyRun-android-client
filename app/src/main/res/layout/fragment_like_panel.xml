@@ -25,8 +25,7 @@
                 android:clickable="true"
                 android:gravity="center_vertical|center_horizontal"
                 android:longClickable="true"
-                android:orientation="horizontal"
-                android:onClick="onLikeClick">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/like_panel_text_like_icon"
@@ -57,8 +56,7 @@
                 android:longClickable="true"
                 android:orientation="horizontal"
                 android:paddingBottom="6dp"
-                android:paddingTop="6dp"
-                android:onClick="onListClick">
+                android:paddingTop="6dp">
 
                 <TextView
                     android:id="@+id/like_panel_text_list_icon"
@@ -81,8 +79,7 @@
                 android:clickable="true"
                 android:gravity="center_vertical|center_horizontal"
                 android:longClickable="true"
-                android:orientation="horizontal"
-                android:onClick="onDislikeClick">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/like_panel_text_dislike_value"
