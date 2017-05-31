@@ -33,14 +33,12 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
 
     private static final int GRID_SPAN = 3;
 
-    private int NEWS_PER_PAGE = 3;
-
     private GetNewsPageTask mGetNewsPageTask;
 
     private RecyclerView recyclerView;
     private RecyclerPersonAdapter adapter;
     private boolean loading = false;
-    private int page = 0;
+    private int loadedPage = 0;
     private Handler handler;
     private Paginate paginate;
 
@@ -48,7 +46,7 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
     // Common options
     protected int threshold = 4;
     protected int totalPages = 3;
-    protected int itemsPerPage = 5;
+    protected int itemsPerPage = 3;
     protected int allItems = -1;
     protected long networkDelay = 5000;
     protected boolean addLoadingRow = true;
@@ -64,7 +62,7 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
         handler = new Handler();
 
 
-        mGetNewsPageTask = new GetNewsPageTask(1, NEWS_PER_PAGE, 1);
+        mGetNewsPageTask = new GetNewsPageTask(1, itemsPerPage, 1);
         mGetNewsPageTask.execute((Void)null);
 
 
@@ -80,7 +78,6 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
         //handler.removeCallbacks(fakeCallback);
         adapter = new RecyclerPersonAdapter(newsList, getSupportFragmentManager());
         loading = false;
-        page = 0;
 
         int layoutOrientation = OrientationHelper.VERTICAL;
         RecyclerView.LayoutManager layoutManager = layoutManager = new LinearLayoutManager(this, layoutOrientation, false);
@@ -112,10 +109,10 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
     public synchronized void onLoadMore() {
         Log.d("Paginate", "onLoadMore");
         loading = true;
-        // Fake asynchronous loading that will generate page of random data after some delay
+        // Fake asynchronous loading that will generate loadedPage of random data after some delay
         // handler.postDelayed(fakeCallback, networkDelay);
         // TODO:
-        mGetNewsPageTask = new GetNewsPageTask(1, NEWS_PER_PAGE, 1);
+        mGetNewsPageTask = new GetNewsPageTask(1, 1, loadedPage+1);
         mGetNewsPageTask.execute((Void)null);
     }
 
@@ -126,13 +123,13 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
 
     @Override
     public boolean hasLoadedAllItems() {
-        return page == totalPages; // If all pages are loaded return true
+        return loadedPage == totalPages; // If all pages are loaded return true
     }
 
    /* private Runnable fakeCallback = new Runnable() {
         @Override
         public void run() {
-            page++;
+            loadedPage++;
             adapter.add(DataProvider.getRandomData(itemsPerPage));
             loading = false;
         }
@@ -185,7 +182,7 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
 
         @Override
         protected GetNewsResponse doInBackground(Void... params) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news page");
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news loadedPage");
             try {
                 return ApiClient.instance().getNewsPage(athlete_id, news_num, page_num);
             } catch (RequestFailedException e) {
@@ -204,18 +201,21 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
 
             } else {
                 if (newsResponse.getNews() != null) {
-                    Log.i(APP_TAG, ACTIVITY_TAG + "news page was loaded");
+                    Log.i(APP_TAG, ACTIVITY_TAG + "news loadedPage was loaded");
                     Toast.makeText(getApplicationContext(), "" + newsResponse.getNews().size(), Toast.LENGTH_SHORT).show();
 
                     if(allItems == -1) {
+                        loadedPage++;
                         allItems = newsResponse.getNews().get(0).getOrder();
-                        totalPages =  allItems / NEWS_PER_PAGE + 1;
+                        totalPages =  allItems / itemsPerPage + 1;
                         setupPagination(newsResponse.getNews());
                     } else {
-                        page++;
+                        loadedPage++;
                         adapter.add(newsResponse.getNews());
                         loading = false;
                     }
+
+                    Log.i(APP_TAG, ACTIVITY_TAG + "PAGE_NUM = "+ loadedPage);
 
                 } else {
                     Log.i(APP_TAG, ACTIVITY_TAG + "news are absent");

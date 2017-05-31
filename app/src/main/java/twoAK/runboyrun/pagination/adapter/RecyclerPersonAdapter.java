@@ -69,6 +69,8 @@ public class RecyclerPersonAdapter extends RecyclerView.Adapter<RecyclerPersonAd
         }
 
         public void setNewsObject(NewsObject newsObject, FragmentManager fm) {
+
+
             this.newsObject = newsObject;
 
             NewsCardFragment mNewsCardFragment = new NewsCardFragment();
