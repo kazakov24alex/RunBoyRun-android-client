@@ -204,6 +204,8 @@
     <string name="last_comments_panel_text_title">Last comments</string>
     <string name="last_comments_panel_button_title">WRITE FIRSTCOMMENT</string>
 
+    <!-- SportType news panel fragment-->
+    <string name="sporttype_panel_points_title">POINTS</string>
 
     <!-- Activity page activity -->
     <string name="activity_page_dialog_loading_activity_data">Loading activity data...</string>

@@ -36,14 +36,14 @@ public class TitleNewsFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_news_title, container, false);
 
-        mAvatarImage = (SquareImageView) rootView.findViewById(R.id.news_title_fragment_image_avatar);
+        mAvatarImage = (SquareImageView) rootView.findViewById(R.id.news_title_panel_image_avatar);
         mAvatarImage.setImageResource(R.drawable.com_facebook_top_button);
 
-        mNameText = (TextView) rootView.findViewById(R.id.news_title_fragment_text_name_surname);
-        mTimeText = (TextView) rootView.findViewById(R.id.news_title_fragment_text_time_start);
-        mDateText = (TextView) rootView.findViewById(R.id.news_title_fragment_text_date_start);
+        mNameText = (TextView) rootView.findViewById(R.id.news_title_panel_text_name_surname);
+        mTimeText = (TextView) rootView.findViewById(R.id.news_title_panel_text_time_start);
+        mDateText = (TextView) rootView.findViewById(R.id.news_title_panel_text_date_start);
 
-        mForm = (LinearLayout) rootView.findViewById(R.id.news_title_fragment_form);
+        mForm = (LinearLayout) rootView.findViewById(R.id.news_title_panel_form);
         mForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,15 +56,20 @@ public class TitleNewsFragment extends Fragment {
     }
 
 
-    public void setContent(int athleteID, String name, String surname, String dateTimeStart) {
-        mAthleteID = athleteID;
 
+    public void setAthleteID(int athlete_id) {
+        mAthleteID = athlete_id;
+    }
+
+    public void setName(String name, String surname) {
         if( (name.length()+surname.length()+1) > 15 ) {
             mNameText.setText(name.charAt(0)+". "+surname);
         } else {
             mNameText.setText(name+" "+surname);
         }
+    }
 
+    public void setDateTimeStart(String dateTimeStart) {
         try {
             Date curDate = new Date();
             Date comDate = (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")).parse(dateTimeStart.replaceAll("Z$", "+0000"));
@@ -82,9 +87,8 @@ public class TitleNewsFragment extends Fragment {
         } catch (ParseException e) {
             //TODO: handle
         }
-
-
     }
+
 
 
 }

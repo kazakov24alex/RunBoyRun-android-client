@@ -57,7 +57,7 @@ public abstract class BasisActivity extends BaseActivity {
         setContentView(R.layout.general_template);
 
         // Set nav drawer selected to first item in list
-        mNavigationView.getMenu().getItem(4).setChecked(true);
+        mNavigationView.getMenu().getItem(1).setChecked(true);
         getActionBarToolbar().setVisibility(View.GONE);
 
         // Content initialization

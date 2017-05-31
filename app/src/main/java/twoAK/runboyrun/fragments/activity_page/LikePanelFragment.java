@@ -100,9 +100,11 @@ public class LikePanelFragment extends Fragment {
         mListLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ValueActivity.class);
-                intent.putExtra("ACTIVITY_ID", mActivityID);
-                startActivity(intent);
+                if(mSendValueTask == null) {
+                    Intent intent = new Intent(getContext(), ValueActivity.class);
+                    intent.putExtra("ACTIVITY_ID", mActivityID);
+                    startActivity(intent);
+                }
             }
         });
 

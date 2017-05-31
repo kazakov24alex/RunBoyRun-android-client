@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/news_title_fragment_form"
+        android:id="@+id/news_title_panel_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
@@ -16,7 +16,7 @@
         android:background="?android:attr/selectableItemBackground">
 
         <twoAK.runboyrun.adapters.SquareImageView
-            android:id="@+id/news_title_fragment_image_avatar"
+            android:id="@+id/news_title_panel_image_avatar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="22"
@@ -24,7 +24,7 @@
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/news_title_fragment_text_name_surname"
+            android:id="@+id/news_title_panel_text_name_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="12"
@@ -39,14 +39,14 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/news_title_fragment_text_time_start"
+                android:id="@+id/news_title_panel_text_time_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/news_title_fragment_text_date_start"
+                android:id="@+id/news_title_panel_text_date_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
