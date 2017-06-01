@@ -15,7 +15,7 @@ import java.util.Date;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.SquareImageView;
-import twoAK.runboyrun.pagination.RecyclerViewExampleActivity;
+import twoAK.runboyrun.activities.NewsFeedProfileActivity;
 
 
 public class TitleNewsFragment extends Fragment {
@@ -47,7 +47,7 @@ public class TitleNewsFragment extends Fragment {
         mForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(rootView.getContext(), RecyclerViewExampleActivity.class);
+                Intent intent = new Intent(rootView.getContext(), NewsFeedProfileActivity.class);
                 intent.putExtra("ATHLETE_ID", mAthleteID);
                 startActivity(intent);
             }

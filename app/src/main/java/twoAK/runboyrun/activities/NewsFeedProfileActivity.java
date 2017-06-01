@@ -1,4 +1,4 @@
-package twoAK.runboyrun.pagination;
+package twoAK.runboyrun.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,23 +25,27 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
-import twoAK.runboyrun.pagination.adapter.RecyclerPersonAdapter;
+import twoAK.runboyrun.adapters.NewsFeedRecyclerAdapter;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.objects.NewsObject;
 
-public class RecyclerViewExampleActivity extends BasisActivity implements Paginate.Callbacks {
+public class NewsFeedProfileActivity extends ProfileActivity implements Paginate.Callbacks {
+
+    static final String APP_TAG = "RUN-BOY-RUN";
+    static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
     private static final int GRID_SPAN = 3;
+
+    private int mAthleteID;
 
     private GetNewsPageTask mGetNewsPageTask;
 
     private RecyclerView recyclerView;
-    private RecyclerPersonAdapter adapter;
+    private NewsFeedRecyclerAdapter adapter;
     private boolean loading = false;
     private int loadedPage = 0;
     private Handler handler;
     private Paginate paginate;
-
 
     // Common options
     protected int threshold = 4;
@@ -57,15 +61,20 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try {
+            mAthleteID = getIntent().getExtras().getInt("ATHLETE_ID", 0);
+        } catch (NullPointerException e) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "NOT GIVEN ATHLETE_ID");
+            finish();
+        }
+
         LayoutInflater.from(this.getApplicationContext()).inflate(R.layout.recycler_layout, getRecyclerContainer(), true);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         handler = new Handler();
 
 
-        mGetNewsPageTask = new GetNewsPageTask(1, itemsPerPage, 1);
+        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, itemsPerPage, 1);
         mGetNewsPageTask.execute((Void)null);
-
-
 
     }
 
@@ -76,7 +85,7 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
             paginate.unbind();
         }
         //handler.removeCallbacks(fakeCallback);
-        adapter = new RecyclerPersonAdapter(newsList, getSupportFragmentManager());
+        adapter = new NewsFeedRecyclerAdapter(newsList, getSupportFragmentManager());
         loading = false;
 
         int layoutOrientation = OrientationHelper.VERTICAL;
@@ -111,8 +120,7 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
         loading = true;
         // Fake asynchronous loading that will generate loadedPage of random data after some delay
         // handler.postDelayed(fakeCallback, networkDelay);
-        // TODO:
-        mGetNewsPageTask = new GetNewsPageTask(1, 1, loadedPage+1);
+        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, 1, loadedPage+1);
         mGetNewsPageTask.execute((Void)null);
     }
 
@@ -215,7 +223,6 @@ public class RecyclerViewExampleActivity extends BasisActivity implements Pagina
                         loading = false;
                     }
 
-                    Log.i(APP_TAG, ACTIVITY_TAG + "PAGE_NUM = "+ loadedPage);
 
                 } else {
                     Log.i(APP_TAG, ACTIVITY_TAG + "news are absent");

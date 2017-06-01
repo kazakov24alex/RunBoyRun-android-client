@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
@@ -14,9 +16,15 @@ import twoAK.runboyrun.adapters.SquareImageView;
 
 
 public class ButtonPanelFragment extends Fragment {
+    private View rootView;
 
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
+
+    private LinearLayout mFriendsLayout;
+    private LinearLayout mStatsLayout;
+    private LinearLayout mRecordsLayout;
+    private LinearLayout mVictoriesLayout;
 
     private SquareImageView mFriendsButton;
     private SquareImageView mStatsButton;
@@ -28,11 +36,13 @@ public class ButtonPanelFragment extends Fragment {
     private TextView mTextRecordsButton;
     private TextView mTextVictoriesButton;
 
+    private int mAthleteID;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile_buttons, container, false);
+        rootView = inflater.inflate(R.layout.fragment_profile_buttons, container, false);
 
         // Initialization images of button panel
         mFriendsButton = (SquareImageView) rootView.findViewById(R.id.profile_buttons_fragment_squareimage_friends);
@@ -56,6 +66,43 @@ public class ButtonPanelFragment extends Fragment {
         mTextVictoriesButton.setTypeface(squareFont);
 
         return rootView;
+    }
+
+
+    public void linkAthleteID(int athlete_id) {
+        mAthleteID = athlete_id;
+
+        mFriendsLayout = (LinearLayout) rootView.findViewById(R.id.profile_buttons_panel_button_friends);
+        mFriendsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Friends (AID="+mAthleteID+") - coming soon!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mStatsLayout = (LinearLayout) rootView.findViewById(R.id.profile_buttons_panel_button_stats);
+        mStatsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Stats (AID="+mAthleteID+") - coming soon!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mRecordsLayout = (LinearLayout) rootView.findViewById(R.id.profile_buttons_panel_button_records);
+        mRecordsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Records (AID="+mAthleteID+") - coming soon!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mVictoriesLayout = (LinearLayout) rootView.findViewById(R.id.profile_buttons_panel_button_victories);
+        mVictoriesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Victories (AID="+mAthleteID+") - coming soon!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

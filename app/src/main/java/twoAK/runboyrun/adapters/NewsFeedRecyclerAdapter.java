@@ -1,4 +1,4 @@
-package twoAK.runboyrun.pagination.adapter;
+package twoAK.runboyrun.adapters;
 
 
 import android.support.v4.app.FragmentManager;
@@ -12,14 +12,15 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.fragments.profile_activity.NewsCardFragment;
+import twoAK.runboyrun.interfaces.RecyclerOnItemClickListener;
 import twoAK.runboyrun.responses.objects.NewsObject;
 
-public class RecyclerPersonAdapter extends RecyclerView.Adapter<RecyclerPersonAdapter.NewsHolder> implements RecyclerOnItemClickListener {
+public class NewsFeedRecyclerAdapter extends RecyclerView.Adapter<NewsFeedRecyclerAdapter.NewsHolder> implements RecyclerOnItemClickListener {
 
     private final List<NewsObject> data;
     private FragmentManager mFragmentManager;
 
-    public RecyclerPersonAdapter(List<NewsObject> data, FragmentManager fm) {
+    public NewsFeedRecyclerAdapter(List<NewsObject> data, FragmentManager fm) {
         this.data = data;
         this.mFragmentManager = fm;
     }

@@ -1,4 +1,4 @@
-package twoAK.runboyrun.pagination.adapter;
+package twoAK.runboyrun.interfaces;
 
 
 import android.view.View;

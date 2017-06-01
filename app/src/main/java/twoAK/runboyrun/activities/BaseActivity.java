@@ -18,7 +18,6 @@ import android.view.View;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.auth.Auth;
-import twoAK.runboyrun.pagination.RecyclerViewExampleActivity;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -155,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_personal_page:
-                intent = new Intent(this, RecyclerViewExampleActivity.class);
+                intent = new Intent(this, NewsFeedProfileActivity.class);
                 intent.putExtra("ATHLETE_ID", 1);
                 createBackStack(intent);
                 break;
@@ -167,7 +166,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_statistics:
-                intent = new Intent(this, RecyclerViewExampleActivity.class);
+                intent = new Intent(this, NewsFeedProfileActivity.class);
                 createBackStack(intent);
                 break;
 

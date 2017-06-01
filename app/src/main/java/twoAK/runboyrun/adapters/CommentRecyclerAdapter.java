@@ -148,7 +148,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter {
                 String curDateString = (new SimpleDateFormat("dd MMMM yyyy")).format(curDate);
                 String comDateString = (new SimpleDateFormat("dd MMMM yyyy")).format(comDate);
 
-                if(curDate.getYear() == comDate.getYear()) {
+                if(curDate.getYear() != comDate.getYear()) {
                     ((TextView) mView.findViewById(R.id.item_comment_list_text_datetime))
                             .setText((new SimpleDateFormat("dd MMM yyyy  kk:mm")).format(comDate));
                 } else {

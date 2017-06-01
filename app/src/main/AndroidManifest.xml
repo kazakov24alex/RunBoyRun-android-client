@@ -107,15 +107,12 @@
         <activity android:name=".activities.CommentActivity"
             android:label="Comments"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.ProfileActivity"
-            android:label="CollapsingToolbar"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
 
-        <activity android:name=".pagination.BasisActivity"
+        <!--<activity android:name=".activities.ProfileActivity"
             android:label="PaginationBasisActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".pagination.RecyclerViewExampleActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>-->
+        <activity android:name=".activities.NewsFeedProfileActivity"
             android:label="RecyclerViewExampleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
