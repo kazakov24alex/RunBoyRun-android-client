@@ -187,6 +187,9 @@
     <string name="condition_panel_text_temperature">temp</string>
     <string name="condition_panel_text_relief">relief</string>
     <string name="condition_panel_text_condition">condition</string>
+    <string name="condition_panel_toast_select_weather">select weather</string>
+    <string name="condition_panel_toast_select_relief">select relief</string>
+    <string name="condition_panel_toast_select_condition">select condition</string>
 
     <!-- Statistics panel fragment -->
     <string name="statistics_panel_text_time">Time:</string>

@@ -3,13 +3,13 @@ package twoAK.runboyrun.responses;
 
 
 public class SendTrainingInfoResponse extends BaseResponse{
-    public int getActivityId() {
-        return activityId;
+    public int getActivity_id() {
+        return activity_id;
     }
 
-    public void setActivityId(int activityId) {
-        this.activityId = activityId;
+    public void setActivity_id(int activity_id) {
+        this.activity_id = activity_id;
     }
 
-    int activityId;
+    int activity_id;
 }
