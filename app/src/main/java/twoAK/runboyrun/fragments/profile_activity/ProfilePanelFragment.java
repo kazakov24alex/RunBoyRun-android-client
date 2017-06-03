@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,10 @@ import java.util.Locale;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.adapters.SquareImageView;
+import twoAK.runboyrun.api.ApiClient;
+import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
+import twoAK.runboyrun.exceptions.api.RequestFailedException;
+import twoAK.runboyrun.request.body.SubscribeBody;
 import twoAK.runboyrun.responses.GetProfileResponse;
 
 import static java.util.Calendar.DATE;
@@ -35,6 +41,8 @@ public class ProfilePanelFragment extends Fragment{
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
+    private SendSubscribeTask mSendSubscribeTask;
+
     private GetProfileResponse mProfile;
 
     private SquareImageView mAvatarImage;
@@ -43,6 +51,8 @@ public class ProfilePanelFragment extends Fragment{
     private TextView mSurnameText;
     private TextView mCountryCityText;
     private TextView mAgeText;
+
+    private int ind = 0;
 
 
     @Override
@@ -54,8 +64,17 @@ public class ProfilePanelFragment extends Fragment{
         mAvatarImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         mSubscribeFAB = (FloatingActionButton) rootView.findViewById(R.id.profile_panel_fab_subscribe);
-
         mSubscribeFAB.setImageBitmap(textAsBitmap("\uf234", 40, Color.WHITE));
+        mSubscribeFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(APP_TAG, ACTIVITY_TAG + "CLICKED="+ind++);
+                /*if(mSendSubscribeTask != null) {
+                    mSendSubscribeTask = new SendSubscribeTask(mProfile.getId());
+                    mSendSubscribeTask.execute((Void) null);
+                }*/
+            }
+        });
 
         //View initialization
         mNameText = (TextView) rootView.findViewById(R.id.profile_panel_textView_name);
@@ -83,7 +102,77 @@ public class ProfilePanelFragment extends Fragment{
         }
 
         mAgeText.setText("Age: "+getDiffYears(birthdayDate, new Date()));
+
+        if(profile.getSubscription() == null) {
+            /*mSubscribeFAB.setVisibility(View.GONE);
+            mSubscribeFAB.setClickable(false);*/
+        } else {
+            setFABstate(profile.getSubscription());
+        }
     }
+
+
+
+
+    private class SendSubscribeTask extends AsyncTask<Void, Void, Boolean> {
+        private String errMes;  // error message possible
+        private SubscribeBody subscribeBody;
+
+        SendSubscribeTask(int athlete_id) {
+            errMes = null;
+            subscribeBody = new SubscribeBody();
+            subscribeBody.setAthlete_id(athlete_id);
+
+            mSubscribeFAB.setClickable(false);
+            setFABstate(!mProfile.getSubscription());
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to send subscription");
+            try {
+                return ApiClient.instance().sendSubscribe(subscribeBody);
+            } catch(RequestFailedException e) {
+                errMes = getString(R.string.activity_page_error_loading_activity_request_failed);
+            } catch(InsuccessfulResponseException e) {
+                errMes = getString(R.string.activity_page_error_loading_activity_insuccessful);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success == false) {
+                Log.i(APP_TAG, ACTIVITY_TAG + "sending subscription ERROR: " + errMes);
+                Toast.makeText(getContext(), errMes, Toast.LENGTH_SHORT).show();
+
+                mSubscribeFAB.setClickable(true);
+                setFABstate(mProfile.getSubscription());
+                mSendSubscribeTask = null;
+                return;
+            }
+
+            Log.i(APP_TAG, ACTIVITY_TAG + "subscription was sent");
+            Toast.makeText(getContext(), getString(R.string.profile_panel_toast_subscribed), Toast.LENGTH_SHORT).show();
+
+            mSubscribeFAB.setClickable(true);
+            mProfile.setSubscription(!mProfile.getSubscription());
+            mSendSubscribeTask = null;
+        }
+
+        /** The task was canceled. */
+        @Override
+        protected void onCancelled() { }
+    }
+
+    public void setFABstate(boolean state) {
+        if (state == true) {
+            mSubscribeFAB.setBackgroundResource(R.color.VIEW_GREY);
+        } else {
+            mSubscribeFAB.setBackgroundResource(R.color.VIEW_SELECTED);
+        }
+    }
+
 
 
     public static int getDiffYears(Date first, Date last) {
@@ -120,4 +209,7 @@ public class ProfilePanelFragment extends Fragment{
         canvas.drawText(text, 0, baseline, paint);
         return image;
     }
+
+
+
 }

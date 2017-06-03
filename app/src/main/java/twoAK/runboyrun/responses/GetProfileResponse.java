@@ -2,12 +2,24 @@ package twoAK.runboyrun.responses;
 
 
 public class GetProfileResponse extends BaseResponse {
-    private String name;
-    private String surname;
-    private String birthday;
-    private String country;
-    private String city;
-    private String sex;
+
+    private int     id;
+    private String  name;
+    private String  surname;
+    private String  birthday;
+    private String  country;
+    private String  city;
+    private String  sex;
+    private Boolean subscription;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -57,4 +69,11 @@ public class GetProfileResponse extends BaseResponse {
         this.sex = sex;
     }
 
+    public Boolean getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Boolean subscription) {
+        this.subscription = subscription;
+    }
 }

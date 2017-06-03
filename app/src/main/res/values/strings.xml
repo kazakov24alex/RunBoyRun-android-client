@@ -229,6 +229,9 @@
     <string name="comment_activity_error_loading_activity_insuccessful">Insuccessful response</string>
     <string name="comment_activity_order_label">#</string>
 
+    <!-- Profile Panel Fragment-->
+    <string name="profile_panel_toast_subscribed">subscribed</string>
+
 
     <!--ERRORS-->
     <string name="error_invalid_email">This email address is invalid</string>

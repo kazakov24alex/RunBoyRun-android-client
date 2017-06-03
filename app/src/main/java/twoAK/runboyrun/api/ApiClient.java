@@ -21,6 +21,7 @@ import twoAK.runboyrun.request.body.CheckBody;
 import twoAK.runboyrun.request.body.CommentBody;
 import twoAK.runboyrun.request.body.LoginBody;
 import twoAK.runboyrun.request.body.SignUpBody;
+import twoAK.runboyrun.request.body.SubscribeBody;
 import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.BaseResponse;
 import twoAK.runboyrun.responses.CheckResponse;
@@ -338,6 +339,23 @@ public class ApiClient implements IApiClient {
                 return response.body();
             } else {
                 throw new InsuccessfulResponseException("Failed to getting news page from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+    @Override
+    public boolean sendSubscribe(SubscribeBody subscribeBody)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<BaseResponse> req = service.sendSubscribe(Auth.getHeaderField(), subscribeBody);
+        try {
+            Response<BaseResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return true;
+            } else {
+                throw new InsuccessfulResponseException("Failed to send subscribe to server.");
             }
         } catch (IOException e) {
             throw new RequestFailedException(e);

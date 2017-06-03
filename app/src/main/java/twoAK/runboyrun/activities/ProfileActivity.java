@@ -180,11 +180,6 @@ public abstract class ProfileActivity extends BaseActivity {
             mProfilePanelFragment.setProfileData(profileResponse);
             mToolbarTitle = profileResponse.getName() + " " + profileResponse.getSurname();
 
-            /*mGetNewsPageTask = new GetNewsPageTask(mAthleteID, NEWS_PER_PAGE, 1);
-            mGetNewsPageTask.execute((Void)null);*/
-
-            showProgressCircle(false);
-
         }
 
     }
@@ -192,7 +187,7 @@ public abstract class ProfileActivity extends BaseActivity {
 
     /** Shows the progress UI and hides the UI form. */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgressCircle(final boolean show) {
+    protected void showProgressCircle(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

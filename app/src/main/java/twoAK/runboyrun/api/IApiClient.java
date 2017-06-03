@@ -10,6 +10,7 @@ import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
 import twoAK.runboyrun.exceptions.api.SignupFailedException;
 import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.request.body.CommentBody;
+import twoAK.runboyrun.request.body.SubscribeBody;
 import twoAK.runboyrun.request.body.ValueBody;
 import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
@@ -71,6 +72,9 @@ public interface IApiClient {
             throws RequestFailedException, InsuccessfulResponseException;
 
     public GetNewsResponse getNewsPage(int athlete_id, int news_num, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException;
+
+    public boolean sendSubscribe(SubscribeBody subscribeBody)
             throws RequestFailedException, InsuccessfulResponseException;
 
 }

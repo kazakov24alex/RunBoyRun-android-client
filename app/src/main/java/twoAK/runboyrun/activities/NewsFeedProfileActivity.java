@@ -2,7 +2,6 @@ package twoAK.runboyrun.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +21,10 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.NewsFeedRecyclerAdapter;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
-import twoAK.runboyrun.adapters.NewsFeedRecyclerAdapter;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.objects.NewsObject;
 
@@ -34,32 +33,36 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
+    // Common options
     private static final int GRID_SPAN = 3;
+    private static final int THRESHOLD = 4;
+    private static final int ITEMS_PER_PAGE = 3;
+    private static final boolean ADD_LOADING_ROW = true;
+    private static final boolean CUSTOM_LOADING_LIST_ITEM = false;
+    protected boolean reverseLayout = false;
 
     private int mAthleteID;
 
     private GetNewsPageTask mGetNewsPageTask;
 
-    private RecyclerView recyclerView;
-    private NewsFeedRecyclerAdapter adapter;
-    private boolean loading = false;
-    private int loadedPage = 0;
-    private Handler handler;
-    private Paginate paginate;
+    private Paginate mPaginate;
+    private RecyclerView mRecyclerView;
+    private NewsFeedRecyclerAdapter mAdapter;
 
-    // Common options
-    protected int threshold = 4;
-    protected int totalPages = 3;
-    protected int itemsPerPage = 3;
-    protected int allItems = -1;
-    protected long networkDelay = 5000;
-    protected boolean addLoadingRow = true;
-    protected boolean customLoadingListItem = false;
-    protected boolean reverseLayout = false;
+    private boolean mLoading;
+    private int mTotalPages;
+    private int mLoadedPage;
+    private int mAllItems;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAllItems   = -1;
+        mLoadedPage = 0;
+        mLoading = false;
 
         try {
             mAthleteID = getIntent().getExtras().getInt("ATHLETE_ID", 0);
@@ -69,11 +72,9 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
         }
 
         LayoutInflater.from(this.getApplicationContext()).inflate(R.layout.recycler_layout, getRecyclerContainer(), true);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        handler = new Handler();
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-
-        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, itemsPerPage, 1);
+        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, ITEMS_PER_PAGE, 1);
         mGetNewsPageTask.execute((Void)null);
 
     }
@@ -81,12 +82,12 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
     @Override
     protected void setupPagination(List<NewsObject> newsList) {
         // If RecyclerView was recently bound, unbind
-        if (paginate != null) {
-            paginate.unbind();
+        if (mPaginate != null) {
+            mPaginate.unbind();
         }
         //handler.removeCallbacks(fakeCallback);
-        adapter = new NewsFeedRecyclerAdapter(newsList, getSupportFragmentManager());
-        loading = false;
+        mAdapter = new NewsFeedRecyclerAdapter(newsList, getSupportFragmentManager());
+        mLoading = false;
 
         int layoutOrientation = OrientationHelper.VERTICAL;
         RecyclerView.LayoutManager layoutManager = layoutManager = new LinearLayoutManager(this, layoutOrientation, false);
@@ -97,14 +98,14 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
             ((StaggeredGridLayoutManager) layoutManager).setReverseLayout(reverseLayout);
         }
 
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new SlideInUpAnimator());
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
+        mRecyclerView.setAdapter(mAdapter);
 
-        paginate = Paginate.with(recyclerView, this)
-                .setLoadingTriggerThreshold(threshold)
-                .addLoadingListItem(addLoadingRow)
-                .setLoadingListItemCreator(customLoadingListItem ? new CustomLoadingListItemCreator() : null)
+        mPaginate = Paginate.with(mRecyclerView, this)
+                .setLoadingTriggerThreshold(THRESHOLD)
+                .addLoadingListItem(ADD_LOADING_ROW)
+                .setLoadingListItemCreator(CUSTOM_LOADING_LIST_ITEM ? new CustomLoadingListItemCreator() : null)
                 .setLoadingListItemSpanSizeLookup(new LoadingListItemSpanLookup() {
                     @Override
                     public int getSpanSize() {
@@ -116,32 +117,23 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
 
     @Override
     public synchronized void onLoadMore() {
-        Log.d("Paginate", "onLoadMore");
-        loading = true;
-        // Fake asynchronous loading that will generate loadedPage of random data after some delay
+        mLoading = true;
+        // Fake asynchronous mLoading that will generate mLoadedPage of random data after some delay
         // handler.postDelayed(fakeCallback, networkDelay);
-        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, 1, loadedPage+1);
+        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, 1, mLoadedPage +1);
         mGetNewsPageTask.execute((Void)null);
     }
 
     @Override
     public synchronized boolean isLoading() {
-        return loading; // Return boolean weather data is already loading or not
+        return mLoading; // Return boolean weather data is already mLoading or not
     }
 
     @Override
     public boolean hasLoadedAllItems() {
-        return loadedPage == totalPages; // If all pages are loaded return true
+        return mLoadedPage == mTotalPages; // If all pages are loaded return true
     }
 
-   /* private Runnable fakeCallback = new Runnable() {
-        @Override
-        public void run() {
-            loadedPage++;
-            adapter.add(DataProvider.getRandomData(itemsPerPage));
-            loading = false;
-        }
-    };*/
 
     private class CustomLoadingListItemCreator implements LoadingListItemCreator {
         @Override
@@ -154,10 +146,10 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             VH vh = (VH) holder;
-            vh.tvLoading.setText(String.format("Total items loaded: %d.\nLoading more...", adapter.getItemCount()));
+            vh.tvLoading.setText(String.format("Total items loaded: %d.\nLoading more...", mAdapter.getItemCount()));
 
             // This is how you can make full span if you are using StaggeredGridLayoutManager
-            if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            if (mRecyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                 StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) vh.itemView.getLayoutParams();
                 params.setFullSpan(true);
             }
@@ -190,7 +182,7 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
 
         @Override
         protected GetNewsResponse doInBackground(Void... params) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news loadedPage");
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news mLoadedPage");
             try {
                 return ApiClient.instance().getNewsPage(athlete_id, news_num, page_num);
             } catch (RequestFailedException e) {
@@ -209,18 +201,20 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
 
             } else {
                 if (newsResponse.getNews() != null) {
-                    Log.i(APP_TAG, ACTIVITY_TAG + "news loadedPage was loaded");
+                    Log.i(APP_TAG, ACTIVITY_TAG + "news mLoadedPage was loaded");
                     Toast.makeText(getApplicationContext(), "" + newsResponse.getNews().size(), Toast.LENGTH_SHORT).show();
 
-                    if(allItems == -1) {
-                        loadedPage++;
-                        allItems = newsResponse.getNews().get(0).getOrder();
-                        totalPages =  allItems / itemsPerPage + 1;
+                    if(mAllItems == -1) {
+                        mLoadedPage++;
+                        mAllItems = newsResponse.getNews().get(0).getOrder();
+                        mTotalPages =  mAllItems / ITEMS_PER_PAGE + 1;
                         setupPagination(newsResponse.getNews());
+
+                        showProgressCircle(false);
                     } else {
-                        loadedPage++;
-                        adapter.add(newsResponse.getNews());
-                        loading = false;
+                        mLoadedPage++;
+                        mAdapter.add(newsResponse.getNews());
+                        mLoading = false;
                     }
 
 
