@@ -346,10 +346,11 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+            android:hint="@string/description_panel_text_title"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:ems="100" />
+            android:ems="100"
+            android:id ="@+id/activity_description"/>
     </android.support.design.widget.TextInputLayout>
 
     <com.lantouzi.wheelview.WheelView

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +96,8 @@ public class ConditionActivity extends AppCompatActivity {
     private TextView mConditionMediumText;
     private TextView mConditionTiredText;
     private TextView mConditionBeatedText;
+
+    private EditText mDescriptionText;
 
     private ProgressDialog mProgressDialog;
 
@@ -193,6 +196,8 @@ public class ConditionActivity extends AppCompatActivity {
         mConditionBeatedText = (TextView) findViewById(R.id.condition_text_condition_beated);
         mConditionBeatedText.setTypeface(squareFont);
 
+        mDescriptionText = (EditText) findViewById(R.id.activity_description);
+
         mTemperatureWheelView = (WheelView) findViewById(R.id.condition_wheelview_temperature);
         List<String> items = new ArrayList<>();
         for(int i=-50; i<=50; i++) {
@@ -235,10 +240,16 @@ public class ConditionActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(SendTrainingInfoResponse response) {
-            if (response.getActivityId() != 0) {
-                Toast.makeText(getApplicationContext(), "SUCCESS RECORD", Toast.LENGTH_LONG).show();
-            } else {
+            if (response==null){
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
+                Log.i(APP_TAG,ACTIVITY_TAG+"Sending activity err = "+errMes);
+            }
+            else{
+                Log.i(APP_TAG,ACTIVITY_TAG+"Activity is recorded!");
+                Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY_ID "+ response.getActivity_id());
+                Intent intent = new Intent(getApplicationContext(),ActivityPageActivity.class);
+                intent.putExtra("ACTIVITY_ID",response.getActivity_id());
+                startActivity(intent);
             }
         }
 
@@ -378,13 +389,31 @@ public class ConditionActivity extends AppCompatActivity {
             body.setDatetime_start(datetime_start);
         }
 
+
         body.setTemperature(mTemperatureValue);
 
-        body.setWeather(mWeatherValue);
+        if(mWeatherValue.equals("")){
+            Toast.makeText(this, getString(R.string.condition_panel_toast_select_condition), Toast.LENGTH_SHORT).show();
+            return;
+        } else{
+            body.setWeather(mWeatherValue);
+        }
 
-        body.setRelief(mReliefValue);
+        if(mReliefValue.equals("")) {
+            Toast.makeText(this, getString(R.string.condition_panel_toast_select_relief), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            body.setRelief(mReliefValue);
+        }
 
-        body.setCondition(mConditionValue);
+        if(mConditionValue.equals("")) {
+            Toast.makeText(this, getString(R.string.condition_panel_toast_select_condition), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            body.setCondition(mConditionValue);
+        }
+
+        body.setDescription(mDescriptionText.getText().toString());
 
         String spent_time = intent.getStringExtra("SPENT_TIME");
         if(spent_time!=null){
@@ -406,7 +435,6 @@ public class ConditionActivity extends AppCompatActivity {
             body.setTempo(tempo);
         }
 
-        body.setDescription("XYZ");
 
         SendTrainingInfoTask mSendTrainingInfoTask = new SendTrainingInfoTask(body);
         mSendTrainingInfoTask.execute((Void) null);

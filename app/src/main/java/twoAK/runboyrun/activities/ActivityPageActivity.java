@@ -84,6 +84,7 @@ public class ActivityPageActivity extends BaseActivity {
             finish();
         }
 
+        Log.i(APP_TAG, "Id = "+mActivityID);
         // progress circle
         mFormView  = findViewById(R.id.activity_page_sclroll_view);
         mProgressView = findViewById(R.id.activity_page_progress_circle);

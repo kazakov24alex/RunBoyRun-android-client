@@ -61,7 +61,7 @@ public class StartNewActivityActivity extends BaseActivity {
         mNavigationView.getMenu().getItem(0).setChecked(true);
 
 
-        mSportFlag = 0;
+        mSportFlag = -1;
         mSportValue = "";
         mSportButtonsList = new ArrayList<LinearLayout>();
 
@@ -126,7 +126,7 @@ public class StartNewActivityActivity extends BaseActivity {
     }
 
     public void onButtonClick(View view) {
-        if(mSportFlag == 0) {
+        if(mSportFlag == -1) {
             Toast.makeText(this, getString(R.string.start_activity_toast_select_sport), Toast.LENGTH_SHORT).show();
             return;
         }
