@@ -107,11 +107,12 @@
         <activity android:name=".activities.CommentActivity"
             android:label="Comments"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.SubscribersActivity"
+            android:label="Subscribers"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
 
-        <!--<activity android:name=".activities.ProfileActivity"
-            android:label="PaginationBasisActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>-->
+
         <activity android:name=".activities.NewsFeedProfileActivity"
             android:label="RecyclerViewExampleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

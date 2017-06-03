@@ -16,6 +16,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
@@ -72,6 +73,9 @@ public interface IApiClient {
             throws RequestFailedException, InsuccessfulResponseException;
 
     public GetNewsResponse getNewsPage(int athlete_id, int news_num, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException;
+
+    public GetSubscribersResponse getSubscribers(int athlete_id)
             throws RequestFailedException, InsuccessfulResponseException;
 
     public boolean sendSubscribe(SubscribeBody subscribeBody)

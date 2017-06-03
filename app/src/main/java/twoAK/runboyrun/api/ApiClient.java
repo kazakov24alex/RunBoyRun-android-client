@@ -31,6 +31,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -259,7 +260,6 @@ public class ApiClient implements IApiClient {
         } catch (IOException e) {
             throw new RequestFailedException(e);
         }
-
     }
 
     @Override
@@ -339,6 +339,22 @@ public class ApiClient implements IApiClient {
                 return response.body();
             } else {
                 throw new InsuccessfulResponseException("Failed to getting news page from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+    @Override
+    public GetSubscribersResponse getSubscribers(int athlete_id)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetSubscribersResponse> req = service.getSubscribers(Auth.getHeaderField(), athlete_id);
+        try {
+            Response<GetSubscribersResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to get subscribers from server.");
             }
         } catch (IOException e) {
             throw new RequestFailedException(e);

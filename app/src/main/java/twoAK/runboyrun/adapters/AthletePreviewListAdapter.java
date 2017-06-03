@@ -12,20 +12,19 @@ import java.util.List;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
-import twoAK.runboyrun.responses.objects.ValueObject;
+import twoAK.runboyrun.responses.objects.AthletePreviewObject;
 
-
-public class LikeListAdapter extends BaseAdapter {
+public class AthletePreviewListAdapter extends BaseAdapter {
 
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
 
     private Context ctx;
     private LayoutInflater lInflater;
-    private List<ValueObject> valuesList;
+    private List<AthletePreviewObject> subscribersList;
 
-    public LikeListAdapter(Context context, List<ValueObject> valuesList) {
-        this.valuesList = valuesList;
+    public AthletePreviewListAdapter(Context context, List<AthletePreviewObject> subscribersList) {
+        this.subscribersList = subscribersList;
         ctx = context;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -33,12 +32,12 @@ public class LikeListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return valuesList.size();
+        return subscribersList.size();
     }
 
     @Override
-    public ValueObject getItem(int position) {
-        return valuesList.get(position);
+    public AthletePreviewObject getItem(int position) {
+        return subscribersList.get(position);
     }
 
     @Override
@@ -54,13 +53,13 @@ public class LikeListAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.item_athlete_preview_list, parent, false);
         }
 
-        ValueObject value = getItem(position);
+        AthletePreviewObject athlete = getItem(position);
 
         // initialization of views
         ((SquareImageView) view.findViewById(R.id.item_athlete_preview_squareimage_avatar))
                 .setImageResource(R.drawable.com_facebook_top_button);
         ((TextView) view.findViewById(R.id.item_athlete_preview_list_text_name_surname))
-                .setText(value.getName()+" "+value.getSurname());
+                .setText(athlete.getName()+" "+athlete.getSurname());
 
         return view;
     }

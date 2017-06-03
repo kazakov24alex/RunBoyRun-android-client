@@ -3,32 +3,32 @@ package twoAK.runboyrun.responses.objects;
 
 public class AthletePreviewObject {
 
-    private int Id;
-    private String Name;
-    private String Surname;
+    private int id;
+    private String name;
+    private String surname;
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        this.surname = surname;
     }
 
 

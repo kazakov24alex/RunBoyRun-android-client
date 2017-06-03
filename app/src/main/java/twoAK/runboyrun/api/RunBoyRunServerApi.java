@@ -22,6 +22,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
@@ -99,6 +100,11 @@ public interface RunBoyRunServerApi {
                                       @Path("athlete_id")      int athlete_id,
                                       @Path("newsNum")         int newsNum,
                                       @Path("pageNum")         int pageNum);
+
+
+    @GET("api/subs/{athlete_id}")
+    Call<GetSubscribersResponse> getSubscribers(@Header("Authorization") String token,
+                                                @Path("athlete_id")      int athlete_id);
 
     @POST("api/subs")
     Call<BaseResponse> sendSubscribe(@Header("Authorization") String token,

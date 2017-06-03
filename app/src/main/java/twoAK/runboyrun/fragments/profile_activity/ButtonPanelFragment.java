@@ -1,5 +1,6 @@
 package twoAK.runboyrun.fragments.profile_activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
+import twoAK.runboyrun.activities.SubscribersActivity;
 import twoAK.runboyrun.adapters.SquareImageView;
 
 
@@ -76,7 +78,9 @@ public class ButtonPanelFragment extends Fragment {
         mFriendsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(rootView.getContext(), "Friends (AID="+mAthleteID+") - coming soon!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), SubscribersActivity.class);
+                intent.putExtra("ATHLETE_ID", mAthleteID);
+                startActivity(intent);
             }
         });
 

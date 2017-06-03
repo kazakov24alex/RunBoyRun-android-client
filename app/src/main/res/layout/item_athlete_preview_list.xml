@@ -12,14 +12,14 @@
         android:layout_weight="5">
 
         <twoAK.runboyrun.adapters.SquareImageView
-            android:id="@+id/item_like_list_squareimage_avatar"
+            android:id="@+id/item_athlete_preview_squareimage_avatar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp" />
     </FrameLayout>
 
     <TextView
-        android:id="@+id/item_like_list_text_name_surname"
+        android:id="@+id/item_athlete_preview_list_text_name_surname"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="-5dp"
@@ -27,7 +27,6 @@
         android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:paddingLeft="20dp"
-        android:text="@string/title_activity_text_sport"
         android:textSize="24sp" />
 
 </LinearLayout>
