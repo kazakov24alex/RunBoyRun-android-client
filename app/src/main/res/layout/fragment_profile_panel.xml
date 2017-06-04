@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/profileShell"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,12 +88,12 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/profile_panel_fab_subscribe"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_marginTop="15dp"
+        android:layout_gravity="right|center_vertical"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         app:backgroundTint="@color/TEXT_SELECTED" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
