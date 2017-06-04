@@ -34,7 +34,6 @@ public class SubscribersListFragment extends Fragment {
         View mRootView = inflater.inflate(R.layout.fragment_like_list, container, false);
 
         mListView = (ListView) mRootView.findViewById(R.id.like_list_listview);
-
         // on item click listener
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
