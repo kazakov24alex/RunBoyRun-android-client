@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
-import twoAK.runboyrun.activities.ProfileActivity;
+import twoAK.runboyrun.activities.NewsFeedProfileActivity;
 import twoAK.runboyrun.adapters.LikeListAdapter;
 import twoAK.runboyrun.responses.objects.ValueObject;
 
@@ -42,7 +42,7 @@ public class LikeListFragment extends Fragment{
         // on item click listener
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                Intent intent = new Intent(getActivity(), NewsFeedProfileActivity.class);
                 intent.putExtra("ATHLETE_ID", mValuesList.get(position).getAthlete_id());
                 startActivity(intent);
             }

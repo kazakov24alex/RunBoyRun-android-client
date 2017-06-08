@@ -64,7 +64,7 @@ public abstract class ProfileActivity extends BaseActivity {
 
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
-        stub.setLayoutResource(R.layout.base_layout_container);
+        stub.setLayoutResource(R.layout.content_profile_activity);
         View inflated = stub.inflate();
 
         initToolbar();

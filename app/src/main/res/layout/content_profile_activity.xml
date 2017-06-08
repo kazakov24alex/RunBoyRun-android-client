@@ -86,15 +86,6 @@
 
                 </LinearLayout>
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/profile_activity_fab_add_friend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:clickable="true"
-                    android:paddingTop="10dp"
-                    android:layout_gravity="top|right" />
-
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/profile_activity_toolbar"
                     android:layout_width="match_parent"

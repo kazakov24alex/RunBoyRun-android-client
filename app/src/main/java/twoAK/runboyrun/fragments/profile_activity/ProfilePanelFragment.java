@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -68,11 +69,10 @@ public class ProfilePanelFragment extends Fragment{
         mSubscribeFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(APP_TAG, ACTIVITY_TAG + "CLICKED="+ind++);
-                /*if(mSendSubscribeTask != null) {
+                if(mSendSubscribeTask == null) {
                     mSendSubscribeTask = new SendSubscribeTask(mProfile.getId());
                     mSendSubscribeTask.execute((Void) null);
-                }*/
+                }
             }
         });
 
@@ -103,9 +103,10 @@ public class ProfilePanelFragment extends Fragment{
 
         mAgeText.setText("Age: "+getDiffYears(birthdayDate, new Date()));
 
+
         if(profile.getSubscription() == null) {
-            /*mSubscribeFAB.setVisibility(View.GONE);
-            mSubscribeFAB.setClickable(false);*/
+            mSubscribeFAB.setVisibility(View.GONE);
+            mSubscribeFAB.setClickable(false);
         } else {
             setFABstate(profile.getSubscription());
         }
@@ -147,7 +148,7 @@ public class ProfilePanelFragment extends Fragment{
                 Toast.makeText(getContext(), errMes, Toast.LENGTH_SHORT).show();
 
                 mSubscribeFAB.setClickable(true);
-                setFABstate(mProfile.getSubscription());
+                //setFABstate(mProfile.getSubscription());
                 mSendSubscribeTask = null;
                 return;
             }
@@ -157,6 +158,7 @@ public class ProfilePanelFragment extends Fragment{
 
             mSubscribeFAB.setClickable(true);
             mProfile.setSubscription(!mProfile.getSubscription());
+            setFABstate(mProfile.getSubscription());
             mSendSubscribeTask = null;
         }
 
@@ -166,10 +168,11 @@ public class ProfilePanelFragment extends Fragment{
     }
 
     public void setFABstate(boolean state) {
+        //TODO:
         if (state == true) {
-            mSubscribeFAB.setBackgroundResource(R.color.VIEW_GREY);
+            mSubscribeFAB.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.TEXT_GREY)));
         } else {
-            mSubscribeFAB.setBackgroundResource(R.color.VIEW_SELECTED);
+            mSubscribeFAB.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.TEXT_GREY)));
         }
     }
 

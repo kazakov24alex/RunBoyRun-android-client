@@ -87,7 +87,7 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
         }
         //handler.removeCallbacks(fakeCallback);
         mAdapter = new NewsFeedRecyclerAdapter(newsList, getSupportFragmentManager());
-        mLoading = false;
+        //mLoading = false;
 
         int layoutOrientation = OrientationHelper.VERTICAL;
         RecyclerView.LayoutManager layoutManager = layoutManager = new LinearLayoutManager(this, layoutOrientation, false);
@@ -113,15 +113,16 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
                     }
                 })
                 .build();
+        mPaginate.setHasMoreDataToLoad(mLoading);
     }
 
     @Override
     public synchronized void onLoadMore() {
-        mLoading = true;
-        // Fake asynchronous mLoading that will generate mLoadedPage of random data after some delay
-        // handler.postDelayed(fakeCallback, networkDelay);
-        mGetNewsPageTask = new GetNewsPageTask(mAthleteID, 1, mLoadedPage +1);
-        mGetNewsPageTask.execute((Void)null);
+
+        //if((mLoadedPage < mTotalPages) && (mGetNewsPageTask == null) ) {
+            mGetNewsPageTask = new GetNewsPageTask(mAthleteID, ITEMS_PER_PAGE, mLoadedPage + 1);
+            mGetNewsPageTask.execute((Void) null);
+        //}
     }
 
     @Override
@@ -178,11 +179,12 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
             this.news_num = news_num;
             this.page_num = page_num;
 
+            mLoading = true;
         }
 
         @Override
         protected GetNewsResponse doInBackground(Void... params) {
-            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news mLoadedPage");
+            Log.i(APP_TAG, ACTIVITY_TAG + "Trying to get news page="+page_num);
             try {
                 return ApiClient.instance().getNewsPage(athlete_id, news_num, page_num);
             } catch (RequestFailedException e) {
@@ -201,28 +203,26 @@ public class NewsFeedProfileActivity extends ProfileActivity implements Paginate
 
             } else {
                 if (newsResponse.getNews() != null) {
-                    Log.i(APP_TAG, ACTIVITY_TAG + "news mLoadedPage was loaded");
-                    Toast.makeText(getApplicationContext(), "" + newsResponse.getNews().size(), Toast.LENGTH_SHORT).show();
+                    Log.i(APP_TAG, ACTIVITY_TAG + "Mews page="+page_num+" was loaded");
+                    mLoading = false;
 
                     if(mAllItems == -1) {
                         mLoadedPage++;
                         mAllItems = newsResponse.getNews().get(0).getOrder();
                         mTotalPages =  mAllItems / ITEMS_PER_PAGE + 1;
                         setupPagination(newsResponse.getNews());
-
-                        showProgressCircle(false);
                     } else {
                         mLoadedPage++;
                         mAdapter.add(newsResponse.getNews());
-                        mLoading = false;
                     }
-
 
                 } else {
                     Log.i(APP_TAG, ACTIVITY_TAG + "news are absent");
-                    Toast.makeText(getApplicationContext(), "news are absent", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            showProgressCircle(false);
+            mGetNewsPageTask = null;
 
         }
     }

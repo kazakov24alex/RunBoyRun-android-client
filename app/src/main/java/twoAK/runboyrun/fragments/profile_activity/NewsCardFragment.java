@@ -48,7 +48,7 @@ public class NewsCardFragment extends Fragment {
         FragmentManager fm = getChildFragmentManager();
         mTitleNewsFragment = (TitleNewsFragment) fm.findFragmentById(R.id.newscard_fragment_news_title);
         mTitleNewsFragment.setAthleteID(mNews.getAthlete_id());
-        mTitleNewsFragment.setName(mNews.getName(), mNews.getSurname());
+        mTitleNewsFragment.setName(mNews.getName(), mNews.getSurname()+" #"+mNews.getId());
         mTitleNewsFragment.setDateTimeStart(mNews.getDatetime_start());
 
         mNewsSportTypePanelFragment = (SportTypeNewsPanelFragment) fm.findFragmentById(R.id.newscard_fragment_news_sporttype_panel);
