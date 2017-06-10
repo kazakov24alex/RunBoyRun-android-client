@@ -110,6 +110,9 @@
         <activity android:name=".activities.SubscribersActivity"
             android:label="Subscribers"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.RouteActivity"
+            android:label="Route"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
 
 

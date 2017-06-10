@@ -35,8 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.activities.ActivityPageActivity;
 import twoAK.runboyrun.activities.ConditionActivity;
+import twoAK.runboyrun.activities.RouteActivity;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -121,8 +121,8 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    Intent intent = new Intent(getContext(), ActivityPageActivity.class);
-                    intent.put
+                    Intent intent = new Intent(getContext(), RouteActivity.class);
+                    intent.putExtra("ACTIVITY_ID", mActivityID);
                     startActivity(intent);
                 }
             });
@@ -245,6 +245,8 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
         GetRouteTask(int activity_id) {
             errMes = null;
             this.activity_id = activity_id;
+
+            Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY_ID="+activity_id);
         }
 
         @Override
