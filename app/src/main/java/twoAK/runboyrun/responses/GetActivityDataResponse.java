@@ -1,8 +1,6 @@
 package twoAK.runboyrun.responses;
 
 
-import java.util.List;
-
 public class GetActivityDataResponse extends BaseResponse {
 
     private int id;
@@ -19,9 +17,6 @@ public class GetActivityDataResponse extends BaseResponse {
     private double average_speed;
     private double tempo;
     private String description;
-
-    private List<List<Double>> route;
-    private List<List<Double>> timeline;
 
     private int like_num;
     private int dislike_num;
@@ -139,22 +134,6 @@ public class GetActivityDataResponse extends BaseResponse {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<List<Double>> getRoute() {
-        return route;
-    }
-
-    public void setRoute(List<List<Double>> route) {
-        this.route = route;
-    }
-
-    public List<List<Double>> getTimeline() {
-        return timeline;
-    }
-
-    public void setTimeline(List<List<Double>> timeline) {
-        this.timeline = timeline;
     }
 
     public int getLike_num() {

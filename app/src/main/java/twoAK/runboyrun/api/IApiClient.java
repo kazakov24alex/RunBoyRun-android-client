@@ -81,4 +81,7 @@ public interface IApiClient {
     public boolean sendSubscribe(SubscribeBody subscribeBody)
             throws RequestFailedException, InsuccessfulResponseException;
 
+    public List<List<Double>> getRoute(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException;
+
 }

@@ -54,6 +54,12 @@
                     android:padding="1dp">
 
                     <!-- PUT HERE THE PORTION OF THE HEADER YOU WANT TO COLLAPSE WHEN SCROLLING-->
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@drawable/background_space"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -187,8 +187,6 @@ public class LikePanelFragment extends Fragment {
 
 
 
-
-
     public Boolean getmMyValue() {
         return mMyValue;
     }

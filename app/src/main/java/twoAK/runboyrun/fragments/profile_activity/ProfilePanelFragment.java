@@ -1,11 +1,11 @@
 package twoAK.runboyrun.fragments.profile_activity;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -50,7 +50,7 @@ public class ProfilePanelFragment extends Fragment{
     private FloatingActionButton mSubscribeFAB;
     private TextView mNameText;
     private TextView mSurnameText;
-    private TextView mCountryCityText;
+    private TextView mLocationText;
     private TextView mAgeText;
 
     private int ind = 0;
@@ -79,8 +79,8 @@ public class ProfilePanelFragment extends Fragment{
         //View initialization
         mNameText = (TextView) rootView.findViewById(R.id.profile_panel_textView_name);
         mSurnameText = (TextView) rootView.findViewById(R.id.profile_panel_textView_surname);
-        mCountryCityText = (TextView) rootView.findViewById(R.id.profile_panel_textView_country_city);
-        mAgeText = (TextView) rootView.findViewById(R.id.profile_panel_textView_age);
+        mLocationText = (TextView) rootView.findViewById(R.id.profile_panel_text_location);
+        mAgeText = (TextView) rootView.findViewById(R.id.profile_panel_text_birthday);
 
         return rootView;
     }
@@ -91,18 +91,17 @@ public class ProfilePanelFragment extends Fragment{
 
         mNameText.setText(profile.getName());
         mSurnameText.setText(profile.getSurname());
-        mCountryCityText.setText(profile.getCountry()+", "+profile.getCity());
+        mLocationText.setText(getString(R.string.profile_panel_label_location) + " " + profile.getCountry()+", "+profile.getCity());
 
         Date birthdayDate = new Date();
         try{
             birthdayDate = (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")).parse(profile.getBirthday().replaceAll("Z$", "+0000"));
+            String date_string = (new SimpleDateFormat("dd.MM.yyyy")).format(birthdayDate);
+            mAgeText.setText(getString(R.string.profile_panel_label_bithday) + " " + date_string);
         } catch (ParseException e) {
             //TODO: handle
             Log.i(APP_TAG, ACTIVITY_TAG + e);
         }
-
-        mAgeText.setText("Age: "+getDiffYears(birthdayDate, new Date()));
-
 
         if(profile.getSubscription() == null) {
             mSubscribeFAB.setVisibility(View.GONE);
@@ -148,17 +147,22 @@ public class ProfilePanelFragment extends Fragment{
                 Toast.makeText(getContext(), errMes, Toast.LENGTH_SHORT).show();
 
                 mSubscribeFAB.setClickable(true);
-                //setFABstate(mProfile.getSubscription());
                 mSendSubscribeTask = null;
                 return;
             }
 
-            Log.i(APP_TAG, ACTIVITY_TAG + "subscription was sent");
-            Toast.makeText(getContext(), getString(R.string.profile_panel_toast_subscribed), Toast.LENGTH_SHORT).show();
-
             mSubscribeFAB.setClickable(true);
             mProfile.setSubscription(!mProfile.getSubscription());
             setFABstate(mProfile.getSubscription());
+
+            if(mProfile.getSubscription() == true) {
+                Toast.makeText(getContext(), getString(R.string.profile_panel_toast_subscribed), Toast.LENGTH_SHORT).show();
+                Log.i(APP_TAG, ACTIVITY_TAG + "you subscribed");
+            } else {
+                Toast.makeText(getContext(), getString(R.string.profile_panel_toast_unsubscribed), Toast.LENGTH_SHORT).show();
+                Log.i(APP_TAG, ACTIVITY_TAG + "you unsubscribed");
+            }
+
             mSendSubscribeTask = null;
         }
 
@@ -170,9 +174,10 @@ public class ProfilePanelFragment extends Fragment{
     public void setFABstate(boolean state) {
         //TODO:
         if (state == true) {
-            mSubscribeFAB.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.TEXT_GREY)));
+            mSubscribeFAB.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.TEXT_GREY)));
         } else {
-            mSubscribeFAB.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.TEXT_GREY)));
+            mSubscribeFAB.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.TEXT_SELECTED)));
+            //mSubscribeFAB.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.TEXT_GREY)));
         }
     }
 

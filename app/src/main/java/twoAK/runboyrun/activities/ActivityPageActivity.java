@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import twoAK.runboyrun.R;
@@ -27,6 +28,7 @@ import twoAK.runboyrun.fragments.activity_page.ConditionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.DescriptionPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.LastCommentsPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.LikePanelFragment;
+import twoAK.runboyrun.fragments.activity_page.RoutePanelFragment;
 import twoAK.runboyrun.fragments.activity_page.StatisticsPanelFragment;
 import twoAK.runboyrun.fragments.activity_page.TitleActivityFragment;
 import twoAK.runboyrun.request.body.CommentBody;
@@ -52,9 +54,11 @@ public class ActivityPageActivity extends BaseActivity {
 
     private View mFormView;
     private View mProgressView;
+    private LinearLayout mMapLayout;
 
     private TitleActivityFragment       mTitleActivityFragment;
     private ConditionPanelFragment      mConditionPanelFragment;
+    private RoutePanelFragment          mRoutePanelFragment;
     private StatisticsPanelFragment     mStatisticsPanelFragment;
     private DescriptionPanelFragment    mDescriptionPanelFragment;
     private LikePanelFragment           mLikePanelFragment;
@@ -84,10 +88,10 @@ public class ActivityPageActivity extends BaseActivity {
             finish();
         }
 
-        Log.i(APP_TAG, "Id = "+mActivityID);
         // progress circle
         mFormView  = findViewById(R.id.activity_page_sclroll_view);
         mProgressView = findViewById(R.id.activity_page_progress_circle);
+        mMapLayout = (LinearLayout) findViewById((R.id.activity_page_container_fragment_route_panel));
 
         // Fragments initialization
         mTitleActivityFragment = (TitleActivityFragment) getSupportFragmentManager()
@@ -221,6 +225,10 @@ public class ActivityPageActivity extends BaseActivity {
                 addCommentReviewPanel(activityData.getDescription());
             }
 
+            if(activityData.isTrack() != false) {
+                addRoutePanel(mActivityID);
+            }
+
             mLikePanelFragment.setActivityID(activityData.getId());
             mLikePanelFragment.setLikeNum(activityData.getLike_num());
             mLikePanelFragment.setDislikeNum(activityData.getDislike_num());
@@ -348,6 +356,20 @@ public class ActivityPageActivity extends BaseActivity {
         mDescriptionPanelFragment.setDescriptionValue(description);
 
         fragmentTransaction.add(R.id.activity_page_container_fragment_description_panel, mDescriptionPanelFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void addRoutePanel(int mActivityID) {
+        // получаем экземпляр FragmentTransaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // добавляем фрагмент
+        mRoutePanelFragment = new RoutePanelFragment();
+        mRoutePanelFragment.setActivityID(mActivityID);
+        mRoutePanelFragment.setInteractive(false);
+
+        fragmentTransaction.add(R.id.activity_page_container_fragment_route_panel, mRoutePanelFragment);
         fragmentTransaction.commit();
     }
 

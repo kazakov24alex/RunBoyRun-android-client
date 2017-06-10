@@ -22,6 +22,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetRouteResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -109,4 +110,8 @@ public interface RunBoyRunServerApi {
     @POST("api/subs")
     Call<BaseResponse> sendSubscribe(@Header("Authorization") String token,
                                      @Body SubscribeBody subscribeBody);
+
+    @GET("api/activity/route/{activity_id}")
+    Call<GetRouteResponse> getRoute(@Header("Authorization") String token,
+                                    @Path("activity_id")     int activity_id);
 }

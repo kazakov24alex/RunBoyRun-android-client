@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -20,13 +20,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
+                android:layout_weight="1.5"
                 android:orientation="vertical">
 
                 <twoAK.runboyrun.adapters.SquareImageView
                     android:id="@+id/profile_panel_imageview_avatar"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+                    android:layout_height="fill_parent"
+                    android:layout_margin="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -39,50 +40,45 @@
                     android:id="@+id/profile_panel_textView_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/profile_textView_country_city"
-                    android:layout_weight="1.5"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/profile_panel_textView_surname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/profile_imageView_avatar"
-                    android:layout_alignStart="@+id/profile_textView_name"
-                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:paddingTop="-10dp"
+                    android:layout_marginTop="-10dp"/>
+
+
+                <TextView
+                    android:id="@+id/profile_panel_text_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/profile_panel_text_birthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-3dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/profile_panel_textView_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/profile_textView_country_city"
-            android:layout_below="@+id/profile_textView_country_city"
-            android:layout_marginTop="11dp"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/profile_panel_textView_country_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/profile_imageView_avatar"
-            android:layout_below="@+id/profile_imageView_avatar"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal" />
 
     </LinearLayout>
 
@@ -91,9 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         android:clickable="true"
-        app:backgroundTint="@color/TEXT_SELECTED" />
+        app:backgroundTint="@color/TEXT_SELECTED"
+        app:fabSize="mini" />
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

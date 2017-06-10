@@ -233,8 +233,10 @@
     <string name="comment_activity_order_label">#</string>
 
     <!-- Profile Panel Fragment-->
-    <string name="profile_panel_toast_subscribed">subscribed</string>
-
+    <string name="profile_panel_toast_subscribed">you subscribed</string>
+    <string name="profile_panel_toast_unsubscribed">you unsubscribed</string>
+    <string name="profile_panel_label_location">Location: </string>
+    <string name="profile_panel_label_bithday">Birthday: </string>
 
 
     <!--ERRORS-->

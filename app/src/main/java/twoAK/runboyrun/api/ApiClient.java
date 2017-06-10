@@ -31,6 +31,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetRouteResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -372,6 +373,23 @@ public class ApiClient implements IApiClient {
                 return true;
             } else {
                 throw new InsuccessfulResponseException("Failed to send subscribe to server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+    @Override
+    public List<List<Double>> getRoute(int activity_id)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetRouteResponse> req = service.getRoute(Auth.getHeaderField(), activity_id);
+        try {
+            Response<GetRouteResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body().getRoute();
+            } else {
+                throw new InsuccessfulResponseException("Failed to get route to server.");
             }
         } catch (IOException e) {
             throw new RequestFailedException(e);
