@@ -166,7 +166,12 @@ public abstract class BaseActivity extends AppCompatActivity
                 break;
 
             case R.id.navdrawer_item_statistics:
-                intent = new Intent(this, NewsFeedProfileActivity.class);
+                intent = new Intent(this, SearchActivity.class);
+                createBackStack(intent);
+                break;
+
+            case R.id.navdrawer_item_records:
+                intent = new Intent(this, NewsFeedActivity.class);
                 createBackStack(intent);
                 break;
 
@@ -184,7 +189,6 @@ public abstract class BaseActivity extends AppCompatActivity
 
         return true;
     }
-
 
     protected boolean isNavDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);

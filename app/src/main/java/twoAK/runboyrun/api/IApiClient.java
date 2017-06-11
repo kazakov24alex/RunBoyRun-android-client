@@ -16,6 +16,7 @@ import twoAK.runboyrun.responses.GetActivityDataResponse;
 import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
+import twoAK.runboyrun.responses.GetSearchResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -84,4 +85,9 @@ public interface IApiClient {
     public List<List<Double>> getRoute(int activity_id)
             throws RequestFailedException, InsuccessfulResponseException;
 
+    public GetSearchResponse getSearch(String searchString)
+            throws RequestFailedException, InsuccessfulResponseException;
+
+    public GetNewsResponse getNewsFeedPage(int start_id, int page_size, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException;
 }

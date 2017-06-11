@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import twoAK.runboyrun.R;
 import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.activities.NewsFeedProfileActivity;
-import twoAK.runboyrun.adapters.LikeListAdapter;
+import twoAK.runboyrun.adapters.ValueListAdapter;
 import twoAK.runboyrun.responses.objects.ValueObject;
 
 
@@ -36,7 +36,7 @@ public class LikeListFragment extends Fragment{
         mListView = (ListView) mRootView.findViewById(R.id.like_list_listview);
 
         // set adapten on ListView
-        LikeListAdapter adapter = new LikeListAdapter(getActivity(), mValuesList);
+        ValueListAdapter adapter = new ValueListAdapter(getActivity(), mValuesList);
         mListView.setAdapter(adapter);
 
         // on item click listener

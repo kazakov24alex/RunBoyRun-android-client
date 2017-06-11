@@ -113,6 +113,14 @@
         <activity android:name=".activities.RouteActivity"
             android:label="Route"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.SearchActivity"
+            android:label="Search athlete"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.NewsFeedActivity"
+            android:label="News feed"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
 
 
 

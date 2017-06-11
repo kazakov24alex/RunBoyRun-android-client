@@ -3,15 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/profile_activity_text_no_activities_yet"
-        android:textAlignment="center"
-        android:textColor="@color/TEXT_GREY"
-        android:textSize="22sp"
-        android:textStyle="italic" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

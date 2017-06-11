@@ -15,7 +15,7 @@ import twoAK.runboyrun.activities.ConditionActivity;
 import twoAK.runboyrun.responses.objects.ValueObject;
 
 
-public class LikeListAdapter extends BaseAdapter {
+public class ValueListAdapter extends BaseAdapter {
 
     static final String APP_TAG = "RUN-BOY-RUN";
     static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
@@ -24,7 +24,7 @@ public class LikeListAdapter extends BaseAdapter {
     private LayoutInflater lInflater;
     private List<ValueObject> valuesList;
 
-    public LikeListAdapter(Context context, List<ValueObject> valuesList) {
+    public ValueListAdapter(Context context, List<ValueObject> valuesList) {
         this.valuesList = valuesList;
         ctx = context;
         lInflater = (LayoutInflater) ctx

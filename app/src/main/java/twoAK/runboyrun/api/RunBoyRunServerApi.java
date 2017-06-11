@@ -23,6 +23,7 @@ import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetRouteResponse;
+import twoAK.runboyrun.responses.GetSearchResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -114,4 +115,15 @@ public interface RunBoyRunServerApi {
     @GET("api/activity/route/{activity_id}")
     Call<GetRouteResponse> getRoute(@Header("Authorization") String token,
                                     @Path("activity_id")     int activity_id);
+
+    @GET("api/profile/search/{searchString}")
+    Call<GetSearchResponse> getSearch(@Header("Authorization") String token,
+                                      @Path("searchString")    String searchString);
+
+    @GET("api/newsfeed/start_id/{start_id}/page_size/{page_size}/page_num/{page_num}")
+    Call<GetNewsResponse> getNewsFeedPage(@Header("Authorization") String token,
+                                          @Path("start_id")     int start_id,
+                                          @Path("page_size")    int page_size,
+                                          @Path("page_num")     int page_num);
+
 }

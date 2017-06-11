@@ -32,6 +32,7 @@ import twoAK.runboyrun.responses.GetCommentsResponse;
 import twoAK.runboyrun.responses.GetNewsResponse;
 import twoAK.runboyrun.responses.GetProfileResponse;
 import twoAK.runboyrun.responses.GetRouteResponse;
+import twoAK.runboyrun.responses.GetSearchResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
@@ -389,7 +390,42 @@ public class ApiClient implements IApiClient {
             if(response.body().isSuccess()) {
                 return response.body().getRoute();
             } else {
-                throw new InsuccessfulResponseException("Failed to get route to server.");
+                throw new InsuccessfulResponseException("Failed to get route from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+    @Override
+    public GetSearchResponse getSearch(String searchString)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetSearchResponse> req = service.getSearch(Auth.getHeaderField(), searchString);
+        try {
+            Response<GetSearchResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to make search on server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+    @Override
+    public GetNewsResponse getNewsFeedPage(int start_id, int page_size, int page_num)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetNewsResponse> req = service.getNewsFeedPage(Auth.getHeaderField(), start_id, page_size, page_num);
+        System.out.println("RUN-BOY-RUN TOKEN="+Auth.getHeaderField());
+        try {
+            Response<GetNewsResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to getting news feed page from server.");
             }
         } catch (IOException e) {
             throw new RequestFailedException(e);
