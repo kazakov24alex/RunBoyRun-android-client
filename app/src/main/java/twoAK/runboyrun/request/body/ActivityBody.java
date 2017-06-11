@@ -13,7 +13,7 @@ public class ActivityBody {
     String relief;
     String condition;
     String duration;
-    int distance;
+    double distance;
     double average_speed;
     double tempo;
     String description;
@@ -95,11 +95,11 @@ public class ActivityBody {
         this.duration = duration;
     }
 
-    public int getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -108,7 +108,7 @@ public class ActivityBody {
     }
 
     public void setAverage_speed(double average_speed) {
-        this.average_speed = average_speed;
+        this.average_speed = round(average_speed, 2);;
     }
 
     public double getTempo() {
@@ -116,7 +116,7 @@ public class ActivityBody {
     }
 
     public void setTempo(double tempo) {
-        this.tempo = tempo;
+        this.tempo = round(tempo, 2);
     }
 
     public String getDescription() {
@@ -125,6 +125,16 @@ public class ActivityBody {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 
 }

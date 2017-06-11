@@ -3,16 +3,16 @@ package twoAK.runboyrun.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import twoAK.runboyrun.R;
@@ -22,7 +22,7 @@ import twoAK.runboyrun.adapters.TimeWheelAdapter;
 public class EnterCompletedActivity extends BaseActivity {
 
     static final String APP_TAG = "RUN-BOY-RUN";
-    static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
+    static final String ACTIVITY_TAG = "["+EnterCompletedActivity.class.getName()+"]: ";
 
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
@@ -59,7 +59,7 @@ public class EnterCompletedActivity extends BaseActivity {
 
         // Meters horizontal wheel
         mMetersWheel = (AbstractWheel) findViewById(R.id.enter_completed_wheel_meters);
-        MetersWheelAdapter metersAdapter = new MetersWheelAdapter(this, 1, 20, "%d");
+        MetersWheelAdapter metersAdapter = new MetersWheelAdapter(this, 0, 19, "%d");
         metersAdapter.setItemResource(R.layout.wheel_text_centered_dark_back);
         metersAdapter.setItemTextResource(R.id.text);
         mMetersWheel.setViewAdapter(metersAdapter);
@@ -84,8 +84,8 @@ public class EnterCompletedActivity extends BaseActivity {
 
     public void onRecordButtonClick(View view) {
         // check distance
-        int distance = (mKilometersWheel.getCurrentItem()+1)*1000 + (mMetersWheel.getCurrentItem()+1)*50;
-        if(distance < 1000) {
+        double distance = (mKilometersWheel.getCurrentItem()+1) + (mMetersWheel.getCurrentItem())*50*0.001;
+        if(distance < 1) {
             Toast.makeText(this, getString(R.string.enter_completed_toast_error_short_distance), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -124,18 +124,23 @@ public class EnterCompletedActivity extends BaseActivity {
 
         // send data to condition activity
         Intent intent = new Intent(EnterCompletedActivity.this, ConditionActivity.class);
+
         intent.putExtra("TRACK", false);
         intent.putExtra("SPORT_TYPE", mSportType);
         intent.putExtra("DISTANCE", distance);
-        intent.putExtra("START_TIME", starttime_calendar.getTime().toString());
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String mDateTimeStart = df.format(starttime_calendar.getTime());
+        intent.putExtra("START_TIME", mDateTimeStart);
+
         String spent_time = mHoursWheel.getCurrentItem()+":"+mMinutesWheel.getCurrentItem()+":00";
-        intent.putExtra("SPENT_TIME", spent_time);
+        intent.putExtra("DURATION", spent_time);
         //TODO
-        double avg_speed = (distance/(mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem()))*(60/1000);
-        double tempo = (mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem())/distance*1000;
+        double tempo = (mHoursWheel.getCurrentItem()*60+mMinutesWheel.getCurrentItem())/distance;
+        double avg_speed = 60 / tempo;
         intent.putExtra("AVG_SPEED", avg_speed);
         intent.putExtra("TEMPO", tempo);
-       // System.out.println("!!!!!"+tempo);
+
         startActivity(intent);
 
     }

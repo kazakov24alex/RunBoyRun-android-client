@@ -245,8 +245,6 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
         GetRouteTask(int activity_id) {
             errMes = null;
             this.activity_id = activity_id;
-
-            Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY_ID="+activity_id);
         }
 
         @Override

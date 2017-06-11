@@ -242,15 +242,17 @@ public class ConditionActivity extends AppCompatActivity {
         protected void onPostExecute(SendTrainingInfoResponse response) {
             if (response==null){
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
-                Log.i(APP_TAG,ACTIVITY_TAG+"Sending activity err = "+errMes);
+                Log.i(APP_TAG,ACTIVITY_TAG + "Sending activity ERROR = "+errMes);
             }
             else{
-                Log.i(APP_TAG,ACTIVITY_TAG+"Activity is recorded!");
-                Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY_ID "+ response.getActivity_id());
+                Log.i(APP_TAG,ACTIVITY_TAG+"ACTIVITY IS RECORDED!");
+
                 Intent intent = new Intent(getApplicationContext(),ActivityPageActivity.class);
                 intent.putExtra("ACTIVITY_ID",response.getActivity_id());
                 startActivity(intent);
             }
+
+            hideProgressDialog();
         }
 
         /**
@@ -372,67 +374,110 @@ public class ConditionActivity extends AppCompatActivity {
     }
 
     public void onRecordButtonClick(View view){
-        ActivityBody body = new ActivityBody();
-        Intent intent = getIntent();
+        Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY RECORDING...");
 
-        boolean track = intent.getBooleanExtra("TRACK",false);
-        body.setTrack(track);
+        Intent intent = getIntent();
+        ActivityBody body = new ActivityBody();
 
         String sport_type = intent.getStringExtra("SPORT_TYPE");
-        System.out.println("!!!!!"+sport_type);
         if(sport_type!=null){
             body.setSport_type(sport_type);
+            Log.i(APP_TAG, ACTIVITY_TAG + "sport type = "+sport_type);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: sport type is absent");
+            Toast.makeText(this, "SPORT_TYPE IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
+
+        boolean track = intent.getBooleanExtra("TRACK", false);
+        Log.i(APP_TAG, ACTIVITY_TAG + "track = "+ track);
+        body.setTrack(track);
+
 
         String datetime_start = intent.getStringExtra("START_TIME");
         if(datetime_start!=null){
             body.setDatetime_start(datetime_start);
+            Log.i(APP_TAG, ACTIVITY_TAG + "datetime start = "+datetime_start);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: datetime_start is absent");
+            Toast.makeText(this, "START_TIME IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
-
 
         body.setTemperature(mTemperatureValue);
+        Log.i(APP_TAG, ACTIVITY_TAG + "temperature = "+mTemperatureValue);
 
-        if(mWeatherValue.equals("")){
+        if(!mWeatherValue.equals("")){
+            Log.i(APP_TAG, ACTIVITY_TAG + "weather = "+mWeatherValue);
+            body.setWeather(mWeatherValue);
+        } else{
             Toast.makeText(this, getString(R.string.condition_panel_toast_select_condition), Toast.LENGTH_SHORT).show();
             return;
-        } else{
-            body.setWeather(mWeatherValue);
         }
 
-        if(mReliefValue.equals("")) {
+        if(!mReliefValue.equals("")) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "relief = "+mReliefValue);
+            body.setRelief(mReliefValue);
+        } else {
             Toast.makeText(this, getString(R.string.condition_panel_toast_select_relief), Toast.LENGTH_SHORT).show();
             return;
-        } else {
-            body.setRelief(mReliefValue);
         }
 
-        if(mConditionValue.equals("")) {
+        if(!mConditionValue.equals("")) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "condition = "+mConditionValue);
+            body.setCondition(mConditionValue);
+        } else {
             Toast.makeText(this, getString(R.string.condition_panel_toast_select_condition), Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        String description = mDescriptionText.getText().toString().trim();
+        if(!description.equals("")) {
+            Log.i(APP_TAG, ACTIVITY_TAG + "description = "+description);
+            body.setDescription(description);
         } else {
-            body.setCondition(mConditionValue);
+            Log.i(APP_TAG, ACTIVITY_TAG + "description = NULL");
+            body.setDescription(null);
         }
 
-        body.setDescription(mDescriptionText.getText().toString());
-
-        String spent_time = intent.getStringExtra("SPENT_TIME");
-        if(spent_time!=null){
-            body.setDuration(spent_time);
+        String duration = intent.getStringExtra("DURATION");
+        if(duration != null){
+            Log.i(APP_TAG, ACTIVITY_TAG + "duration = "+duration);
+            body.setDuration(duration);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: duration is absent");
+            Toast.makeText(this, "DURATION IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        int distance = intent.getIntExtra("DISTANCE",-1);
-        if(distance!=-1){
+        double distance = intent.getDoubleExtra("DISTANCE",-1);
+        if(distance !=-1 ){
+            Log.i(APP_TAG, ACTIVITY_TAG + "distance = " + distance);
             body.setDistance(distance);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: distance is absent");
+            Toast.makeText(this, "DISTANCE IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         double avg_speed =  intent.getDoubleExtra("AVG_SPEED",-1);
-        if(avg_speed!=-1){
+        if(avg_speed != -1){
+            Log.i(APP_TAG, ACTIVITY_TAG + "average speed = " + avg_speed);
             body.setAverage_speed(avg_speed);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: average speed is absent");
+            Toast.makeText(this, "AVERAGE SPEED IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         double tempo =  intent.getDoubleExtra("TEMPO",-1);
-        if(tempo!=-1){
+        if(tempo !=- 1){
+            Log.i(APP_TAG, ACTIVITY_TAG + "tempo = " + tempo);
             body.setTempo(tempo);
+        } else {
+            Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: tempo is absent");
+            Toast.makeText(this, "TEMPO IS ABSENT", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
 

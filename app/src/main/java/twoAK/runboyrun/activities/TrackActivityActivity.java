@@ -50,7 +50,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.pathsense.android.sdk.location.PathsenseInVehicleLocation;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -79,6 +82,8 @@ public class TrackActivityActivity extends AppCompatActivity
 
 
     private Context ctx = this;
+    private String mSportType;
+    private String mDateTimeStart;
 
     // Google Voice
     private TextToSpeech mTTS;
@@ -173,6 +178,7 @@ public class TrackActivityActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_activity);
 
+        mSportType = getIntent().getExtras().getString("SPORT_TYPE");
 
         mPreferences = getSharedPreferences("PathsenseInVehicleLocationDemoPreferences", MODE_PRIVATE);
         mTTS = new TextToSpeech(this, this); // Google Voice
@@ -505,6 +511,10 @@ public class TrackActivityActivity extends AppCompatActivity
     }
 
     private void startActivity() {
+        // record datetime start
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        mDateTimeStart = df.format(Calendar.getInstance().getTime());
+
         mStartButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.RED_LIGHT)));
         if(speechIsAvailable)
             mTTS.speak("We start training!", TextToSpeech.QUEUE_FLUSH, null);
@@ -645,6 +655,13 @@ public class TrackActivityActivity extends AppCompatActivity
         finish();
 
         Intent intent = new Intent(TrackActivityActivity.this, ConditionActivity.class);
+        intent.putExtra("SPORT_TYPE", mSportType);
+        intent.putExtra("START_TIME", mDateTimeStart);
+        intent.putExtra("TRACK", true);
+        intent.putExtra("DURATION", mTrackChronometer.getText());
+        intent.putExtra("DISTANCE", Double.parseDouble(mTempoText.getText().toString()));
+        intent.putExtra("AVG_SPEED", Double.parseDouble(mTempoText.getText().toString())/60);
+        intent.putExtra("TEMPO", Double.parseDouble(mTempoText.getText().toString()));
         intent.putExtra("ROUTE", (Serializable) mRoutePointTimeList);
         startActivity(intent);
     }

@@ -17,7 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:background="@drawable/background_custom"
+            android:paddingLeft="1.5dp"
+            android:paddingRight="1.5dp">
 
             <TextView
                 android:id="@+id/track_activity_text_km_number"
@@ -44,7 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="4">
+            android:layout_weight="4"
+            android:background="@drawable/background_custom"
+            android:paddingLeft="1.5dp"
+            android:paddingRight="1.5dp">
 
             <Chronometer
                 android:id="@+id/track_activity_chronometer"
@@ -71,7 +77,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:background="@drawable/background_custom"
+            android:paddingLeft="1.5dp"
+            android:paddingRight="1.5dp">
 
             <TextView
                 android:id="@+id/track_activity_text_tempo_number"
@@ -100,7 +109,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:weightSum="5">
+            android:weightSum="5"
+            android:background="@drawable/background_custom"
+            android:paddingLeft="1.5dp"
+            android:paddingRight="1.5dp">
 
 
             <TextView
@@ -129,6 +141,9 @@
 
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

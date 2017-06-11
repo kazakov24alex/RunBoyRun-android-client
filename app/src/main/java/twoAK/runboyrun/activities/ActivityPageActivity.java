@@ -40,7 +40,7 @@ import twoAK.runboyrun.responses.objects.CommentObject;
 public class ActivityPageActivity extends BaseActivity {
 
     static final String APP_TAG = "RUN-BOY-RUN";
-    static final String ACTIVITY_TAG = "["+ConditionActivity.class.getName()+"]: ";
+    static final String ACTIVITY_TAG = "["+ActivityPageActivity.class.getName()+"]: ";
 
     static final int COMMENTS_NUM_MAX = 3;
 
