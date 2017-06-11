@@ -127,8 +127,6 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
                     startActivity(intent);
                 }
             });
-        } else {
-            zoom = 14.0f;
         }
 
         LatLng middle = new LatLng(mRoute.get(mRoute.size()/2).get(0), mRoute.get(mRoute.size()/2).get(1));

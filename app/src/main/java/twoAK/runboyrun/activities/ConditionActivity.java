@@ -21,7 +21,7 @@ import twoAK.runboyrun.R;
 import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.SendTrainingInfoFailedException;
-import twoAK.runboyrun.objects.route.PointTime;
+import twoAK.runboyrun.objects.route.RoutePoint;
 import twoAK.runboyrun.request.body.ActivityBody;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 
@@ -49,7 +49,9 @@ public class ConditionActivity extends AppCompatActivity {
 
 
 
-    private List<PointTime> mRoutePointTimeList;
+    private List<RoutePoint> mRoutePointList;
+    private List<RoutePoint> mRouteTimeList;
+
 
     private List<SquareImageView> mWeatherButtonsList;
     private List<SquareImageView> mReliefButtonsList;
@@ -108,9 +110,6 @@ public class ConditionActivity extends AppCompatActivity {
         Log.i(APP_TAG, ACTIVITY_TAG + "ACTIVITY WAS CREATED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_condition);
-
-        Intent intent = getIntent();
-        mRoutePointTimeList = (List<PointTime>) intent.getSerializableExtra("ROUTE");
 
         mWeatherButtonsList = new ArrayList<SquareImageView>();
         mReliefButtonsList = new ArrayList<SquareImageView>();
@@ -392,6 +391,14 @@ public class ConditionActivity extends AppCompatActivity {
         boolean track = intent.getBooleanExtra("TRACK", false);
         Log.i(APP_TAG, ACTIVITY_TAG + "track = "+ track);
         body.setTrack(track);
+
+        if(track == true) {
+            mRoutePointList = (List<RoutePoint>) intent.getSerializableExtra("ROUTE");
+            body.setRoute(mRoutePointList);
+
+            mRouteTimeList = (List<RoutePoint>) intent.getSerializableExtra("TIMELINE");
+            body.setTimeline(mRouteTimeList);
+        }
 
 
         String datetime_start = intent.getStringExtra("START_TIME");

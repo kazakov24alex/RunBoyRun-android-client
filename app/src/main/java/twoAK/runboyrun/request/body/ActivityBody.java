@@ -1,7 +1,10 @@
 package twoAK.runboyrun.request.body;
 
 
+import java.util.ArrayList;
 import java.util.List;
+
+import twoAK.runboyrun.objects.route.RoutePoint;
 
 public class ActivityBody {
 
@@ -20,8 +23,6 @@ public class ActivityBody {
 
     List<List<Double>> route;
     List<List<Double>> timeline;
-
-
 
 
 
@@ -128,6 +129,35 @@ public class ActivityBody {
     }
 
 
+
+    public void setRoute(List<RoutePoint> routeList) {
+        route = new ArrayList<List<Double>>();
+
+        for(int i = 0; i < routeList.size(); i++) {
+            List<Double> point = new ArrayList<Double>();
+            point.add(routeList.get(i).lat);
+            point.add(routeList.get(i).lng);
+            route.add(point);
+        }
+    }
+
+    public void setTimeline(List<RoutePoint> timelineList) {
+        timeline = new ArrayList<List<Double>>();
+
+        for(int i = 0; i < timelineList.size(); i++) {
+            List<Double> timepoint = new ArrayList<Double>();
+            timepoint.add(timelineList.get(i).lat);
+            timepoint.add(timelineList.get(i).lng);
+            timeline.add(timepoint);
+        }
+
+        System.out.println("RUN-BOY-RUN  SIZE="+timelineList.size());
+        System.out.println("RUN-BOY-RUN  SIZE="+timelineList.get(0).lat);
+
+    }
+
+
+
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -136,5 +166,6 @@ public class ActivityBody {
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
+
 
 }

@@ -60,7 +60,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import twoAK.runboyrun.R;
-import twoAK.runboyrun.objects.route.PointTime;
+import twoAK.runboyrun.objects.route.RoutePoint;
 import twoAK.runboyrun.pathsense.FusedLocationManager;
 import twoAK.runboyrun.pathsense.PathsenseInVehicleLocationUpdateRunnerService;
 
@@ -106,7 +106,8 @@ public class TrackActivityActivity extends AppCompatActivity
 
 
     private Chronometer mTrackChronometer;
-    private List<PointTime> mRoutePointTimeList;
+    private List<RoutePoint> mRoutePointList;
+    private List<RoutePoint> mRouteTimeList;
 
     // Map KM labels
     private List<Marker> mKmLabelMarkerList;
@@ -143,7 +144,7 @@ public class TrackActivityActivity extends AppCompatActivity
 
         // сheck whether the location has changed
         if(curPosition.latitude == location.getLatitude() && curPosition.longitude == location.getLongitude())
-            if(!isTracked || mRoutePointTimeList.size()!=0)
+            if(!isTracked || mRoutePointList.size()!=0)
                 return;
 
         setCurrentPositionMarker(location);
@@ -200,7 +201,8 @@ public class TrackActivityActivity extends AppCompatActivity
         mKmTraveled = 0;
         mTempo = 0;
 
-        mRoutePointTimeList = new ArrayList<PointTime>();
+        mRoutePointList = new ArrayList<RoutePoint>();
+        mRouteTimeList = new ArrayList<RoutePoint>();
         mKmLabelMarkerList = new ArrayList<Marker>();
 
         // Google Maps view
@@ -212,7 +214,7 @@ public class TrackActivityActivity extends AppCompatActivity
         mDistanceText = (TextView) findViewById(R.id.track_activity_text_km_number);
         mDistanceText.setText(String.format(Locale.US, "%.2f", mDistanceMeters));
         mTempoText = (TextView) findViewById(R.id.track_activity_text_tempo_number);
-        mTempoText.setText("0:00");
+        mTempoText.setText("0.00");
         mProviderStatus = (TextView) findViewById(R.id.track_activity_text_provider_status);
 
         mStartButton = (FloatingActionButton) findViewById(R.id.track_activity_floatbut_start);
@@ -546,7 +548,8 @@ public class TrackActivityActivity extends AppCompatActivity
         List<LatLng> points = mRoutePolyline.getPoints();
         points.add(newLatLng);
         mRoutePolyline.setPoints(points);
-        mRoutePointTimeList.add(new PointTime(newLatLng, elapsedSeconds));
+        mRoutePointList.add(new RoutePoint(newLatLng));
+        mRouteTimeList.add(new RoutePoint(elapsedSeconds, 0));
 
         if (points.size() > 1) {
             // distance calculating
@@ -561,9 +564,13 @@ public class TrackActivityActivity extends AppCompatActivity
             if(mDistanceMeters *0.001 > mKmTraveled)
                 setKmLabelMarker(newLatLng);
 
+            mTempoText.setText(String.format(Locale.US, "%.2f", (elapsedSeconds / 60) / Double.parseDouble(mDistanceText.getText().toString())));
+
         } else {
             setKmLabelMarker(newLatLng);
         }
+
+
 
         Log.i(APP_TAG, ACTIVITY_TAG + "LAT="+newLatLng.latitude+"\tLNG="+newLatLng.longitude+"\tSEC="+elapsedSeconds);
     }
@@ -659,10 +666,12 @@ public class TrackActivityActivity extends AppCompatActivity
         intent.putExtra("START_TIME", mDateTimeStart);
         intent.putExtra("TRACK", true);
         intent.putExtra("DURATION", mTrackChronometer.getText());
-        intent.putExtra("DISTANCE", Double.parseDouble(mTempoText.getText().toString()));
+        intent.putExtra("DISTANCE", Double.parseDouble(mDistanceText.getText().toString()));
+        Log.i(APP_TAG, ACTIVITY_TAG + "AVG_SPEED = "+ mTempoText.getText().toString());
         intent.putExtra("AVG_SPEED", Double.parseDouble(mTempoText.getText().toString())/60);
         intent.putExtra("TEMPO", Double.parseDouble(mTempoText.getText().toString()));
-        intent.putExtra("ROUTE", (Serializable) mRoutePointTimeList);
+        intent.putExtra("ROUTE", (Serializable) mRoutePointList);
+        intent.putExtra("TIMELINE", (Serializable) mRouteTimeList);
         startActivity(intent);
     }
 
