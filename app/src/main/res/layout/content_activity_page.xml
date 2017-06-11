@@ -45,10 +45,10 @@
 
 
             <LinearLayout
+                android:id="@+id/activity_page_container_fragment_route_panel"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:orientation="vertical"
-                android:id="@+id/activity_page_container_fragment_route_panel"/>
+                android:orientation="vertical" />
 
             <Space
                 android:layout_width="match_parent"

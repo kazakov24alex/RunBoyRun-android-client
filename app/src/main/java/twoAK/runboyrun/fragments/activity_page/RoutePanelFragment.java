@@ -115,6 +115,7 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
         Log.i(APP_TAG, ACTIVITY_TAG + "GOOGLE MAP IS READY");
 
         mGoogleMap = map;
+        float zoom = 13.0f;
 
         if(!interactive) {
             mGoogleMap.getUiSettings().setAllGesturesEnabled(false);
@@ -126,11 +127,12 @@ public class RoutePanelFragment extends Fragment implements OnMapReadyCallback {
                     startActivity(intent);
                 }
             });
-
+        } else {
+            zoom = 14.0f;
         }
 
         LatLng middle = new LatLng(mRoute.get(mRoute.size()/2).get(0), mRoute.get(mRoute.size()/2).get(1));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(middle, 13.0f));
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(middle, zoom));
 
 
         // listener for map zoom (hides KM LABEL MARKERS)

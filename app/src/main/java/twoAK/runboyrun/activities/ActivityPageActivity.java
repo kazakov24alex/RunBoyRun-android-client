@@ -227,6 +227,8 @@ public class ActivityPageActivity extends BaseActivity {
 
             if(activityData.isTrack() != false) {
                 addRoutePanel(mActivityID);
+            } else {
+                mMapLayout.setVisibility(View.GONE);
             }
 
             mLikePanelFragment.setActivityID(activityData.getId());
