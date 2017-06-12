@@ -1,5 +1,6 @@
 package twoAK.runboyrun.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.activities.NewsFeedProfileActivity;
 import twoAK.runboyrun.interfaces.OnLoadMoreListener;
 import twoAK.runboyrun.responses.objects.CommentObject;
 
@@ -129,8 +131,18 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         public void fillContent() {
-            ((SquareImageView) mView.findViewById(R.id.item_comment_list_image_avatar))
-                    .setImageResource(R.drawable.com_facebook_top_button);
+            SquareImageView avatar = ((SquareImageView) mView.findViewById(R.id.item_comment_list_image_avatar));
+            avatar.setImageResource(R.drawable.com_facebook_top_button);
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mView.getContext(), NewsFeedProfileActivity.class);
+                    intent.putExtra("ATHLETE_ID", commentObject.getAthlete_id());
+                    mView.getContext().startActivity(intent);
+                }
+            });
+
+
 
             ((TextView) mView.findViewById(R.id.item_comment_list_text_author))
                     .setText(commentObject.getName() + " " + commentObject.getSurname());

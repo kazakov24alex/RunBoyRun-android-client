@@ -113,7 +113,7 @@
     <string name="track_activity_dialog_button_check_settings">SETTINGS</string>
     <string name="track_activity_dialog_button_cancel">CANCEL</string>
 
-    <string name="track_activity_dialog_start_activity_title">Начинаем активность!</string>
+    <string name="track_activity_dialog_start_activity_title">We begin activity!</string>
     <string name="track_activity_dialog_setting_title">Setting sound alerts</string>
     <string name="track_activity_dialog_setting_text_distance">Distance traveled</string>
     <string name="track_activity_dialog_setting_text_time">Elapsed time</string>

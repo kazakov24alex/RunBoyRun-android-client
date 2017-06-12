@@ -26,7 +26,7 @@ public class CommentPreviewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_comment_preview, container, false);
 
         mAvatarImage = (SquareImageView) rootView.findViewById(R.id.comment_preview_image_avatar);
-        mAvatarImage.setImageResource(R.drawable.com_facebook_top_button);
+        mAvatarImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         mAuthorText = (TextView) rootView.findViewById(R.id.comment_preview_text_author);
         mAuthorText.setText(mAuthor);

@@ -57,7 +57,7 @@ public class AthletePreviewListAdapter extends BaseAdapter {
 
         // initialization of views
         ((SquareImageView) view.findViewById(R.id.item_athlete_preview_squareimage_avatar))
-                .setImageResource(R.drawable.com_facebook_top_button);
+                .setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
         ((TextView) view.findViewById(R.id.item_athlete_preview_list_text_name_surname))
                 .setText(athlete.getName()+" "+athlete.getSurname());
 

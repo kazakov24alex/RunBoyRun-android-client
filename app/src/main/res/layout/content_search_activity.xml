@@ -21,17 +21,29 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_custom"
         android:orientation="vertical"
         android:padding="2dp">
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NOT FOUND"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:layout_marginTop="15dp"/>
+
+
         <ListView
             android:id="@+id/search_activity_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@color/white"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

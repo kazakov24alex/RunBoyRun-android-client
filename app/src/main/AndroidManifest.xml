@@ -70,16 +70,9 @@
 
         <activity
             android:name=".activities.StartNewActivityActivity"
-            android:label="Activity1"
+            android:label="Start new activity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <!--<activity
-            android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_2"
-            android:parentActivityName=".activities.StartNewActivityActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="twoAK.runboyrun.activities.StartNewActivityActivity"/>
-        </activity>-->
 
         <activity android:name=".activities.TrackActivityActivity"
             android:label="TrackActivity"
@@ -87,12 +80,12 @@
 
         <activity
             android:name=".activities.EnterCompletedActivity"
-            android:label="EnterComplitedActivity"
+            android:label="Activity details"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity android:name=".activities.ConditionActivity"
-            android:label="ConditionActivity"
+            android:label="Activity condition"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 

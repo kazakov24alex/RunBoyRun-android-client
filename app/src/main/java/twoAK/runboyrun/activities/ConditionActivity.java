@@ -6,8 +6,10 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,8 +124,10 @@ public class ConditionActivity extends AppCompatActivity {
         mWeatherValue   = "";
         mReliefValue    = "";
         mConditionValue = "";
-        mTemperatureValue = 0;
+        mTemperatureValue = 10;
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Activity condition");
 
         // Initialization images of button panel
         mWeatherSunnyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_sunny);
@@ -213,6 +217,8 @@ public class ConditionActivity extends AppCompatActivity {
             @Override
             public void onWheelItemChanged(WheelView wheelView, int position) { }
         });
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
 
@@ -307,7 +313,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
+        view.setBackgroundResource(R.color.colorAccent);
     }
 
     public void onReliefButtonClick(View view) {
@@ -338,7 +344,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
+        view.setBackgroundResource(R.color.colorAccent);
     }
 
     public void onConditionButtonClick(View view) {
@@ -369,7 +375,7 @@ public class ConditionActivity extends AppCompatActivity {
                 break;
         }
 
-        view.setBackgroundResource(R.color.IMAGE_BUTTON_SELECT);
+        view.setBackgroundResource(R.color.colorAccent);
     }
 
     public void onRecordButtonClick(View view){

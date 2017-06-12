@@ -477,7 +477,6 @@ public class TrackActivityActivity extends AppCompatActivity
                                     View startDialogContent = getLayoutInflater().inflate(R.layout.dialog_start_activity, null);
                                     final DonutProgress progressBar = (DonutProgress) startDialogContent.findViewById(R.id.donut_progress);
                                     final AlertDialog startActivityDialog = new AlertDialog.Builder(ctx)
-                                            .setIcon(android.R.drawable.btn_star_big_on)
                                             .setTitle(getString(R.string.track_activity_dialog_start_activity_title))
                                             .setView(startDialogContent)
                                             .setCancelable(false)
@@ -635,7 +634,7 @@ public class TrackActivityActivity extends AppCompatActivity
         timeText.setText(mTrackChronometer.getText());
 
         final AlertDialog settingActivityDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.track_activity_dialog_setting_title))
+                .setTitle("Activity details")
                 .setView(resultDialogContent)
                 .setPositiveButton(getString(R.string.track_activity_dialog_result_button_record),
                         new DialogInterface.OnClickListener() {
@@ -666,7 +665,7 @@ public class TrackActivityActivity extends AppCompatActivity
         intent.putExtra("START_TIME", mDateTimeStart);
         intent.putExtra("TRACK", true);
         intent.putExtra("DURATION", mTrackChronometer.getText());
-        intent.putExtra("DISTANCE", Double.parseDouble(mDistanceText.getText().toString()));
+        intent.putExtra("DISTANCE", (mDistanceMeters*0.001));
         Log.i(APP_TAG, ACTIVITY_TAG + "AVG_SPEED = "+ mTempoText.getText().toString());
         intent.putExtra("AVG_SPEED", Double.parseDouble(mTempoText.getText().toString())/60);
         intent.putExtra("TEMPO", Double.parseDouble(mTempoText.getText().toString()));

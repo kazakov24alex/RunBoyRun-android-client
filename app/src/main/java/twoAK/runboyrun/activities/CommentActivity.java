@@ -97,6 +97,7 @@ public class CommentActivity extends BaseActivity {
                 return;
 
             } else {
+                mEditText.setText("");
                 activity.recreate();
                 return;
             }

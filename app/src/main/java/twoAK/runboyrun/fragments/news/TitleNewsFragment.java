@@ -37,7 +37,7 @@ public class TitleNewsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_news_title, container, false);
 
         mAvatarImage = (SquareImageView) rootView.findViewById(R.id.news_title_panel_image_avatar);
-        mAvatarImage.setImageResource(R.drawable.com_facebook_top_button);
+        mAvatarImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         mNameText = (TextView) rootView.findViewById(R.id.news_title_panel_text_name_surname);
         mTimeText = (TextView) rootView.findViewById(R.id.news_title_panel_text_time_start);

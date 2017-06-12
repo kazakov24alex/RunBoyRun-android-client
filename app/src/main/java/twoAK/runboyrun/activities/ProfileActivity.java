@@ -87,9 +87,9 @@ public abstract class ProfileActivity extends BaseActivity {
         mProfilePanelFragment = (ProfilePanelFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.profile_activity_fragment_profile);
 
-        mButtonPanelFragment = (ButtonPanelFragment) getSupportFragmentManager()
+        /*mButtonPanelFragment = (ButtonPanelFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.profile_activity_fragment_buttons);
-        mButtonPanelFragment.linkAthleteID(mAthleteID);
+        mButtonPanelFragment.linkAthleteID(mAthleteID)*/;
 
 
         mGetProfileTask = new GetProfileTask(mAthleteID);

@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="?attr/colorAccent"
                 app:expandedTitleMarginEnd="64dp"
                 app:expandedTitleMarginStart="48dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -74,7 +74,7 @@
 
                     </LinearLayout>
 
-                    <Space
+                    <!--<Space
                         android:layout_width="match_parent"
                         android:layout_height="3dp"
                         android:background="@drawable/background_space"/>
@@ -84,7 +84,7 @@
                         android:name="twoAK.runboyrun.fragments.profile_activity.ButtonPanelFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-
+-->
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="3dp"

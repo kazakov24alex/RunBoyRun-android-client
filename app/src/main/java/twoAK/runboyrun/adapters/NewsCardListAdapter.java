@@ -124,7 +124,7 @@ public class NewsCardListAdapter extends BaseAdapter {
 
     private void initTitlePart(View view, final NewsObject news) {
         SquareImageView mAvatarImage = (SquareImageView) view.findViewById(R.id.news_item_image_avatar);
-        mAvatarImage.setImageResource(R.drawable.com_facebook_top_button);
+        mAvatarImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
 
         TextView mNameText = (TextView) view.findViewById(R.id.news_item_text_name_surname);
         if( (news.getName().length()+news.getSurname().length()+1) > 15 ) {

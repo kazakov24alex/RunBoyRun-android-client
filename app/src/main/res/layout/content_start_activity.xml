@@ -7,12 +7,19 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="twoAK.runboyrun.activities.StartNewActivityActivity"
     tools:showIn="@layout/general_template"
-    android:id="@+id/activity1_container">
+    android:id="@+id/activity1_container"
+    android:background="@color/white">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
         <TextView
             android:id="@+id/start_activity_title_select_sport"
@@ -23,13 +30,17 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="40dp">
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/start_activity_layout_sport_running"
@@ -138,7 +149,9 @@
             android:layout_height="wrap_content"
             android:text="@string/start_activity_title"
             android:textSize="18sp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
 
         <Button
             android:id="@+id/start_activity_button_enter_stat"
@@ -150,7 +163,9 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:clickable="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
 
         <Button
             android:id="@+id/start_activity_button_track_activity"
@@ -162,7 +177,9 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:clickable="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
 
     </LinearLayout>
 
