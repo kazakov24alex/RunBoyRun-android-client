@@ -20,6 +20,7 @@ import twoAK.runboyrun.api.ApiClient;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
 import twoAK.runboyrun.request.body.ValueBody;
+import twoAK.runboyrun.responses.ValueResponse;
 
 
 public class LikePanelFragment extends Fragment {
@@ -250,7 +251,7 @@ public class LikePanelFragment extends Fragment {
 
 
 
-    private class SendValueTask extends AsyncTask<Void, Void, Boolean> {
+    private class SendValueTask extends AsyncTask<Void, Void, ValueResponse> {
         private String errMes;  // error message possible
         private ValueBody valueBody;
 
@@ -272,7 +273,7 @@ public class LikePanelFragment extends Fragment {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected ValueResponse doInBackground(Void... params) {
             Log.i(APP_TAG, ACTIVITY_TAG + "Trying to send value");
             try {
                 return ApiClient.instance().sendValue(valueBody);
@@ -281,12 +282,12 @@ public class LikePanelFragment extends Fragment {
             } catch(InsuccessfulResponseException e) {
                 errMes = getString(R.string.activity_page_error_loading_activity_insuccessful);
             }
-            return false;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(final Boolean result) {
-            if(result == false) {
+        protected void onPostExecute(final ValueResponse result) {
+            if(result == null) {
                 Log.i(APP_TAG, ACTIVITY_TAG + "ERROR: " + errMes);
                 Toast.makeText(getContext(), errMes, Toast.LENGTH_SHORT).show();
 

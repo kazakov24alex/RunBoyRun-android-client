@@ -4,13 +4,417 @@
     android:id="@+id/item_newsfeed_list_container_listview"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp">
+    android:layout_height="wrap_content">
 
-    <fragment
-        android:id="@+id/fragmentNEWS"
-        android:name="twoAK.runboyrun.fragments.profile_activity.NewsCardFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/background_custom"
+        android:layout_marginBottom="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/news_item_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:paddingLeft="1dp"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <twoAK.runboyrun.adapters.SquareImageView
+                    android:id="@+id/news_item_image_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="22"
+                    android:padding="2dp"
+                    android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/news_item_text_name_surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="12"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/TEXT_BLACK_COLOR"
+                        android:textSize="24sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="18"
+                    android:orientation="vertical"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/news_item_text_time_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/TEXT_GREY_COLOR"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/news_item_text_date_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/TEXT_GREY_COLOR"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/SHAPE_BORDER"/>
+
+
+        <!-- SECOND PART OF NEWS -->
+
+        <LinearLayout
+            android:id="@+id/news_item_layout_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true">
+
+            <!-- SPORT TYPE PANEL !!!-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6.2">
+
+                    <twoAK.runboyrun.adapters.SquareImageView
+                        android:id="@+id/news_item_squareimage_sporttype"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:paddingLeft="15dp">
+
+                    <TextView
+                        android:id="@+id/news_item_text_title_sport"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="-5dp"
+                        android:includeFontPadding="false"
+                        android:text="@string/title_activity_text_sport"
+                        android:textSize="15sp"
+                        android:textColor="@color/TEXT_GREY_COLOR"/>
+
+                    <TextView
+                        android:id="@+id/news_item_text_sport_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/TEXT_BLACK_COLOR"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="6"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/news_item_text_points"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="-7dp"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/TEXT_BLACK_COLOR"/>
+
+                    <TextView
+                        android:id="@+id/news_item_text_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sporttype_panel_points_title"
+                        android:textAlignment="center"
+                        android:textSize="13sp"
+                        android:textColor="@color/TEXT_BLACK_COLOR"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/news_item_text_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:textSize="17sp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textColor="@color/TEXT_BLACK_COLOR" />
+
+
+
+            <!-- STATISTICS PANEL !!! -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingTop="3dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4">
+
+                        <twoAK.runboyrun.adapters.SquareImageView
+                            android:id="@+id/news_item_squareimage_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/news_item_text_title_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10dp"
+                            android:text="@string/statistics_panel_text_time"
+                            android:textSize="16sp"
+                            android:textColor="@color/TEXT_BLACK_COLOR"/>
+
+                        <TextView
+                            android:id="@+id/news_item_text_time_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textAlignment="center"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/TEXT_BLACK_COLOR"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingTop="3dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4">
+
+                        <twoAK.runboyrun.adapters.SquareImageView
+                            android:id="@+id/news_item_squareimage_distance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/news_item_text_title_distance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10dp"
+                            android:text="@string/statistics_panel_text_distance"
+                            android:textSize="16sp"
+                            android:textColor="@color/TEXT_BLACK_COLOR"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/news_item_text_distance_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:paddingRight="4dp"
+                                android:textAlignment="textEnd"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/TEXT_BLACK_COLOR"/>
+
+                            <TextView
+                                android:id="@+id/news_item_text_distance_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/statistics_panel_text_distance_label"
+                                android:textColor="@color/TEXT_BLACK_COLOR"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/SHAPE_BORDER"/>
+
+
+
+        <!-- VALUE PANEL !!! -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/news_item_like_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:longClickable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/news_item_text_like_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/TEXT_GREY"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/news_item_text_like_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/TEXT_GREY"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/news_item_list_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:longClickable="true"
+                    android:orientation="horizontal"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:id="@+id/news_item_text_list_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:padding="5dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/TEXT_GREY"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/news_item_dislike_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:longClickable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/news_item_text_dislike_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/TEXT_GREY"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/news_item_text_dislike_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/TEXT_GREY"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

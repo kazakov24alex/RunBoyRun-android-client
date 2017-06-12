@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <fragment
                 android:id="@+id/newscard_fragment_news_title"
                 android:name="twoAK.runboyrun.fragments.news.TitleNewsFragment"

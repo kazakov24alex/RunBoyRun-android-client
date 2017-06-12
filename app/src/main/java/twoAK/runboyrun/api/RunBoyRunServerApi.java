@@ -29,6 +29,7 @@ import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
+import twoAK.runboyrun.responses.ValueResponse;
 
 //import com.et.response.BaseResponse;
 //import com.et.response.SignupResponse;
@@ -78,8 +79,8 @@ public interface RunBoyRunServerApi {
                                       @Path("activity_id") int activity_id);
 
     @POST("api/value")
-    Call<BaseResponse> sendValue(@Header("Authorization") String token,
-                                 @Body ValueBody valueBody);
+    Call<ValueResponse> sendValue(@Header("Authorization") String token,
+                                  @Body ValueBody valueBody);
 
     @GET("api/comment/{activity_id}/{comments_num}")
     Call<GetCommentsResponse> getComments(@Header("Authorization") String token,

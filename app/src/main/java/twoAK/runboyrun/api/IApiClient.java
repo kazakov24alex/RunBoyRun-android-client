@@ -20,6 +20,7 @@ import twoAK.runboyrun.responses.GetSearchResponse;
 import twoAK.runboyrun.responses.GetSubscribersResponse;
 import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
+import twoAK.runboyrun.responses.ValueResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
@@ -61,7 +62,7 @@ public interface IApiClient {
     public GetValuesResponse getValues(int activity_id)
             throws RequestFailedException, InsuccessfulResponseException;
 
-    public boolean sendValue(ValueBody valueBody)
+    public ValueResponse sendValue(ValueBody valueBody)
             throws RequestFailedException, InsuccessfulResponseException;
 
     public GetCommentsResponse getComments(int activity_id, int comments_num)

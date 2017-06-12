@@ -78,7 +78,7 @@ public class ActivityPageActivity extends BaseActivity {
 
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
-        stub.setLayoutResource(R.layout.content_search_activity);
+        stub.setLayoutResource(R.layout.content_activity_page);
         View inflated = stub.inflate();
 
         try {

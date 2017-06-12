@@ -38,6 +38,7 @@ import twoAK.runboyrun.responses.GetValuesResponse;
 import twoAK.runboyrun.responses.SendTrainingInfoResponse;
 import twoAK.runboyrun.responses.SignUpResponse;
 import twoAK.runboyrun.responses.TokenResponse;
+import twoAK.runboyrun.responses.ValueResponse;
 import twoAK.runboyrun.responses.objects.CityObject;
 import twoAK.runboyrun.responses.objects.CountryObject;
 
@@ -265,13 +266,13 @@ public class ApiClient implements IApiClient {
     }
 
     @Override
-    public boolean sendValue(ValueBody valueBody)
+    public ValueResponse sendValue(ValueBody valueBody)
             throws RequestFailedException, InsuccessfulResponseException {
-        Call<BaseResponse> req = service.sendValue(Auth.getHeaderField(), valueBody);
+        Call<ValueResponse> req = service.sendValue(Auth.getHeaderField(), valueBody);
         try {
-            Response<BaseResponse> response = req.execute();
+            Response<ValueResponse> response = req.execute();
             if (response.body().isSuccess()) {
-                return true;
+                return response.body();
             } else {
                 throw new InsuccessfulResponseException("Failed to send value to server.");
             }
@@ -419,7 +420,6 @@ public class ApiClient implements IApiClient {
     public GetNewsResponse getNewsFeedPage(int start_id, int page_size, int page_num)
             throws RequestFailedException, InsuccessfulResponseException {
         Call<GetNewsResponse> req = service.getNewsFeedPage(Auth.getHeaderField(), start_id, page_size, page_num);
-        System.out.println("RUN-BOY-RUN TOKEN="+Auth.getHeaderField());
         try {
             Response<GetNewsResponse> response = req.execute();
             if(response.body().isSuccess()) {

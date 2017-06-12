@@ -20,7 +20,7 @@ import twoAK.runboyrun.responses.GetNewsResponse;
 public class NewsFeedActivity extends BaseActivity {
 
     static final String APP_TAG = "RUN-BOY-RUN";
-    static final String ACTIVITY_TAG = "["+ActivityPageActivity.class.getName()+"]: ";
+    static final String ACTIVITY_TAG = "["+NewsFeedActivity.class.getName()+"]: ";
 
 
     // Common options;
@@ -97,7 +97,6 @@ public class NewsFeedActivity extends BaseActivity {
             } else {
                 if (newsResponse.getNews() != null) {
                     Log.i(APP_TAG, ACTIVITY_TAG + "Mews page="+page_num+" was loaded");
-                    Log.i(APP_TAG, ACTIVITY_TAG + "SIZE = "+newsResponse.getNews().size());
 
                     mNewsResponse = newsResponse;
                     setAdapter();
