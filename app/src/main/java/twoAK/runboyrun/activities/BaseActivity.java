@@ -61,6 +61,8 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         //Global methods as
         /*
         akup@mail.ru
@@ -124,6 +126,9 @@ public abstract class BaseActivity extends AppCompatActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        /*SquareImageView mLogo = (SquareImageView) findViewById(R.id.navdrawer_logo_image);
+        mLogo.setImageResource(R.drawable.logo);*/
 
     }
 
