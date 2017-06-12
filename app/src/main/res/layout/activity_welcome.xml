@@ -1,56 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/welcome_progress_circle"
-        style="?android:attr/progressBarStyleLarge"
+    <FrameLayout
+        android:id="@+id/welcome_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_weight="1">
+
+        <twoAK.runboyrun.adapters.SquareImageView
+            android:id="@+id/welcome_logo_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp" />
+
+    </FrameLayout>
 
     <ScrollView
         android:id="@+id/welcome_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/welcome_text_title"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome_title"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
+                android:layout_height="50dp" />
 
             <Button
                 android:id="@+id/welcome_button_signin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/welcome_buttontext_sign_in" />
+                android:text="@string/welcome_buttontext_sign_in"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorAccent"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
 
             <Button
                 android:id="@+id/welcome_button_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/welcome_buttontext_sign_up" />
+                android:text="@string/welcome_buttontext_sign_up"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorAccent"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
 
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- Login progress -->
 
 </LinearLayout>

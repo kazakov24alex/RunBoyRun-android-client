@@ -1,21 +1,19 @@
 package twoAK.runboyrun.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.auth.Auth;
 import twoAK.runboyrun.exceptions.api.InsuccessfulResponseException;
 import twoAK.runboyrun.exceptions.api.RequestFailedException;
@@ -30,6 +28,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private View    mProgressView;  // progress circle progress bar
     private View    mFormView;      // view of UI form (SignIn and SignUp buttons)
+    private FrameLayout mLogoView;
+    private SquareImageView mLogo;
 
     Button mSignInButton;   // SignIn: directs to SignIn activity
     Button mSignUpButton;   // SignUp: directs to PreSignUp activity
@@ -44,7 +44,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // View initialization
         mFormView  = findViewById(R.id.welcome_form);
-        mProgressView = findViewById(R.id.welcome_progress_circle);
+        mLogoView = (FrameLayout) findViewById(R.id.welcome_logo);
+
+        mLogo = (SquareImageView) findViewById(R.id.welcome_logo_image);
+        mLogo.setImageResource(R.drawable.logo);
+
+
         mSignInButton = (Button) findViewById(R.id.welcome_button_signin);
         mSignUpButton = (Button) findViewById(R.id.welcome_button_signup);
 
@@ -82,9 +87,9 @@ public class WelcomeActivity extends AppCompatActivity {
         private String errMes;
 
         CheckTokenTask(String token) {
-            showProgressCircle(true);
             this.token = token;
             this.errMes = null;
+            mFormView.setVisibility(View.GONE);
         }
 
         @Override
@@ -103,6 +108,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {}
+
+
             mCheckTokenTask = null;
             if(success) {
                 Log.i("WelcomeActivity", "Token checked: correct");
@@ -110,7 +120,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(WelcomeActivity.this, StartNewActivityActivity.class));
             } else {
                 Log.i("WelcomeActivity", "Token checked: incorrect");
-                showProgressCircle(false);
                 Toast.makeText(getApplicationContext(), errMes, Toast.LENGTH_LONG).show();
 
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
@@ -118,52 +127,19 @@ public class WelcomeActivity extends AppCompatActivity {
                 editor.putString("token", "");
                 editor.commit();
             }
+
+
+            mFormView.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onCancelled() {
             // reset the task and hide a progress spinner
             mCheckTokenTask = null;
-            showProgressCircle(false);
+
         }
 
     }
 
-
-    /**
-     * Shows the progress UI and hides the UI form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgressCircle(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
 }

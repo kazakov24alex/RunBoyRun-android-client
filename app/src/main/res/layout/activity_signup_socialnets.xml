@@ -1,18 +1,70 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".activities.SocialNetworksAuthActivity">
 
+    <FrameLayout
+        android:id="@+id/socialnets_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp">
+
+        <twoAK.runboyrun.adapters.SquareImageView
+            android:id="@+id/socialnets_logo_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp" />
+
+    </FrameLayout>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorAccent"
+        android:text="VIA SOCIAL NETWORKS"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <Button
+        android:id="@+id/socialnets_gpButton2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login via GooglePlus"
-        android:id="@+id/socialnets_gpButton2"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
         android:background="#D34836"
-        android:layout_margin="8dp"
-        android:textColor="#ffffffff"/>
+        android:text="via Google Plus"
+        android:textColor="#ffffffff"
+        android:textSize="18sp" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"></LinearLayout>
+
+</LinearLayout>

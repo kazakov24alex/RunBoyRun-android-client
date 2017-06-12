@@ -54,8 +54,6 @@ public class SocialNetFragment extends Fragment implements SocialNetworkManager.
         vkButton.setOnClickListener(loginClick);
         facebookButton = (Button) rootView.findViewById(R.id.socialnets_fbButton);
         facebookButton.setOnClickListener(loginClick);
-        googleplusButton = (Button) rootView.findViewById(R.id.socialnets_gpButton);
-        googleplusButton.setOnClickListener(loginClick);
 
         //Get Keys for initiate SocialNetworks
         String VK_KEY = getActivity().getString(R.string.vk_app_id);

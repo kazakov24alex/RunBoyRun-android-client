@@ -32,6 +32,7 @@ import com.google.android.gms.plus.Plus;
 import java.io.IOException;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.SquareImageView;
 
 
 public class SocialNetworksAuthActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FragmentManager.OnBackStackChangedListener{
@@ -73,6 +74,9 @@ public class SocialNetworksAuthActivity extends AppCompatActivity implements Goo
                 googleLogin();
             }
         });
+
+        SquareImageView mLogoImage = (SquareImageView) findViewById(R.id.socialnets_logo_image);
+        mLogoImage.setImageResource(R.drawable.logo);
     }
 
     // login GOOGLE

@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.auth.Auth;
 import twoAK.runboyrun.exceptions.api.LoginFailedException;
 
@@ -44,11 +47,15 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = new Auth();
 
         // View initialization
+        final FrameLayout mLogo = (FrameLayout) findViewById(R.id.signin_logo);
+
         mIdentificatorView  = (EditText) findViewById(R.id.signin_editText_identificator);
         mPasswordView       = (EditText) findViewById(R.id.signin_editText_password);
         mSignInButton       = (Button) findViewById(R.id.signin_button_sendSignIn);
         mSNSignInButton     = (Button) findViewById(R.id.signin_button_socialnets_sign_in);
 
+        SquareImageView mLogoImage = (SquareImageView) findViewById(R.id.welcome_logo_image);
+        mLogoImage.setImageResource(R.drawable.logo);
         // Setting click listeners
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +72,9 @@ public class SignInActivity extends AppCompatActivity {
                         SIGNIN_ACTIVITY_REQUEST_CODE);
             }
         });
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
     }
 
 

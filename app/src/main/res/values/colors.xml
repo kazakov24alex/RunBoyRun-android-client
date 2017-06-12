@@ -2,8 +2,8 @@
 <resources>
 
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff4081</color>
+    <color name="colorPrimaryDark">#dee0e3</color>
+    <color name="colorAccent">#ffff8800</color>
 
     <color name="grey_light">#16cc05</color>
     <color name="dark">#4b4b4b</color>
@@ -31,7 +31,7 @@
     <color name="VIEW_GREY">#b0b1b5</color>
     <color name="VIEW_SELECTED">#5186c2</color>
     <color name="TEXT_GREY_COLOR">#757575</color>
-    <color name="TEXT_BLACK_COLOR">#494e52</color>
+    <color name="TEXT_BLACK_COLOR">#dee0e3</color>
 
 
 
@@ -46,5 +46,6 @@
         <item>@color/blue</item>
         <item>@color/yellow</item>
     </integer-array>
+
 
 </resources>

@@ -3,34 +3,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFCCCCCC">
+    android:background="@color/white">
 
     <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Login via GooglePlus"
-        android:id="@+id/socialnets_gpButton"
-        android:layout_gravity="center_horizontal"
-        android:background="#D34836"
-        android:layout_margin="8dp"
-        android:textColor="#ffffffff"/>
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Login via VK"
         android:id="@+id/socialnets_vkButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
         android:background="@color/vk"
-        android:layout_margin="8dp"
-        android:textColor="#ffffffff" />
+        android:lineSpacingExtra="18sp"
+        android:text="via VK"
+        android:textColor="#ffffffff"
+        android:textSize="18sp" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login via Facebook"
+        android:text="via Facebook"
         android:id="@+id/socialnets_fbButton"
         android:layout_gravity="center_horizontal"
         android:background="#3b5998"
-        android:layout_margin="8dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="18sp"/>
 
 </LinearLayout>

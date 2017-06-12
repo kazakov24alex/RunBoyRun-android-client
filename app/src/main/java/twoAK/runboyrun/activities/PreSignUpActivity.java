@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import twoAK.runboyrun.R;
+import twoAK.runboyrun.adapters.SquareImageView;
 import twoAK.runboyrun.auth.Auth;
 import twoAK.runboyrun.exceptions.api.CheckFailedException;
 
@@ -65,6 +67,11 @@ public class PreSignUpActivity extends AppCompatActivity {
                 );
             }
         });
+
+        SquareImageView mLogoImage = (SquareImageView) findViewById(R.id.pre_signup_logo_image);
+        mLogoImage.setImageResource(R.drawable.logo);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     /** This method сhecks if this identifier has already been registered.

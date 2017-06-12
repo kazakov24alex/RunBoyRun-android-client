@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -126,8 +127,12 @@ public class SignUpActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSexSpinner.setAdapter(adapter);
 
+        Log.i("RUN-BOY-RUN", "OAUTH  = "+mOAuth);
         // standart - own. Registration form autocomplete, if register via social network.
-        if(mOAuth != "own") { formAutocomplete(); }
+        if(!mOAuth.equals("own")) { formAutocomplete(); }
+
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // starting countries loading task
         mCountryLoadingTask = new CountryLoadingTask();
