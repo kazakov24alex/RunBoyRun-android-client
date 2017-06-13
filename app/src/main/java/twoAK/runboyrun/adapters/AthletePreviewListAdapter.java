@@ -26,8 +26,12 @@ public class AthletePreviewListAdapter extends BaseAdapter {
     public AthletePreviewListAdapter(Context context, List<AthletePreviewObject> subscribersList) {
         this.subscribersList = subscribersList;
         ctx = context;
-        lInflater = (LayoutInflater) ctx
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public AthletePreviewListAdapter(LayoutInflater lInflater, List<AthletePreviewObject> subscribersList) {
+        this.subscribersList = subscribersList;
+        this.lInflater = lInflater;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class NewsCardFragment extends Fragment {
 
         mNewsSportTypePanelFragment = (SportTypeNewsPanelFragment) fm.findFragmentById(R.id.newscard_fragment_news_sporttype_panel);
         mNewsSportTypePanelFragment.setSportType(mNews.getSport_type());
-        mNewsSportTypePanelFragment.setPoints(24); // TODO: mNews.getPoints()
+        mNewsSportTypePanelFragment.setPoints((int) mNews.getDistance()/1); // TODO: mNews.getPoints()
 
         mDescriptionText = (TextView) rootView.findViewById(R.id.newscard_text_description);
         if(mDescription != null) {

@@ -109,6 +109,12 @@ public interface RunBoyRunServerApi {
     Call<GetSubscribersResponse> getSubscribers(@Header("Authorization") String token,
                                                 @Path("athlete_id")      int athlete_id);
 
+    @GET("api/subscriptions/{athlete_id}")
+    Call<GetSubscribersResponse> getSubscriptions(@Header("Authorization") String token,
+                                                  @Path("athlete_id")      int athlete_id);
+
+
+
     @POST("api/subs")
     Call<BaseResponse> sendSubscribe(@Header("Authorization") String token,
                                      @Body SubscribeBody subscribeBody);

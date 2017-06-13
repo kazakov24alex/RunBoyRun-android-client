@@ -101,7 +101,7 @@
             android:label="Comments"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.SubscribersActivity"
-            android:label="Subscribers"
+            android:label="Subscriptions"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.RouteActivity"
             android:label="Route"

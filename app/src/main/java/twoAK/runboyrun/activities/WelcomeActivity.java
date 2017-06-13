@@ -109,7 +109,7 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {}
 
 
@@ -126,10 +126,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("token", "");
                 editor.commit();
+
+                mFormView.setVisibility(View.VISIBLE);
             }
 
 
-            mFormView.setVisibility(View.VISIBLE);
+
         }
 
         @Override

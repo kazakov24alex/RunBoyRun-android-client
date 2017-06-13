@@ -45,6 +45,9 @@ public class EnterCompletedActivity extends BaseActivity {
         stub.setLayoutResource(R.layout.content_enter_completed);
         View inflated = stub.inflate();
 
+        // Set nav drawer selected to first item in list
+        mNavigationView.getMenu().getItem(0).setChecked(true);
+
         mSportType = getIntent().getStringExtra("SPORT_TYPE");
         mTimePicker = (TimePicker) findViewById(R.id.enter_completed_timepicker_starttime);
         mDatePicker = (DatePicker) findViewById(R.id.enter_completed_datepicker_starttime);

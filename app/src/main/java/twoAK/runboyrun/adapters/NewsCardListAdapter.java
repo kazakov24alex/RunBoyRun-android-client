@@ -188,7 +188,7 @@ public class NewsCardListAdapter extends BaseAdapter {
         }
 
 
-        mPointsText.setText("HEY"); // TODO: points
+        mPointsText.setText(""+(int) news.getDistance()/1); // TODO: points
     }
 
     private void initDescriptionPart(View view, final NewsObject news) {

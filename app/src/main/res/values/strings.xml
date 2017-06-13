@@ -71,13 +71,13 @@
     <!-- Navigation Drawer -->
     <string name="navdrawer_item_start_activity">Start activity</string>
     <string name="navdrawer_item_personal_page">Personal page</string>
-    <string name="navdrawer_item_subscriptions">Subscriptions</string>
-    <string name="navdrawer_item_activities">Activities</string>
+    <string name="navdrawer_item_newsfeed">News feed</string>
+    <string name="navdrawer_item_search">Search athlele</string>
     <string name="navdrawer_item_statistics">Statistics</string>
     <string name="navdrawer_item_records">Records</string>
     <string name="navdrawer_item_challenges">Challenges</string>
     <string name="navdrawer_item_competitions">Competitions</string>
-    <string name="navdrawer_item_rates">Rates</string>
+    <string name="navdrawer_item_subs">Subscriptions</string>
     <string name="navdrawer_item_logout">Logout</string>
 
 

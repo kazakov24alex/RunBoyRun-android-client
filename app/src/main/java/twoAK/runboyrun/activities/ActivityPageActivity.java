@@ -73,9 +73,6 @@ public class ActivityPageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.general_template);
 
-        // Set nav drawer selected to first item in list
-        mNavigationView.getMenu().getItem(3).setChecked(true);
-
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
         stub.setLayoutResource(R.layout.content_activity_page);

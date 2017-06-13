@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -37,6 +38,9 @@ public class SearchActivity extends BaseActivity {
     private EditText mSearchField;
     private ListView mListView;
 
+    private boolean exit = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,7 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.general_template);
 
         // Set nav drawer selected to first item in list
-        mNavigationView.getMenu().getItem(4).setChecked(true);
+        mNavigationView.getMenu().getItem(3).setChecked(true);
 
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
@@ -69,6 +73,8 @@ public class SearchActivity extends BaseActivity {
 
 
         mListView = (ListView) findViewById(R.id.search_activity_list_view);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         search();
 

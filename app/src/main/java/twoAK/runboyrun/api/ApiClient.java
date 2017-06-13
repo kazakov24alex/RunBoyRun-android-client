@@ -366,6 +366,23 @@ public class ApiClient implements IApiClient {
 
 
     @Override
+    public GetSubscribersResponse getSubscriptions(int athlete_id)
+            throws RequestFailedException, InsuccessfulResponseException {
+        Call<GetSubscribersResponse> req = service.getSubscriptions(Auth.getHeaderField(), athlete_id);
+        try {
+            Response<GetSubscribersResponse> response = req.execute();
+            if(response.body().isSuccess()) {
+                return response.body();
+            } else {
+                throw new InsuccessfulResponseException("Failed to get subscriptions from server.");
+            }
+        } catch (IOException e) {
+            throw new RequestFailedException(e);
+        }
+    }
+
+
+    @Override
     public boolean sendSubscribe(SubscribeBody subscribeBody)
             throws RequestFailedException, InsuccessfulResponseException {
         Call<BaseResponse> req = service.sendSubscribe(Auth.getHeaderField(), subscribeBody);

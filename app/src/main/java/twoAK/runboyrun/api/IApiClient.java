@@ -80,6 +80,9 @@ public interface IApiClient {
     public GetSubscribersResponse getSubscribers(int athlete_id)
             throws RequestFailedException, InsuccessfulResponseException;
 
+    public GetSubscribersResponse getSubscriptions(int athlete_id)
+            throws RequestFailedException, InsuccessfulResponseException;
+
     public boolean sendSubscribe(SubscribeBody subscribeBody)
             throws RequestFailedException, InsuccessfulResponseException;
 

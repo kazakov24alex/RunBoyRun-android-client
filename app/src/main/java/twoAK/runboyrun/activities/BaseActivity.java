@@ -127,8 +127,6 @@ public abstract class BaseActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        /*SquareImageView mLogo = (SquareImageView) findViewById(R.id.navdrawer_logo_image);
-        mLogo.setImageResource(R.drawable.logo);*/
 
     }
 
@@ -164,19 +162,20 @@ public abstract class BaseActivity extends AppCompatActivity
                 createBackStack(intent);
                 break;
 
-            case R.id.navdrawer_item_activities:
-                intent = new Intent(this, ActivityPageActivity.class);
-                intent.putExtra("ACTIVITY_ID", 2);
+            case R.id.navdrawer_item_newsfeed:
+                intent = new Intent(this, NewsFeedActivity.class);
                 createBackStack(intent);
                 break;
 
-            case R.id.navdrawer_item_statistics:
+            case R.id.navdrawer_item_search:
                 intent = new Intent(this, SearchActivity.class);
                 createBackStack(intent);
                 break;
 
-            case R.id.navdrawer_item_records:
-                intent = new Intent(this, NewsFeedActivity.class);
+
+            case R.id.navdrawer_item_subs:
+                intent = new Intent(this, SubscribersActivity.class);
+                intent.putExtra("ATHLETE_ID", 0);
                 createBackStack(intent);
                 break;
 

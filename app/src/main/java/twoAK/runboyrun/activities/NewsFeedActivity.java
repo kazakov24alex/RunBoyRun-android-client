@@ -48,7 +48,7 @@ public class NewsFeedActivity extends BaseActivity {
         setContentView(R.layout.general_template);
 
         // Set nav drawer selected to first item in list
-        mNavigationView.getMenu().getItem(5).setChecked(true);
+        mNavigationView.getMenu().getItem(2).setChecked(true);
 
         // Content initialization
         ViewStub stub = (ViewStub) findViewById(R.id.content_stub);
