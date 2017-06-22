@@ -59,73 +59,73 @@ Draft GUI     | <http://ninjamock.com/s/JM3FH>
   <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/3.png" width="250"/>
 </p>
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/4.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/5.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/6.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/4.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/5.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/6.png" width="250"/>
 </p>
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/7.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/8.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/9.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/7.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/8.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/9.png" width="250"/>
 </p>
 
 ### Personal page
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/10.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/12.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/10.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/12.png" width="250"/>
 </p>
 
 ### Search and subscribe
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/13.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/14.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/15.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/13.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/14.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/15.png" width="250"/>
 </p>
 
 ### News feed
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/16.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/17.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/16.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/17.png" width="250"/>
 </p>
 
 ### Enter complete activity
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/18.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/19.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/18.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/19.png" width="250"/>
 </p>
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/20.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/21.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/20.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/21.png" width="250"/>
 </p>
 
 ### Track activity
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/22.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/23.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/24.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/25.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/26.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/27.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/22.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/23.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/24.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/25.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/26.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/27.png" width="250"/>
 </p>
 
 ### Activity report
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/28.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/29.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/30.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/31.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/32.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/33.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/28.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/29.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/30.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/31.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/32.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/33.png" width="250"/>
 </p>
 
 ### Likes and comments
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/34.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/35.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/34.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/35.png" width="250"/>
 </p>
 
 ### Navigation drawer and subscriptions
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/36.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/37.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/36.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/37.png" width="250"/>
 </p>
