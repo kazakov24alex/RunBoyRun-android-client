@@ -67,7 +67,6 @@ public class ActivityPageActivity extends BaseActivity {
     private GetActivityDataResponse mActivityData;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
