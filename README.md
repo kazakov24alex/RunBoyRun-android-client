@@ -44,6 +44,11 @@ Draft GUI     | <http://ninjamock.com/s/JM3FH>
   + evaluation of training by other users (like, dislike)
   + ability to comment on the training
 
+## TODO:
++ Fix crash of tracking activity
++ Russian localization
++ Rating system
+
 ## Demonstration:
 
 ### Login and Registration
