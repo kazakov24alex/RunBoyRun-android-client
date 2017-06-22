@@ -3,6 +3,7 @@
 </p>
 
 # RUN BOY RUN v0.1b
+Android application. </br>
 A activity diary and a social network for athletes.
 
 
