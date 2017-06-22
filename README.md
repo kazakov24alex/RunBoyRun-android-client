@@ -1,23 +1,40 @@
-# RunBoyRun (android client) Version 0.1.3
-Coursework
+# RUN BOY RUN v0.1b
+A activity diary and a social network for athletes.
 
-Draft GUI - http://ninjamock.com/s/JM3FH 
-
-Server    - https://runboyrun.herokuapp.com/
-
-### Version 0.1.3:
-- registration via Facebook
-- login via Facebook
+## Notification:
+This application was written as part of the course work. It is not anything more than an experiment to gain experience with Android, Node.JS and MySQL. In the application there may be bugs (and most likely they are there) due to the lack of a full stage of testing the application.
 
 
-### Version 0.1.2:
-- registration via GooglePlus
-- login via GooglePlus
+## About the app:
+Authors       | Alex Kazakov / <kazakov24alex@gmail.com><br/> Alex Kupriyanov / <kupriyanov_95@inbox.ru>
+------------- | -------------
+OS            | Android
+Min API level | v21 (LOLLIPOP)
+Localization  | ENGLISH :uk:
+Server-side   | <http://runboyrun.herokuapp.com></br><http://github.com/kazakov24alex/RunBoyRun-server>
+Draft GUI     | <http://ninjamock.com/s/JM3FH>
 
-### Version 0.1.1:
-- registration via VK
-- login via VK
+## Functionality
++ user registration
++ user registration via social networks
+  + VK
+  + Facebook
+  + Google Plus
++ user authorization
++ user authorization via social networks
++ personal user page
+  + personal information
+  + training statistics
+  + records
+  + subscribers
+  + news feed
++ search for pages of other users
++ subscriptions system
++ recording training results
++ tracking activity by GPS
++ drawing up a report on training
+  + activity statistics
+  + route of training on the map, if the training was tracked
+  + evaluation of training by other users (like, dislike)
+  + ability to comment on the training
 
-### Version 0.1:
-- own registration
-- own login
