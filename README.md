@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/logo.PNG" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/logo.PNG" width="250"/>
 </p>
 
 # RUN BOY RUN v0.1b
@@ -54,9 +54,9 @@ Draft GUI     | <http://ninjamock.com/s/JM3FH>
 
 ### Login and Registration
 <p align="center">
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/1.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/2.png" width="250"/>
-  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/3.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/1.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/2.png" width="250"/>
+  <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/master/docs/3.png" width="250"/>
 </p>
 <p align="center">
   <img src="https://github.com/kazakov24alex/RunBoyRun-android-client/blob/dev/docs/4.png" width="250"/>
