@@ -64,7 +64,8 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="13sp"
-                    android:padding="3dp"/>
+                    android:padding="3dp"
+                    android:layout_marginTop="-10dp"/>
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,7 +90,11 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="13sp"
-                    android:padding="3dp"/>
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="1dp"
+                    android:layout_marginTop="-10dp"/>
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -113,7 +118,8 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="13sp"
-                    android:padding="3dp"/>
+                    android:padding="3dp"
+                    android:layout_marginTop="-10dp"/>
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -138,7 +144,8 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="13sp"
-                    android:padding="3dp"/>
+                    android:padding="3dp"
+                    android:layout_marginTop="-10dp"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -1,21 +1,21 @@
 <resources>
-    <string name="app_name">RunBoyRun</string>
-    <string name="server_url">https://runboyrun.herokuapp.com/</string>
+    <string name="app_name" translatable="false">RUN BOY RUN</string>
+    <string name="server_url" translatable="false">https://runboyrun.herokuapp.com/</string>
     <string name="preferences_file_key" translatable="false">twoAK.runboyrun.preferences</string>
 
     <!-- Social networks key data-->
-    <string name="vk_app_id">5944334</string>
-    <string name="facebook_app_id">1449271205145331</string>
-    <string name="google_client_id">1098093132900-dmb49sod7fcbvgj6mtbdoq80rlha1o78.apps.googleusercontent.com</string>
-    <string name="google_maps_api_key">AIzaSyA2PUaAVlXGavjM5mPCcsk0WPD9S8296I4</string>
+    <string name="vk_app_id" translatable="false">5944334</string>
+    <string name="facebook_app_id" translatable="false">1449271205145331</string>
+    <string name="google_client_id" translatable="false">1098093132900-dmb49sod7fcbvgj6mtbdoq80rlha1o78.apps.googleusercontent.com</string>
+    <string name="google_maps_api_key" translatable="false">AIzaSyA2PUaAVlXGavjM5mPCcsk0WPD9S8296I4</string>
 
     <!-- Navigator Drawer -->
     <string name="action_settings">Settings</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <!-- Accessibility description for navigation mDrawerLayout -->
-    <string name="navdrawer_description_a11y">Navigation Drawer used to switch between major features of the application</string>
+    <string name="navdrawer_description_a11y" translatable="false">Navigation Drawer used to switch between major features of the application</string>
     <string name="title_activity_deleteme">deleteme</string>
     <string name="title_activity_2">Activity2</string>
 
@@ -43,7 +43,7 @@
 
     <!-- PreSignUp activity-->
     <string name="presignup_title">REGISTRATION</string>
-    <string name="presignup_edittext_email">Email</string>
+    <string name="presignup_edittext_email" translatable="false">Email</string>
     <string name="presignup_edittext_password">Password</string>
     <string name="presignup_button_signup">SIGN UP</string>
     <string name="presignup_button_signup_via_sn">SIGN UP VIA SOCIAL NETWORKS</string>
@@ -61,7 +61,7 @@
     <string name="signup_dialog_registration_waiting">Register you - please wait</string>
 
     <!--GetProfileInfo activity-->
-    <string name="getprofileinfo_error">incorrect data</string>
+    <string name="getprofileinfo_error" translatable="false">incorrect data</string>
     <string name="profile_loading_progress_dialog">Loading data, please wait</string>
     <string name="profile_activity_error_loading_profile_request_failed">Request failed</string>
     <string name="profile_activity_error_loading_profile_insuccessful">Insuccessful</string>
@@ -73,10 +73,6 @@
     <string name="navdrawer_item_personal_page">Personal page</string>
     <string name="navdrawer_item_newsfeed">News feed</string>
     <string name="navdrawer_item_search">Search athlele</string>
-    <string name="navdrawer_item_statistics">Statistics</string>
-    <string name="navdrawer_item_records">Records</string>
-    <string name="navdrawer_item_challenges">Challenges</string>
-    <string name="navdrawer_item_competitions">Competitions</string>
     <string name="navdrawer_item_subs">Subscriptions</string>
     <string name="navdrawer_item_logout">Logout</string>
 
@@ -104,7 +100,7 @@
         They may not be accurate. We advise you to enable GPS</string>
     
 
-    <string name="track_activity_text_provide_status_title">GPS</string>
+    <string name="track_activity_text_provide_status_title" translatable="false">GPS</string>
     <string name="track_activity_text_provider_status_yes">YES</string>
     <string name="track_activity_text_provider_status_no">NO</string>
 
@@ -215,7 +211,7 @@
     <string name="activity_page_error_loading_activity_request_failed">Request failed</string>
     <string name="activity_page_error_loading_activity_insuccessful">Insuccessful response</string>
     <string name="activity_page_dialog_comment_title_write_comment">First comment:</string>
-    <string name="activity_page_dialog_comment_button_positive">SEND!</string>
+    <string name="activity_page_dialog_comment_button_positive">SEND</string>
     <string name="activity_page_dialog_comment_button_negative">CANCEL</string>
     <string name="activity_page_dialog_comment_sending_progress_text">Sending comment...</string>
     <string name="activity_page_dialog_comment_edittext_hint">Comment</string>
@@ -224,13 +220,13 @@
     <!-- Value activity -->
     <string name="value_activity_error_loading_values_request_failed">request failed</string>
     <string name="value_activity_error_loading_values_insuccessful">insuccessful</string>
-    <string name="value_activity_page_like_title">Like</string>
-    <string name="value_activity_page_dislike_title">Dislike</string>
+    <string name="value_activity_page_like_title" translatable="false">Like</string>
+    <string name="value_activity_page_dislike_title" translatable="false">Dislike</string>
 
     <!-- Comment activity-->
     <string name="comment_activity_error_loading_activity_request_failed">Request failed</string>
     <string name="comment_activity_error_loading_activity_insuccessful">Insuccessful response</string>
-    <string name="comment_activity_order_label">#</string>
+    <string name="comment_activity_order_label" translatable="false">#</string>
 
     <!-- Profile Panel Fragment-->
     <string name="profile_panel_toast_subscribed">you subscribed</string>

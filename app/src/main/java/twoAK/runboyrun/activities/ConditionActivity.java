@@ -129,6 +129,7 @@ public class ConditionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Activity condition");
 
+
         // Initialization images of button panel
         mWeatherSunnyButton = (SquareImageView) findViewById(R.id.condition_squareimage_weather_sunny);
         mWeatherSunnyButton.setImageResource(R.drawable.weather_sunny);

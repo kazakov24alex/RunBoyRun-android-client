@@ -51,7 +51,10 @@
                         android:id="@+id/condition_squareimage_weather_sunny"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:scaleType="centerCrop"
                         android:onClick="onWeatherButtonClick" />
                     <TextView
@@ -74,8 +77,10 @@
                         android:id="@+id/condition_squareimage_weather_cloudy"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onWeatherButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_weather_cloudy"
@@ -97,7 +102,10 @@
                         android:id="@+id/condition_squareimage_weather_rainy"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onWeatherButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_weather_rainy"
@@ -120,7 +128,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onWeatherButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_weather_snowy"
@@ -167,7 +178,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onReliefButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_relief_stadium"
@@ -190,7 +204,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onReliefButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_relief_park"
@@ -213,7 +230,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onReliefButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_relief_cross"
@@ -235,7 +255,10 @@
                         android:id="@+id/condition_squareimage_relief_hills"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onReliefButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_relief_hills"
@@ -282,7 +305,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onConditionButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_condition_good"
@@ -303,9 +329,12 @@
                     <twoAK.runboyrun.adapters.SquareImageView
                         android:id="@+id/condition_squareimage_condition_medium"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onConditionButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_condition_medium"
@@ -326,8 +355,12 @@
                     <twoAK.runboyrun.adapters.SquareImageView
                         android:id="@+id/condition_squareimage_condition_tired"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="3dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onConditionButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_condition_tired"
@@ -342,15 +375,20 @@
                 </FrameLayout>
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/condition_layout_condition_beated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_weight="1">
                     <twoAK.runboyrun.adapters.SquareImageView
                         android:id="@+id/condition_squareimage_condition_beated"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
-                        android:padding="3dp"
+                        android:paddingTop="3dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingBottom="15dp"
                         android:onClick="onConditionButtonClick"/>
                     <TextView
                         android:id="@+id/condition_text_condition_beated"
